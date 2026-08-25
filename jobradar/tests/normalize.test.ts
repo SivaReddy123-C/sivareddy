@@ -40,3 +40,21 @@ test("hasSalaryText detects INR and LPA formats", () => {
   assert.ok(hasSalaryText("Salary: $120,000 - $150,000"));
   assert.ok(!hasSalaryText("We offer competitive compensation and benefits."));
 });
+
+test("matchesCountry recognizes US locations", async () => {
+  const { matchesCountry } = await import("../src/normalize.js");
+  assert.ok(matchesCountry("San Francisco, CA", "us"));
+  assert.ok(matchesCountry("Remote - US", "us"));
+  assert.ok(matchesCountry("New York, United States", "us"));
+  assert.ok(!matchesCountry("Bengaluru, India", "us"));
+  assert.ok(matchesCountry("Bengaluru, India", "in"));
+});
+
+test("sponsorshipSignal detects explicit no-sponsorship language", async () => {
+  const { sponsorshipSignal } = await import("../src/normalize.js");
+  assert.equal(sponsorshipSignal("We are unable to sponsor visas now or in the future."), "no");
+  assert.equal(sponsorshipSignal("Candidates must be authorized to work in the US."), "no");
+  assert.equal(sponsorshipSignal("H-1B sponsorship available for this role."), "yes");
+  assert.equal(sponsorshipSignal("We value diversity and inclusion."), "unknown");
+  assert.equal(sponsorshipSignal(null), "unknown");
+});

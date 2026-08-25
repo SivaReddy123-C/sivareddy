@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { assessGhost } from "./ghost.js";
-import { looksIndian } from "./normalize.js";
+import { matchesCountry, sponsorshipSignal, type Country } from "./normalize.js";
 import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
@@ -51,6 +51,7 @@ async function fetchAll(): Promise<void> {
           firstSeenAt: history?.firstSeenAt ?? new Date().toISOString(),
           lastSeenAt: history?.lastSeenAt ?? new Date().toISOString(),
           ghost: assessGhost(job, history),
+          sponsorship: sponsorshipSignal(job.description),
         });
       }
       console.log(`fetched ${String(jobs.length).padStart(4)} jobs  ${c.name} (${c.source})`);
@@ -62,7 +63,7 @@ async function fetchAll(): Promise<void> {
   console.log(`\nTotal: ${all.length} jobs -> data/latest.json`);
 }
 
-function report(indiaOnly: boolean): void {
+function report(country: Country | null): void {
   const store = new Store(DATA);
   const latest = store.readLatest<{ fetchedAt: string; jobs: ScoredJob[] }>();
   if (!latest) {
@@ -70,9 +71,10 @@ function report(indiaOnly: boolean): void {
     process.exit(1);
   }
   let jobs = latest.jobs;
-  if (indiaOnly) jobs = jobs.filter((j) => looksIndian(j.location));
+  if (country) jobs = jobs.filter((j) => matchesCountry(j.location, country));
 
-  console.log(`Snapshot from ${latest.fetchedAt} - ${jobs.length} jobs${indiaOnly ? " (India)" : ""}\n`);
+  const label = country === "in" ? " (India)" : country === "us" ? " (USA)" : "";
+  console.log(`Snapshot from ${latest.fetchedAt} - ${jobs.length} jobs${label}\n`);
 
   const byBand = { low: 0, medium: 0, high: 0, critical: 0 };
   for (const j of jobs) byBand[j.ghost.band]++;
@@ -81,6 +83,10 @@ function report(indiaOnly: boolean): void {
     const pct = jobs.length ? ((n / jobs.length) * 100).toFixed(1) : "0.0";
     console.log(`  ${band.padEnd(9)} ${String(n).padStart(5)}  (${pct}%)`);
   }
+
+  const sponsor = { yes: 0, no: 0, unknown: 0 };
+  for (const j of jobs) sponsor[j.sponsorship ?? "unknown"]++;
+  console.log(`\nVisa sponsorship (from description text): ${sponsor.yes} state they sponsor, ${sponsor.no} state they do NOT, ${sponsor.unknown} don't say`);
 
   const risky = jobs
     .filter((j) => j.ghost.band === "high" || j.ghost.band === "critical")
@@ -96,12 +102,15 @@ function report(indiaOnly: boolean): void {
 }
 
 const cmd = process.argv[2];
-const indiaOnly = process.argv.includes("--india");
+const args = process.argv.slice(3);
+let country: Country | null = null;
+if (args.includes("--india") || args.includes("--country=in")) country = "in";
+if (args.includes("--usa") || args.includes("--country=us")) country = "us";
 switch (cmd) {
   case "probe": await probe(); break;
   case "fetch": await fetchAll(); break;
-  case "report": report(indiaOnly); break;
+  case "report": report(country); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report> [--india]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report> [--india | --usa]");
     process.exit(1);
 }

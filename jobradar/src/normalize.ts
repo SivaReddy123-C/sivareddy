@@ -42,3 +42,39 @@ export function looksIndian(location: string): boolean {
   const l = location.toLowerCase();
   return INDIA_HINTS.some((h) => l.includes(h));
 }
+
+const US_STATE_CODES =
+  "AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC";
+const US_STATE_RE = new RegExp(`,\\s*(${US_STATE_CODES})\\b`);
+const US_HINTS = [
+  "united states", "usa", "u.s.", "remote - us", "us remote", "remote (us",
+  "new york", "san francisco", "seattle", "austin", "boston", "chicago",
+  "los angeles", "denver", "atlanta", "dallas", "miami", "washington",
+];
+
+export type Country = "in" | "us";
+
+export function matchesCountry(location: string, country: Country): boolean {
+  if (country === "in") return looksIndian(location);
+  const l = location.toLowerCase();
+  return US_HINTS.some((h) => l.includes(h)) || US_STATE_RE.test(location);
+}
+
+export type SponsorshipSignal = "no" | "yes" | "unknown";
+
+const NO_SPONSOR_RE =
+  /(unable|not able|cannot|can't|will not|won't|not (currently )?(willing|offering)|do(es)? not (offer|provide)|no) (to )?(visa )?sponsor(ship)?|without (visa )?sponsorship,? now or in the future|must (be|have) (legally )?(authorized|authorization) to work|not (eligible|available) for (visa )?sponsorship/i;
+const YES_SPONSOR_RE =
+  /(visa )?sponsorship (is )?(available|offered|provided|possible)|(will|can|do|happy to) sponsor|h-?1b (sponsorship|transfer|visa)|support (work )?visa/i;
+
+/**
+ * Detect visa-sponsorship stance from a job description.
+ * "no" is high-precision (employers state it bluntly); "yes" is rarer in text;
+ * most postings simply do not say - that is honestly "unknown", not "yes".
+ */
+export function sponsorshipSignal(description: string | null): SponsorshipSignal {
+  if (!description) return "unknown";
+  if (NO_SPONSOR_RE.test(description)) return "no";
+  if (YES_SPONSOR_RE.test(description)) return "yes";
+  return "unknown";
+}

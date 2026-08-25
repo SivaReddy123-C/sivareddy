@@ -63,6 +63,8 @@ export interface GhostAssessment {
 }
 
 export interface ScoredJob extends Job {
+  /** Visa-sponsorship stance detected in the description ("no" is high-precision). */
+  sponsorship: "yes" | "no" | "unknown";
   firstSeenAt: string;
   lastSeenAt: string;
   ghost: GhostAssessment;

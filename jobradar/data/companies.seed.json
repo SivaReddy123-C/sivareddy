@@ -1,14 +1,107 @@
 [
-  { "name": "Stripe", "source": "greenhouse", "token": "stripe", "verified": false, "note": "Global; hires in India (Bengaluru)" },
-  { "name": "Postman", "source": "greenhouse", "token": "postman", "verified": false, "note": "India-founded; Bengaluru + SF" },
-  { "name": "GitLab", "source": "greenhouse", "token": "gitlab", "verified": false, "note": "Remote-first, hires in India" },
-  { "name": "Databricks", "source": "greenhouse", "token": "databricks", "verified": false, "note": "Bengaluru office" },
-  { "name": "Razorpay", "source": "lever", "token": "razorpay", "verified": false, "note": "Indian fintech, Bengaluru" },
-  { "name": "Atlassian", "source": "lever", "token": "atlassian", "verified": false, "note": "Large Bengaluru presence" },
-  { "name": "Groww", "source": "lever", "token": "groww", "verified": false, "note": "Indian fintech" },
-  { "name": "OpenAI", "source": "ashby", "token": "openai", "verified": false, "note": "Reference board for ashby adapter" },
-  { "name": "Ramp", "source": "ashby", "token": "ramp", "verified": false, "note": "Reference board for ashby adapter" },
-  { "name": "Linear", "source": "ashby", "token": "linear", "verified": false, "note": "Remote" },
-  { "name": "Visa", "source": "smartrecruiters", "token": "visa", "verified": false, "note": "Bengaluru tech hub" },
-  { "name": "Bosch", "source": "smartrecruiters", "token": "bosch", "verified": false, "note": "Large India engineering presence" }
+  {
+    "name": "Stripe",
+    "source": "greenhouse",
+    "token": "stripe",
+    "verified": false,
+    "note": "Global; hires in India (Bengaluru)"
+  },
+  {
+    "name": "Postman",
+    "source": "greenhouse",
+    "token": "postman",
+    "verified": false,
+    "note": "India-founded; Bengaluru + SF"
+  },
+  {
+    "name": "GitLab",
+    "source": "greenhouse",
+    "token": "gitlab",
+    "verified": false,
+    "note": "Remote-first, hires in India"
+  },
+  {
+    "name": "Databricks",
+    "source": "greenhouse",
+    "token": "databricks",
+    "verified": false,
+    "note": "Bengaluru office"
+  },
+  {
+    "name": "Razorpay",
+    "source": "lever",
+    "token": "razorpay",
+    "verified": false,
+    "note": "Indian fintech, Bengaluru"
+  },
+  {
+    "name": "Atlassian",
+    "source": "lever",
+    "token": "atlassian",
+    "verified": false,
+    "note": "Large Bengaluru presence"
+  },
+  {
+    "name": "Groww",
+    "source": "lever",
+    "token": "groww",
+    "verified": false,
+    "note": "Indian fintech"
+  },
+  {
+    "name": "OpenAI",
+    "source": "ashby",
+    "token": "openai",
+    "verified": false,
+    "note": "Reference board for ashby adapter"
+  },
+  {
+    "name": "Ramp",
+    "source": "ashby",
+    "token": "ramp",
+    "verified": false,
+    "note": "Reference board for ashby adapter"
+  },
+  {
+    "name": "Linear",
+    "source": "ashby",
+    "token": "linear",
+    "verified": false,
+    "note": "Remote"
+  },
+  {
+    "name": "Visa",
+    "source": "smartrecruiters",
+    "token": "visa",
+    "verified": false,
+    "note": "Bengaluru tech hub"
+  },
+  {
+    "name": "Bosch",
+    "source": "smartrecruiters",
+    "token": "bosch",
+    "verified": false,
+    "note": "Large India engineering presence"
+  },
+  {
+    "name": "Figma",
+    "source": "greenhouse",
+    "token": "figma",
+    "verified": false,
+    "note": "US; strong new-grad hiring"
+  },
+  {
+    "name": "Coinbase",
+    "source": "greenhouse",
+    "token": "coinbase",
+    "verified": false,
+    "note": "US remote-first"
+  },
+  {
+    "name": "Notion",
+    "source": "ashby",
+    "token": "notion",
+    "verified": false,
+    "note": "US (SF/NY)"
+  }
 ]

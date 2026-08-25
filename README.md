@@ -61,6 +61,7 @@ npm run probe          # verify which seed-list company boards answer (network r
 npm run fetch          # pull all boards, snapshot, score
 npm run report         # ghost-risk distribution + worst offenders
 npm run report -- --india   # India-located postings only
+npm run report -- --usa     # US-located postings, with sponsorship breakdown
 npm test               # unit tests (no network needed)
 ```
 
@@ -83,5 +84,14 @@ elsewhere first", not "this company is lying".
 
 ## Target
 
-India first: final-year students and freshers in tech, plus India-located
-roles at global companies on these ATS platforms. Expand later, not sooner.
+Two markets from day one, both of which we know firsthand:
+
+- **India** — final-year students and freshers in tech, plus India-located
+  roles at global companies on these ATS platforms.
+- **USA** — with a focus on international students (F-1/OPT/H-1B). Every
+  fetched posting is scanned for visa-sponsorship language: postings that
+  say "unable to sponsor" are flagged **before** you spend an hour applying,
+  and the rare ones that explicitly offer sponsorship are surfaced.
+  "Doesn't say" is reported honestly as unknown, never assumed either way.
+
+`npm run report -- --india` / `npm run report -- --usa` filter accordingly.
