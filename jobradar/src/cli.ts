@@ -136,6 +136,14 @@ async function sync(): Promise<void> {
   );
 }
 
+/** `rank`: score fit for every user profile and write today's top-N matches. */
+async function rank(): Promise<void> {
+  const { makeClient } = await import("./sync.js");
+  const { rankAllUsers } = await import("./rank.js");
+  const result = await rankAllUsers(makeClient());
+  console.log(`ranked: ${result.users} users, ${result.matches} matches written`);
+}
+
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
 function stats(): void {
   const store = new Store(DATA);
@@ -222,7 +230,8 @@ switch (cmd) {
   case "stats": stats(); break;
   case "feed": feed(); break;
   case "sync": await sync(); break;
+  case "rank": await rank(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank> [--india | --usa]");
     process.exit(1);
 }

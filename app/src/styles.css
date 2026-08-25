@@ -231,3 +231,14 @@ textarea { resize: vertical; }
 .btn-link:hover { border-color: var(--accent); }
 .applied-mark { text-align: center; color: var(--ok); font-weight: 600; font-size: 13px; padding: 6px; }
 .load-more { align-self: center; padding: 8px 22px; }
+
+/* ---------- For you ---------- */
+.foryou { padding: 14px 20px; display: flex; flex-direction: column; gap: 12px; }
+.foryou-head { display: flex; gap: 10px; align-items: center; }
+.foryou-head .jobs-meta { margin-right: auto; }
+.auth-card { max-width: 440px; display: flex; flex-direction: column; gap: 8px; }
+.field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); flex: 1; }
+.rank-chip { display: inline-block; background: var(--accent); color: #fff; border-radius: 10px;
+  padding: 0 8px; font-size: 11px; font-weight: 700; }
+.fit-reasons { margin: 2px 0 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+.fit-reasons li { margin: 1px 0; }

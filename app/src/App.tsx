@@ -1,11 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { exportJson, importJson, loadState, saveState } from "./lib/storage.js";
 import type { AppState } from "./lib/types.js";
 import { JobsPage } from "./jobs/JobsPage.js";
 import { ResumePage } from "./resume/ResumePage.js";
 import { TrackerPage } from "./tracker/TrackerPage.js";
 
-type Tab = "resume" | "jobs" | "tracker";
+type Tab = "resume" | "jobs" | "foryou" | "tracker";
+
+// Account layer loads only when opened - keeps the base bundle small and the
+// local-first tabs fully independent of it.
+const ForYouPage = lazy(() =>
+  import("./foryou/ForYouPage.js").then((m) => ({ default: m.ForYouPage })),
+);
 
 export function App() {
   const [state, setState] = useState<AppState>(() => loadState());
@@ -52,6 +58,9 @@ export function App() {
           <button className={tab === "jobs" ? "active" : ""} onClick={() => setTab("jobs")}>
             Jobs
           </button>
+          <button className={tab === "foryou" ? "active" : ""} onClick={() => setTab("foryou")}>
+            For you
+          </button>
           <button className={tab === "tracker" ? "active" : ""} onClick={() => setTab("tracker")}>
             Tracker{state.applications.length > 0 ? ` (${state.applications.length})` : ""}
           </button>
@@ -86,6 +95,14 @@ export function App() {
           onChange={(applications) => setState((s) => ({ ...s, applications }))}
         />
       )}
+      {tab === "foryou" && (
+        <Suspense fallback={<div className="foryou"><p className="jobs-meta">Loading…</p></div>}>
+          <ForYouPage
+            applications={state.applications}
+            onChange={(applications) => setState((s) => ({ ...s, applications }))}
+          />
+        </Suspense>
+      )}
       {tab === "tracker" && (
         <TrackerPage
           applications={state.applications}
@@ -94,7 +111,8 @@ export function App() {
       )}
 
       <footer className="foot no-print">
-        Free while you job-hunt. Open source, open books, no accounts, no credential custody.
+        Free while you job-hunt. Open source, open books, no credential custody. Resume and
+        tracker live in your browser; an optional account powers only your daily matches.
         Export your data any time — it's yours.
       </footer>
     </div>

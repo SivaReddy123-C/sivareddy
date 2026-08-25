@@ -14,6 +14,7 @@
     "stats": "tsx src/cli.ts stats",
     "feed": "tsx src/cli.ts feed",
     "sync": "tsx src/cli.ts sync",
+    "rank": "tsx src/cli.ts rank",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"
   },

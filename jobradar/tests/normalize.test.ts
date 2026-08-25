@@ -100,3 +100,29 @@ test("sync row mappers preserve identity and never send first_seen_at", async ()
   assert.equal(snap.run_date, "2026-08-25");
   assert.equal((snap.signals as { id: string }[])[0]!.id, "no_salary");
 });
+
+test("fit scoring: skills, freshness, seniority, ghost penalty", async () => {
+  const { scoreFit, seniorityOfTitle } = await import("../src/fit.js");
+  const NOW2 = new Date("2026-08-25T00:00:00Z");
+  const profile = { skills: ["react", "typescript"], countries: ["in"], locations: ["bengaluru"], seniorityTarget: "junior" };
+  const posting = {
+    title: "Junior Frontend Engineer", location: "Bengaluru, India", country: "in",
+    descriptionText: "Build UIs with React and TypeScript", hasSalary: true,
+    postedAt: "2026-08-23T00:00:00Z", firstSeenAt: "2026-08-23T00:00:00Z", ghostScore: 10,
+  };
+  const r = scoreFit(profile, posting, NOW2);
+  assert.ok(r.score >= 60, `expected strong fit, got ${r.score}: ${r.reasons.join("; ")}`);
+  assert.ok(r.reasons.some((x) => x.includes("react")));
+  assert.ok(r.reasons.some((x) => x.includes("Seniority level matches")));
+
+  const staffRole = scoreFit(profile, { ...posting, title: "Staff Software Engineer" }, NOW2);
+  assert.ok(staffRole.reasons.some((x) => x.includes("above your target")));
+
+  const stale = scoreFit(profile, { ...posting, postedAt: "2026-06-01T00:00:00Z", ghostScore: 45 }, NOW2);
+  assert.ok(stale.score < r.score);
+  assert.ok(stale.reasons.some((x) => x.includes("ghost risk")));
+
+  assert.equal(seniorityOfTitle("Software Engineer Intern"), "intern");
+  assert.equal(seniorityOfTitle("Sr. Backend Engineer"), "senior");
+  assert.equal(seniorityOfTitle("Software Engineer"), null);
+});
