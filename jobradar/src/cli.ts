@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { StubClassifier } from "./classify.js";
 import { assessGhost } from "./ghost.js";
 import { matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
 import { greenhouse } from "./sources/greenhouse.js";
@@ -38,8 +39,10 @@ async function probe(): Promise<void> {
 async function fetchAll(): Promise<void> {
   const seeds = loadSeeds();
   const store = new Store(DATA);
+  const classifier = new StubClassifier();
   const all: ScoredJob[] = [];
   for (const c of seeds) {
+    const employerType = c.employerType ?? classifier.classifyEmployer(c.name).type;
     const adapter = adapters[c.source]!;
     try {
       const jobs = await adapter.fetchJobs(c);
@@ -56,7 +59,7 @@ async function fetchAll(): Promise<void> {
           ...job,
           firstSeenAt: history?.firstSeenAt ?? new Date().toISOString(),
           lastSeenAt: history?.lastSeenAt ?? new Date().toISOString(),
-          ghost: assessGhost(job, history, new Date(), open),
+          ghost: assessGhost(job, history, new Date(), open, employerType),
           sponsorship: sponsorshipSignal(job.description),
         });
       }
@@ -105,6 +108,32 @@ function report(country: Country | null): void {
       for (const s of j.ghost.signals) console.log(`        - ${s.reason}`);
     }
   }
+}
+
+/** `sync`: push the latest run into Supabase (idempotent per day). */
+async function sync(): Promise<void> {
+  const { makeClient, syncRun } = await import("./sync.js");
+  const store = new Store(DATA);
+  const latest = store.readLatest<{ fetchedAt: string; jobs: ScoredJob[] }>();
+  if (!latest) {
+    console.error("No data yet - run `npm run fetch` first.");
+    process.exit(1);
+  }
+  const classifier = new StubClassifier();
+  const seeds = loadSeeds();
+  const groups = seeds
+    .map((company) => ({
+      company,
+      employerType: company.employerType ?? classifier.classifyEmployer(company.name).type,
+      jobs: latest.jobs.filter((j) => j.companyToken === company.token && j.source === company.source),
+    }))
+    // A board that returned nothing this run is indistinguishable from a fetch
+    // failure at this layer - skip it rather than close all its postings.
+    .filter((g) => g.jobs.length > 0);
+  const result = await syncRun(makeClient(), groups, latest.fetchedAt);
+  console.log(
+    `synced: ${result.companies} companies, ${result.postings} postings, ${result.snapshots} snapshots, ${result.closed} closed`,
+  );
 }
 
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
@@ -192,7 +221,8 @@ switch (cmd) {
   case "report": report(country); break;
   case "stats": stats(); break;
   case "feed": feed(); break;
+  case "sync": await sync(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync> [--india | --usa]");
     process.exit(1);
 }

@@ -28,6 +28,13 @@ jobs:
       - name: Write public jobs feed
         working-directory: jobradar
         run: npm run feed
+      - name: Sync to Supabase
+        if: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY != '' }}
+        working-directory: jobradar
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run sync
       - name: Commit history and stats
         run: |
           git config user.name "jobradar-fetch"

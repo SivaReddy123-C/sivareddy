@@ -102,3 +102,24 @@ test("null description (source did not provide one) is not penalized", () => {
   const a = assessGhost(makeJob({ description: null }), null, NOW);
   assert.ok(!a.signals.some((s) => s.id === "thin_description"));
 });
+
+test("agency-language and staffing-employer signals fire", () => {
+  const a = assessGhost(
+    makeJob({ description: "We are hiring for our clients across multiple locations. " + "x".repeat(600) }),
+    null, NOW, 1, "staffing",
+  );
+  assert.ok(a.signals.some((s) => s.id === "agency_text"));
+  assert.ok(a.signals.some((s) => s.id === "staffing_employer"));
+});
+
+test("freshness decays after 14 days but far less than 45/90", () => {
+  const at = (d: string) => assessGhost(makeJob({ publishedAt: d }), null, NOW);
+  assert.ok(!at("2026-08-20T00:00:00Z").signals.some((s) => s.id.startsWith("stale")));
+  const s14 = at("2026-08-05T00:00:00Z").signals.find((s) => s.id === "stale_14d");
+  assert.equal(s14?.weight, 10);
+});
+
+test("product employers gain no employer signal", () => {
+  const a = assessGhost(makeJob(), null, NOW, 1, "product");
+  assert.ok(!a.signals.some((s) => s.id.endsWith("_employer")));
+});

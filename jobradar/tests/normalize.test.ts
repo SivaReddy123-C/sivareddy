@@ -71,3 +71,32 @@ test("sponsorship detection works through escaped Greenhouse HTML", async () => 
   const desc = htmlToText("&lt;p&gt;Candidates &lt;b&gt;must be authorized to work&lt;/b&gt; in the United States.&lt;/p&gt;");
   assert.equal(sponsorshipSignal(desc), "no");
 });
+
+test("stub classifier: known brands, keywords, and clean products", async () => {
+  const { StubClassifier } = await import("../src/classify.js");
+  const c = new StubClassifier();
+  assert.equal(c.classifyEmployer("TEKsystems India").type, "staffing");
+  assert.equal(c.classifyEmployer("Apex Recruiting Partners").type, "staffing");
+  assert.equal(c.classifyEmployer("Wipro Limited").type, "consultancy");
+  assert.equal(c.classifyEmployer("Stripe").type, "unknown");
+});
+
+test("sync row mappers preserve identity and never send first_seen_at", async () => {
+  const { jobToRow, snapshotRow } = await import("../src/sync.js");
+  const job = {
+    key: "greenhouse:acme:1", source: "greenhouse", company: "Acme", companyToken: "acme",
+    sourceJobId: "1", title: "SWE", location: "Bengaluru", remote: false,
+    url: "https://x/1", applyUrl: "https://x/1/a", department: null, employmentType: null,
+    description: "hello", hasSalaryInfo: true, publishedAt: "2026-08-01T00:00:00Z", updatedAt: null,
+    firstSeenAt: "2026-08-01T00:00:00Z", lastSeenAt: "2026-08-25T00:00:00Z",
+    ghost: { score: 10, band: "low", signals: [{ id: "no_salary", weight: 10, reason: "r" }] },
+    sponsorship: "unknown",
+  } as never;
+  const row = jobToRow(job, "cid") as Record<string, unknown>;
+  assert.equal(row.source_job_id, "1");
+  assert.ok(!("first_seen_at" in row), "first_seen_at must be DB-defaulted, not overwritten");
+  assert.equal((row.ghost_reasons as string[])[0], "r");
+  const snap = snapshotRow(job, "pid", "2026-08-25") as Record<string, unknown>;
+  assert.equal(snap.run_date, "2026-08-25");
+  assert.equal((snap.signals as { id: string }[])[0]!.id, "no_salary");
+});

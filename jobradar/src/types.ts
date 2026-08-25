@@ -33,6 +33,8 @@ export interface SeedCompany {
   /** false until someone has run `probe` and confirmed the board answers. */
   verified: boolean;
   note?: string;
+  /** Stored employer classification; scoring reads this, never computes it. */
+  employerType?: "product" | "staffing" | "consultancy" | "agency" | "unknown";
 }
 
 export interface SourceAdapter {
