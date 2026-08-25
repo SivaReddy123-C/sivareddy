@@ -1,12 +1,12 @@
 {
  "date": "2026-08-25",
- "fetchedAt": "2026-08-25T19:44:05.034Z",
+ "fetchedAt": "2026-08-25T19:59:27.980Z",
  "overall": {
   "total": 8271,
   "bands": {
    "low": 4007,
-   "medium": 1821,
-   "high": 2442,
+   "medium": 1820,
+   "high": 2443,
    "critical": 1
   },
   "sponsor": {
@@ -15,7 +15,7 @@
    "unknown": 8269
   },
   "noSalary": 7423,
-  "stale90": 2718
+  "stale90": 2719
  },
  "india": {
   "total": 752,
@@ -37,8 +37,8 @@
   "total": 2309,
   "bands": {
    "low": 1212,
-   "medium": 618,
-   "high": 478,
+   "medium": 617,
+   "high": 479,
    "critical": 1
   },
   "sponsor": {
@@ -47,10 +47,10 @@
    "unknown": 2307
   },
   "noSalary": 1527,
-  "stale90": 757
+  "stale90": 758
  },
  "byCompany": {
-  "Stripe": 585,
+  "Stripe": 586,
   "Postman": 68,
   "GitLab": 211,
   "Databricks": 822,
@@ -60,7 +60,7 @@
   "Ramp": 135,
   "Linear": 32,
   "Notion": 132,
-  "Bosch": 4794,
+  "Bosch": 4793,
   "Razorpay": 24,
   "CRED": 14,
   "Meesho": 50,
