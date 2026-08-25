@@ -10,6 +10,7 @@
     "fetch": "tsx src/cli.ts fetch",
     "report": "tsx src/cli.ts report",
     "stats": "tsx src/cli.ts stats",
+    "feed": "tsx src/cli.ts feed",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"
   },

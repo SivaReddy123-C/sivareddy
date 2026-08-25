@@ -79,3 +79,25 @@ test("AI suggestion parser tolerates fenced output, rejects junk", async () => {
   assert.deepEqual(parseSuggestions('```json\n["x","y"]\n```'), ["x", "y"]);
   assert.throws(() => parseSuggestions("sorry, no"));
 });
+
+test("job filters: country, ghost, sponsorship, search, sort", async () => {
+  const { applyFilters, defaultFilters } = await import("../src/jobs/feed.js");
+  const mk = (over: Record<string, unknown>) => ({
+    key: "k", company: "Acme", title: "SWE", location: "Bengaluru", country: "in",
+    url: "u", source: "greenhouse", publishedAt: "2026-08-01T00:00:00Z",
+    firstSeenAt: "2026-08-01T00:00:00Z",
+    ghost: { score: 10, band: "low", reasons: [] }, sponsorship: "unknown", hasSalaryInfo: false,
+    ...over,
+  }) as never;
+  const jobs = [
+    mk({ key: "1", country: "us", ghost: { score: 80, band: "critical", reasons: [] } }),
+    mk({ key: "2", country: "us", sponsorship: "no" }),
+    mk({ key: "3", company: "Stripe", title: "Backend Engineer" }),
+  ];
+  const f = defaultFilters();
+  assert.equal(applyFilters(jobs, { ...f, country: "us" }).length, 2);
+  assert.equal(applyFilters(jobs, { ...f, hideHighGhost: true }).length, 2);
+  assert.equal(applyFilters(jobs, { ...f, sponsorshipOnly: true }).length, 2);
+  assert.equal(applyFilters(jobs, { ...f, q: "backend" })[0]!.key, "3");
+  assert.equal(applyFilters(jobs, { ...f, sort: "ghost" })[2]!.key, "1");
+});

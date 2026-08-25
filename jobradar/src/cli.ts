@@ -144,6 +144,43 @@ function stats(): void {
   console.log(`stats -> ${file}`);
 }
 
+/**
+ * `feed`: write the slim public jobs feed the web app consumes.
+ * India + US postings only, no descriptions - small enough to commit daily
+ * and serve from GitHub raw. Every entry carries its ghost assessment with
+ * human-readable reasons, because a score without reasons is just an opinion.
+ */
+function feed(): void {
+  const store = new Store(DATA);
+  const latest = store.readLatest<{ fetchedAt: string; jobs: ScoredJob[] }>();
+  if (!latest) {
+    console.error("No data yet - run `npm run fetch` first.");
+    process.exit(1);
+  }
+  const entries = latest.jobs
+    .map((j) => {
+      const country = matchesCountry(j.location, "in") ? "in" : matchesCountry(j.location, "us") ? "us" : null;
+      return country === null ? null : {
+        key: j.key,
+        company: j.company,
+        title: j.title,
+        location: j.location,
+        country,
+        url: j.url,
+        source: j.source,
+        publishedAt: j.publishedAt,
+        firstSeenAt: j.firstSeenAt,
+        ghost: { score: j.ghost.score, band: j.ghost.band, reasons: j.ghost.signals.map((s) => s.reason) },
+        sponsorship: j.sponsorship ?? "unknown",
+        hasSalaryInfo: j.hasSalaryInfo,
+      };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+  const out = { generatedAt: latest.fetchedAt, total: entries.length, jobs: entries };
+  writeFileSync(join(DATA, "feed.json"), JSON.stringify(out));
+  console.log(`feed -> data/feed.json (${entries.length} India+US jobs of ${latest.jobs.length} total)`);
+}
+
 const cmd = process.argv[2];
 const args = process.argv.slice(3);
 let country: Country | null = null;
@@ -154,7 +191,8 @@ switch (cmd) {
   case "fetch": await fetchAll(); break;
   case "report": report(country); break;
   case "stats": stats(); break;
+  case "feed": feed(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed> [--india | --usa]");
     process.exit(1);
 }

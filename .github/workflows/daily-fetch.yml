@@ -25,12 +25,15 @@ jobs:
       - name: Write daily stats
         working-directory: jobradar
         run: npm run stats
+      - name: Write public jobs feed
+        working-directory: jobradar
+        run: npm run feed
       - name: Commit history and stats
         run: |
           git config user.name "jobradar-fetch"
           git config user.email "actions@users.noreply.github.com"
           git add -f jobradar/data/state.json
-          git add jobradar/data/stats
+          git add jobradar/data/stats jobradar/data/feed.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else

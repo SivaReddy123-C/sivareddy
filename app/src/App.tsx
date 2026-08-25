@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { exportJson, importJson, loadState, saveState } from "./lib/storage.js";
 import type { AppState } from "./lib/types.js";
+import { JobsPage } from "./jobs/JobsPage.js";
 import { ResumePage } from "./resume/ResumePage.js";
 import { TrackerPage } from "./tracker/TrackerPage.js";
 
-type Tab = "resume" | "tracker";
+type Tab = "resume" | "jobs" | "tracker";
 
 export function App() {
   const [state, setState] = useState<AppState>(() => loadState());
@@ -48,6 +49,9 @@ export function App() {
           <button className={tab === "resume" ? "active" : ""} onClick={() => setTab("resume")}>
             Resume
           </button>
+          <button className={tab === "jobs" ? "active" : ""} onClick={() => setTab("jobs")}>
+            Jobs
+          </button>
           <button className={tab === "tracker" ? "active" : ""} onClick={() => setTab("tracker")}>
             Tracker{state.applications.length > 0 ? ` (${state.applications.length})` : ""}
           </button>
@@ -73,9 +77,16 @@ export function App() {
         </div>
       )}
 
-      {tab === "resume" ? (
+      {tab === "resume" && (
         <ResumePage resume={state.resume} onChange={(resume) => setState((s) => ({ ...s, resume }))} />
-      ) : (
+      )}
+      {tab === "jobs" && (
+        <JobsPage
+          applications={state.applications}
+          onChange={(applications) => setState((s) => ({ ...s, applications }))}
+        />
+      )}
+      {tab === "tracker" && (
         <TrackerPage
           applications={state.applications}
           onChange={(applications) => setState((s) => ({ ...s, applications }))}
