@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.env
+jobradar/data/snapshots/
+jobradar/data/state.json
+jobradar/data/latest.json
