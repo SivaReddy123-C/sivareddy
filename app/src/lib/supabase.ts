@@ -7,8 +7,8 @@
  */
 import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://mmsmelyifosgggyiudpa.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_c9Yg8NjE4bfFPzwJL3QOIw_8STbzDBz";
+const SUPABASE_URL = "https://udvhqvdydkcqxkdzsdbg.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_GFd4l0RNHuGqw76S2juM7w_-cQHhPFs";
 
 let client: SupabaseClient | null = null;
 
