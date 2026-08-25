@@ -1,70 +1,110 @@
 {
  "date": "2026-08-25",
- "fetchedAt": "2026-08-25T11:57:22.195Z",
+ "fetchedAt": "2026-08-25T20:09:03.147Z",
  "overall": {
-  "total": 8273,
+  "total": 14736,
   "bands": {
-   "low": 3996,
-   "medium": 1833,
-   "high": 2444,
-   "critical": 0
+   "low": 6839,
+   "medium": 3366,
+   "high": 4522,
+   "critical": 9
   },
   "sponsor": {
-   "yes": 1,
-   "no": 1,
-   "unknown": 8271
+   "yes": 7,
+   "no": 18,
+   "unknown": 14711
   },
-  "noSalary": 7418,
-  "stale90": 2722
+  "noSalary": 13561,
+  "stale90": 4930
  },
  "india": {
-  "total": 750,
+  "total": 1023,
   "bands": {
-   "low": 476,
-   "medium": 117,
-   "high": 157,
+   "low": 606,
+   "medium": 184,
+   "high": 233,
    "critical": 0
   },
   "sponsor": {
    "yes": 0,
    "no": 0,
-   "unknown": 750
+   "unknown": 1023
   },
-  "noSalary": 730,
-  "stale90": 157
+  "noSalary": 1002,
+  "stale90": 233
  },
  "usa": {
-  "total": 2317,
+  "total": 6038,
   "bands": {
-   "low": 1215,
-   "medium": 621,
-   "high": 481,
-   "critical": 0
+   "low": 2791,
+   "medium": 1502,
+   "high": 1738,
+   "critical": 7
   },
   "sponsor": {
-   "yes": 1,
-   "no": 1,
-   "unknown": 2315
+   "yes": 5,
+   "no": 10,
+   "unknown": 6023
   },
-  "noSalary": 1527,
-  "stale90": 762
+  "noSalary": 4997,
+  "stale90": 2123
  },
  "byCompany": {
-  "Stripe": 583,
-  "Postman": 69,
-  "GitLab": 210,
-  "Databricks": 824,
-  "Figma": 159,
-  "Coinbase": 174,
-  "OpenAI": 757,
-  "Ramp": 139,
+  "Stripe": 587,
+  "Postman": 68,
+  "GitLab": 211,
+  "Databricks": 822,
+  "Figma": 158,
+  "Coinbase": 175,
+  "OpenAI": 753,
+  "Ramp": 135,
   "Linear": 32,
-  "Notion": 133,
-  "Bosch": 4783,
+  "Notion": 132,
+  "Bosch": 4793,
   "Razorpay": 24,
   "CRED": 14,
   "Meesho": 50,
-  "Airbnb": 193,
-  "Robinhood": 129
+  "Airbnb": 188,
+  "Robinhood": 130,
+  "Lyft": 161,
+  "Pinterest": 214,
+  "Reddit": 151,
+  "DoorDash": 464,
+  "Instacart": 121,
+  "Brex": 288,
+  "Affirm": 204,
+  "Gusto": 87,
+  "MongoDB": 406,
+  "Elastic": 285,
+  "Datadog": 452,
+  "Twilio": 140,
+  "Asana": 126,
+  "Dropbox": 41,
+  "Duolingo": 81,
+  "Roblox": 235,
+  "Samsara": 263,
+  "Vercel": 87,
+  "Anthropic": 544,
+  "Discord": 51,
+  "Airtable": 16,
+  "Chime": 63,
+  "Carta": 59,
+  "Cloudflare": 310,
+  "Checkr": 46,
+  "Flexport": 161,
+  "Scale AI": 216,
+  "PhonePe": 66,
+  "InMobi": 64,
+  "Groww": 5,
+  "Palantir": 308,
+  "Spotify": 90,
+  "Porter": 27,
+  "Cursor": 115,
+  "Replit": 71,
+  "Supabase": 59,
+  "Vanta": 108,
+  "PostHog": 14,
+  "ElevenLabs": 247,
+  "Warp": 18
  }
 }
