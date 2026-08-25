@@ -108,13 +108,21 @@ export async function syncRun(
       postings += chunk.length;
     }
 
-    // Snapshot rows need posting ids - fetch id map for this company's source ids.
-    const { data: idRows, error: idErr } = await db
-      .from("jr_job_postings")
-      .select("id, source_job_id")
-      .eq("company_id", comp.id);
-    if (idErr) throw new Error(`id fetch failed for ${company.name}: ${idErr.message}`);
-    const idMap = new Map((idRows ?? []).map((r) => [r.source_job_id as string, r.id as string]));
+    // Snapshot rows need posting ids. PostgREST caps responses at 1000 rows,
+    // so paginate - Bosch alone has ~4800 postings.
+    interface IdRow { id: string; source_job_id: string; closed_at: string | null }
+    const idRows: IdRow[] = [];
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await db
+        .from("jr_job_postings")
+        .select("id, source_job_id, closed_at")
+        .eq("company_id", comp.id)
+        .range(from, from + 999);
+      if (error) throw new Error(`id fetch failed for ${company.name}: ${error.message}`);
+      idRows.push(...((data ?? []) as IdRow[]));
+      if (!data || data.length < 1000) break;
+    }
+    const idMap = new Map(idRows.map((r) => [r.source_job_id, r.id]));
 
     const snaps = jobs
       .map((j) => {
@@ -132,16 +140,19 @@ export async function syncRun(
     }
 
     // Close postings that disappeared from a board we successfully fetched.
-    const seenIds = jobs.map((j) => j.sourceJobId);
-    const { data: closedRows, error: clErr } = await db
-      .from("jr_job_postings")
-      .update({ closed_at: runIso })
-      .eq("company_id", comp.id)
-      .is("closed_at", null)
-      .not("source_job_id", "in", `(${seenIds.map((s) => `"${s}"`).join(",")})`)
-      .select("id");
-    if (clErr) throw new Error(`close pass failed for ${company.name}: ${clErr.message}`);
-    closed += closedRows?.length ?? 0;
+    // Computed client-side and closed by primary key in chunks - putting
+    // hundreds of ids into a query-string filter 400s past ~700 jobs.
+    const seen = new Set(jobs.map((j) => j.sourceJobId));
+    const toClose = idRows.filter((r) => r.closed_at === null && !seen.has(r.source_job_id)).map((r) => r.id);
+    for (let i = 0; i < toClose.length; i += 200) {
+      const chunk = toClose.slice(i, i + 200);
+      const { error } = await db
+        .from("jr_job_postings")
+        .update({ closed_at: runIso })
+        .in("id", chunk);
+      if (error) throw new Error(`close pass failed for ${company.name}: ${error.message}`);
+      closed += chunk.length;
+    }
   }
   return { companies: seeds.length, postings, snapshots, closed };
 }
