@@ -104,11 +104,12 @@ test("sync row mappers preserve identity and never send first_seen_at", async ()
 test("fit scoring: skills, freshness, seniority, ghost penalty", async () => {
   const { scoreFit, seniorityOfTitle } = await import("../src/fit.js");
   const NOW2 = new Date("2026-08-25T00:00:00Z");
-  const profile = { skills: ["react", "typescript"], countries: ["in"], locations: ["bengaluru"], seniorityTarget: "junior" };
+  const profile = { skills: ["react", "typescript"], countries: ["in"], locations: ["bengaluru"], seniorityTarget: "junior", needsSponsorship: false };
   const posting = {
     title: "Junior Frontend Engineer", location: "Bengaluru, India", country: "in",
     descriptionText: "Build UIs with React and TypeScript", hasSalary: true,
     postedAt: "2026-08-23T00:00:00Z", firstSeenAt: "2026-08-23T00:00:00Z", ghostScore: 10,
+    sponsorship: "unknown" as const,
   };
   const r = scoreFit(profile, posting, NOW2);
   assert.ok(r.score >= 60, `expected strong fit, got ${r.score}: ${r.reasons.join("; ")}`);

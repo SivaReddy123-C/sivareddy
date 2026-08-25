@@ -4,7 +4,7 @@
  * Runs after sync in the daily Action, with the service role.
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { GHOST_CUTOFF, scoreFit, type FitPosting, type FitProfile } from "./fit.js";
+import { GHOST_CUTOFF, passesHardFilters, scoreFit, type FitPosting, type FitProfile } from "./fit.js";
 import { matchesCountry } from "./normalize.js";
 
 interface ProfileRow {
@@ -14,6 +14,7 @@ interface ProfileRow {
   locations: string[] | null;
   seniority_target: string | null;
   daily_list_size: number | null;
+  needs_sponsorship: boolean | null;
 }
 
 interface PostingRow {
@@ -26,6 +27,7 @@ interface PostingRow {
   posted_at: string | null;
   first_seen_at: string;
   ghost_score: number | null;
+  sponsorship: "no" | "yes" | "unknown" | null;
   url: string;
 }
 
@@ -34,9 +36,12 @@ async function fetchOpenPostings(db: SupabaseClient): Promise<PostingRow[]> {
   for (let from = 0; ; from += 1000) {
     const { data, error } = await db
       .from("jr_job_postings")
-      .select("id, title, location, country, description_text, has_salary, posted_at, first_seen_at, ghost_score, url")
+      .select("id, title, location, country, description_text, has_salary, posted_at, first_seen_at, ghost_score, sponsorship, url")
       .is("closed_at", null)
       .lt("ghost_score", 50)
+      // Unordered .range() pagination has no stable page boundaries -- rows
+      // can repeat or vanish between requests. Order by primary key.
+      .order("id")
       .range(from, from + 999);
     if (error) throw new Error(`posting fetch failed: ${error.message}`);
     rows.push(...((data ?? []) as PostingRow[]));
@@ -48,7 +53,7 @@ async function fetchOpenPostings(db: SupabaseClient): Promise<PostingRow[]> {
 export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promise<{ users: number; matches: number }> {
   const { data: profiles, error: pErr } = await db
     .from("jr_user_profiles")
-    .select("user_id, skills, countries, locations, seniority_target, daily_list_size");
+    .select("user_id, skills, countries, locations, seniority_target, daily_list_size, needs_sponsorship");
   if (pErr) throw new Error(`profile fetch failed: ${pErr.message}`);
   if (!profiles || profiles.length === 0) return { users: 0, matches: 0 };
 
@@ -62,12 +67,14 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
       countries: (p.countries ?? []).map((c) => c.toLowerCase()),
       locations: (p.locations ?? []).map((l) => l.toLowerCase().trim()).filter(Boolean),
       seniorityTarget: p.seniority_target,
+      needsSponsorship: Boolean(p.needs_sponsorship),
     };
     const listSize = Math.min(50, Math.max(5, p.daily_list_size ?? 30));
 
     const scored = postings
       .filter((post) => {
         if ((post.ghost_score ?? 0) >= GHOST_CUTOFF) return false;
+        if (!passesHardFilters(profile, toFitPosting(post))) return false;
         if (profile.countries.length === 0) return true;
         // Country column may be null on older rows - fall back to location text.
         const c = post.country?.toLowerCase();
@@ -76,16 +83,7 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
       })
       .map((post) => ({
         post,
-        fit: scoreFit(profile, {
-          title: post.title,
-          location: post.location,
-          country: post.country,
-          descriptionText: post.description_text,
-          hasSalary: post.has_salary,
-          postedAt: post.posted_at,
-          firstSeenAt: post.first_seen_at,
-          ghostScore: post.ghost_score ?? 0,
-        }, now),
+        fit: scoreFit(profile, toFitPosting(post), now),
       }))
       .sort((a, b) => b.fit.score - a.fit.score)
       .slice(0, listSize);
@@ -108,4 +106,18 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
     }
   }
   return { users: profiles.length, matches: total };
+}
+
+function toFitPosting(post: PostingRow): FitPosting {
+  return {
+    title: post.title,
+    location: post.location,
+    country: post.country,
+    descriptionText: post.description_text,
+    hasSalary: post.has_salary,
+    postedAt: post.posted_at,
+    firstSeenAt: post.first_seen_at,
+    ghostScore: post.ghost_score ?? 0,
+    sponsorship: post.sponsorship ?? "unknown",
+  };
 }
