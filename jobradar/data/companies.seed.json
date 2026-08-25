@@ -3,105 +3,140 @@
     "name": "Stripe",
     "source": "greenhouse",
     "token": "stripe",
-    "verified": false,
-    "note": "Global; hires in India (Bengaluru)"
+    "verified": true,
+    "note": "585 jobs at last probe; hires in India (Bengaluru)"
   },
   {
     "name": "Postman",
     "source": "greenhouse",
     "token": "postman",
-    "verified": false,
-    "note": "India-founded; Bengaluru + SF"
+    "verified": true,
+    "note": "69 jobs; India-founded, Bengaluru + SF"
   },
   {
     "name": "GitLab",
     "source": "greenhouse",
     "token": "gitlab",
-    "verified": false,
-    "note": "Remote-first, hires in India"
+    "verified": true,
+    "note": "210 jobs; remote-first"
   },
   {
     "name": "Databricks",
     "source": "greenhouse",
     "token": "databricks",
-    "verified": false,
-    "note": "Bengaluru office"
-  },
-  {
-    "name": "Razorpay",
-    "source": "lever",
-    "token": "razorpay",
-    "verified": false,
-    "note": "Indian fintech, Bengaluru"
-  },
-  {
-    "name": "Atlassian",
-    "source": "lever",
-    "token": "atlassian",
-    "verified": false,
-    "note": "Large Bengaluru presence"
-  },
-  {
-    "name": "Groww",
-    "source": "lever",
-    "token": "groww",
-    "verified": false,
-    "note": "Indian fintech"
-  },
-  {
-    "name": "OpenAI",
-    "source": "ashby",
-    "token": "openai",
-    "verified": false,
-    "note": "Reference board for ashby adapter"
-  },
-  {
-    "name": "Ramp",
-    "source": "ashby",
-    "token": "ramp",
-    "verified": false,
-    "note": "Reference board for ashby adapter"
-  },
-  {
-    "name": "Linear",
-    "source": "ashby",
-    "token": "linear",
-    "verified": false,
-    "note": "Remote"
-  },
-  {
-    "name": "Visa",
-    "source": "smartrecruiters",
-    "token": "visa",
-    "verified": false,
-    "note": "Bengaluru tech hub"
-  },
-  {
-    "name": "Bosch",
-    "source": "smartrecruiters",
-    "token": "bosch",
-    "verified": false,
-    "note": "Large India engineering presence"
+    "verified": true,
+    "note": "823 jobs; Bengaluru office"
   },
   {
     "name": "Figma",
     "source": "greenhouse",
     "token": "figma",
-    "verified": false,
-    "note": "US; strong new-grad hiring"
+    "verified": true,
+    "note": "159 jobs; strong US new-grad hiring"
   },
   {
     "name": "Coinbase",
     "source": "greenhouse",
     "token": "coinbase",
-    "verified": false,
-    "note": "US remote-first"
+    "verified": true,
+    "note": "174 jobs; US remote-first"
+  },
+  {
+    "name": "OpenAI",
+    "source": "ashby",
+    "token": "openai",
+    "verified": true,
+    "note": "758 jobs"
+  },
+  {
+    "name": "Ramp",
+    "source": "ashby",
+    "token": "ramp",
+    "verified": true,
+    "note": "139 jobs; US"
+  },
+  {
+    "name": "Linear",
+    "source": "ashby",
+    "token": "linear",
+    "verified": true,
+    "note": "32 jobs; remote"
   },
   {
     "name": "Notion",
     "source": "ashby",
     "token": "notion",
+    "verified": true,
+    "note": "133 jobs; US"
+  },
+  {
+    "name": "Visa",
+    "source": "smartrecruiters",
+    "token": "Visa",
     "verified": false,
-    "note": "US (SF/NY)"
+    "note": "lowercase 'visa' answered with 0 jobs; trying capitalized token"
+  },
+  {
+    "name": "Bosch",
+    "source": "smartrecruiters",
+    "token": "BoschGroup",
+    "verified": false,
+    "note": "'bosch' answered with 0 jobs; trying 'BoschGroup'"
+  },
+  {
+    "name": "Razorpay",
+    "source": "greenhouse",
+    "token": "razorpaysoftwareprivatelimited",
+    "verified": false,
+    "note": "Lever board gone; Razorpay likely on Greenhouse now"
+  },
+  {
+    "name": "Atlassian",
+    "source": "greenhouse",
+    "token": "atlassian",
+    "verified": false,
+    "note": "Lever board gone; trying Greenhouse"
+  },
+  {
+    "name": "CRED",
+    "source": "lever",
+    "token": "cred",
+    "verified": false,
+    "note": "Indian fintech; candidate"
+  },
+  {
+    "name": "Meesho",
+    "source": "lever",
+    "token": "meesho",
+    "verified": false,
+    "note": "Indian e-commerce; candidate"
+  },
+  {
+    "name": "Zepto",
+    "source": "lever",
+    "token": "zeptonow",
+    "verified": false,
+    "note": "Indian quick-commerce; candidate"
+  },
+  {
+    "name": "Rippling",
+    "source": "greenhouse",
+    "token": "rippling",
+    "verified": false,
+    "note": "US+Bengaluru; candidate"
+  },
+  {
+    "name": "Airbnb",
+    "source": "greenhouse",
+    "token": "airbnb",
+    "verified": false,
+    "note": "US; candidate"
+  },
+  {
+    "name": "Robinhood",
+    "source": "greenhouse",
+    "token": "robinhood",
+    "verified": false,
+    "note": "US; candidate"
   }
 ]
