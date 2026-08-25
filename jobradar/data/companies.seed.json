@@ -70,73 +70,45 @@
     "note": "133 jobs; US"
   },
   {
-    "name": "Visa",
-    "source": "smartrecruiters",
-    "token": "Visa",
-    "verified": false,
-    "note": "lowercase 'visa' answered with 0 jobs; trying capitalized token"
-  },
-  {
     "name": "Bosch",
     "source": "smartrecruiters",
     "token": "BoschGroup",
-    "verified": false,
-    "note": "'bosch' answered with 0 jobs; trying 'BoschGroup'"
+    "verified": true,
+    "note": "4785 jobs at last probe (2026-08-25)"
   },
   {
     "name": "Razorpay",
     "source": "greenhouse",
     "token": "razorpaysoftwareprivatelimited",
-    "verified": false,
-    "note": "Lever board gone; Razorpay likely on Greenhouse now"
-  },
-  {
-    "name": "Atlassian",
-    "source": "greenhouse",
-    "token": "atlassian",
-    "verified": false,
-    "note": "Lever board gone; trying Greenhouse"
+    "verified": true,
+    "note": "24 jobs at last probe (2026-08-25)"
   },
   {
     "name": "CRED",
     "source": "lever",
     "token": "cred",
-    "verified": false,
-    "note": "Indian fintech; candidate"
+    "verified": true,
+    "note": "13 jobs at last probe (2026-08-25)"
   },
   {
     "name": "Meesho",
     "source": "lever",
     "token": "meesho",
-    "verified": false,
-    "note": "Indian e-commerce; candidate"
-  },
-  {
-    "name": "Zepto",
-    "source": "lever",
-    "token": "zeptonow",
-    "verified": false,
-    "note": "Indian quick-commerce; candidate"
-  },
-  {
-    "name": "Rippling",
-    "source": "greenhouse",
-    "token": "rippling",
-    "verified": false,
-    "note": "US+Bengaluru; candidate"
+    "verified": true,
+    "note": "50 jobs at last probe (2026-08-25)"
   },
   {
     "name": "Airbnb",
     "source": "greenhouse",
     "token": "airbnb",
-    "verified": false,
-    "note": "US; candidate"
+    "verified": true,
+    "note": "193 jobs at last probe (2026-08-25)"
   },
   {
     "name": "Robinhood",
     "source": "greenhouse",
     "token": "robinhood",
-    "verified": false,
-    "note": "US; candidate"
+    "verified": true,
+    "note": "129 jobs at last probe (2026-08-25)"
   }
 ]

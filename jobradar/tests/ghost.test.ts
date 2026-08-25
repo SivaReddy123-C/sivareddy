@@ -60,8 +60,27 @@ test("repost churn across ids is flagged", () => {
     lastSeenAt: "2026-08-24T00:00:00Z",
     seenIds: ["1", "2", "3"],
   };
-  const a = assessGhost(makeJob(), history, NOW);
+  const a = assessGhost(makeJob(), history, NOW, 1);
   assert.ok(a.signals.some((s) => s.id === "reposted"));
+});
+
+test("concurrent identical openings are headcount, not reposts", () => {
+  const history: JobHistory = {
+    firstSeenAt: "2026-07-01T00:00:00Z",
+    lastSeenAt: "2026-08-24T00:00:00Z",
+    seenIds: ["1", "2"],
+  };
+  const a = assessGhost(makeJob(), history, NOW, 2);
+  assert.ok(!a.signals.some((s) => s.id === "reposted"));
+});
+
+test("engineering 'Pipelines' titles are not evergreen-flagged", () => {
+  for (const title of ["Sr. Engineering Manager - Pipelines Engine", "Staff Engineer, Data Pipelines"]) {
+    const a = assessGhost(makeJob({ title }), null, NOW);
+    assert.ok(!a.signals.some((s) => s.id === "evergreen_title"), title);
+  }
+  const a = assessGhost(makeJob({ title: "Engineering Talent Pipeline" }), null, NOW);
+  assert.ok(a.signals.some((s) => s.id === "evergreen_title"));
 });
 
 test("missing everything stacks toward critical", () => {

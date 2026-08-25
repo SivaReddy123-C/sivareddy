@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { assessGhost } from "./ghost.js";
-import { matchesCountry, sponsorshipSignal, type Country } from "./normalize.js";
+import { matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
 import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
@@ -44,13 +44,19 @@ async function fetchAll(): Promise<void> {
     try {
       const jobs = await adapter.fetchJobs(c);
       store.record(jobs);
+      const concurrent = new Map<string, number>();
+      for (const job of jobs) {
+        const k = slotKey(job.source, job.companyToken, job.title, job.location);
+        concurrent.set(k, (concurrent.get(k) ?? 0) + 1);
+      }
       for (const job of jobs) {
         const history = store.historyFor(job);
+        const open = concurrent.get(slotKey(job.source, job.companyToken, job.title, job.location)) ?? 1;
         all.push({
           ...job,
           firstSeenAt: history?.firstSeenAt ?? new Date().toISOString(),
           lastSeenAt: history?.lastSeenAt ?? new Date().toISOString(),
-          ghost: assessGhost(job, history),
+          ghost: assessGhost(job, history, new Date(), open),
           sponsorship: sponsorshipSignal(job.description),
         });
       }

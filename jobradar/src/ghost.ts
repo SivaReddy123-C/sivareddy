@@ -3,7 +3,7 @@ import type { GhostAssessment, GhostSignal, Job, JobHistory } from "./types.js";
 const DAY = 24 * 60 * 60 * 1000;
 
 const EVERGREEN_TITLE =
-  /talent (pool|community|network)|general application|future (opportunit|opening)|open application|pipeline|evergreen|expression of interest/i;
+  /talent (pool|community|network|pipeline)|general application|future (opportunit|opening)|open application|evergreen|expression of interest/i;
 
 /**
  * Score how likely a posting is a "ghost job" - one that will never hire anyone.
@@ -13,7 +13,13 @@ const EVERGREEN_TITLE =
  * Weights are deliberately published and explained - if we flag a company's
  * posting, anyone (including that company) can see exactly why.
  */
-export function assessGhost(job: Job, history: JobHistory | null, now = new Date()): GhostAssessment {
+/**
+ * @param concurrentOpen how many postings share this job's slot in the CURRENT
+ * snapshot. Multiple ids for a slot only indicate repost churn when there are
+ * more historical ids than concurrently open copies - identical roles open at
+ * the same time are multiple headcount, not reposts.
+ */
+export function assessGhost(job: Job, history: JobHistory | null, now = new Date(), concurrentOpen = 1): GhostAssessment {
   const signals: GhostSignal[] = [];
   const nowMs = now.getTime();
 
@@ -35,11 +41,11 @@ export function assessGhost(job: Job, history: JobHistory | null, now = new Date
   }
 
   // 3) Repost churn: same role slot cycling through new job ids.
-  if (history && history.seenIds.length >= 2) {
+  if (history && history.seenIds.length > Math.max(concurrentOpen, 1)) {
     signals.push({
       id: "reposted",
       weight: 25,
-      reason: `Same role reposted under ${history.seenIds.length} different job ids`,
+      reason: `Role has cycled through ${history.seenIds.length} job ids (${concurrentOpen} currently open)`,
     });
   }
 

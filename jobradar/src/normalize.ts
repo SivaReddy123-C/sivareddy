@@ -1,23 +1,30 @@
 const MAX_DESC = 3000;
 
-/** Strip HTML tags/entities into readable plain text. */
-export function htmlToText(html: string | null | undefined): string | null {
-  if (!html) return null;
-  const text = html
-    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/(p|div|li|h[1-6])>/gi, "\n")
-    .replace(/<[^>]+>/g, " ")
+function decodeEntities(s: string): string {
+  return s
     .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
     .replace(/&lt;/gi, "<")
     .replace(/&gt;/gi, ">")
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&quot;/gi, '"')
+    .replace(/&amp;/gi, "&");
+}
+
+/** Strip HTML tags/entities into readable plain text. */
+export function htmlToText(html: string | null | undefined): string | null {
+  if (!html) return null;
+  // Greenhouse serves descriptions with HTML-escaped entities (&lt;p&gt;...),
+  // so decode first, strip tags, then decode what the first pass revealed.
+  const text = decodeEntities(html)
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|li|h[1-6])>/gi, "\n")
+    .replace(/<[^>]+>/g, " ")
     .replace(/[ \t]+/g, " ")
     .replace(/\n\s*\n\s*/g, "\n")
     .trim();
-  return text ? text.slice(0, MAX_DESC) : null;
+  const decoded = decodeEntities(text).trim();
+  return decoded ? decoded.slice(0, MAX_DESC) : null;
 }
 
 export function toIso(value: string | number | null | undefined): string | null {

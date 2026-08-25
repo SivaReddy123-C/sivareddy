@@ -58,3 +58,16 @@ test("sponsorshipSignal detects explicit no-sponsorship language", async () => {
   assert.equal(sponsorshipSignal("We value diversity and inclusion."), "unknown");
   assert.equal(sponsorshipSignal(null), "unknown");
 });
+
+test("htmlToText handles Greenhouse-style escaped HTML", () => {
+  const escaped = "&lt;p&gt;We are &lt;strong&gt;unable to sponsor&lt;/strong&gt; visas.&lt;/p&gt;";
+  const out = htmlToText(escaped);
+  assert.ok(out!.includes("unable to sponsor"), out ?? "null");
+  assert.ok(!out!.includes("<"));
+});
+
+test("sponsorship detection works through escaped Greenhouse HTML", async () => {
+  const { sponsorshipSignal } = await import("../src/normalize.js");
+  const desc = htmlToText("&lt;p&gt;Candidates &lt;b&gt;must be authorized to work&lt;/b&gt; in the United States.&lt;/p&gt;");
+  assert.equal(sponsorshipSignal(desc), "no");
+});

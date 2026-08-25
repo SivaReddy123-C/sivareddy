@@ -35,7 +35,7 @@ export const lever: SourceAdapter = {
       applyUrl: p.applyUrl ?? p.hostedUrl,
       department: p.categories?.team ?? p.categories?.department ?? null,
       employmentType: p.categories?.commitment ?? null,
-      description: p.descriptionPlain?.slice(0, 3000) ?? htmlToText(p.description),
+      description: p.descriptionPlain?.trim() ? p.descriptionPlain.slice(0, 3000) : htmlToText(p.description),
       hasSalaryInfo: Boolean(p.salaryRange && (p.salaryRange.min || p.salaryRange.max)),
       publishedAt: toIso(p.createdAt ?? null),
       updatedAt: null,
