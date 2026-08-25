@@ -110,5 +110,369 @@
     "token": "robinhood",
     "verified": true,
     "note": "129 jobs at last probe (2026-08-25)"
+  },
+  {
+    "name": "Lyft",
+    "source": "greenhouse",
+    "token": "lyft",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Pinterest",
+    "source": "greenhouse",
+    "token": "pinterest",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Reddit",
+    "source": "greenhouse",
+    "token": "reddit",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "DoorDash",
+    "source": "greenhouse",
+    "token": "doordashusa",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Instacart",
+    "source": "greenhouse",
+    "token": "instacart",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Brex",
+    "source": "greenhouse",
+    "token": "brex",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Plaid",
+    "source": "greenhouse",
+    "token": "plaid",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Affirm",
+    "source": "greenhouse",
+    "token": "affirm",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Gusto",
+    "source": "greenhouse",
+    "token": "gusto",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "MongoDB",
+    "source": "greenhouse",
+    "token": "mongodb",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Elastic",
+    "source": "greenhouse",
+    "token": "elastic",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Datadog",
+    "source": "greenhouse",
+    "token": "datadog",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Twilio",
+    "source": "greenhouse",
+    "token": "twilio",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Asana",
+    "source": "greenhouse",
+    "token": "asana",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Dropbox",
+    "source": "greenhouse",
+    "token": "dropbox",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Duolingo",
+    "source": "greenhouse",
+    "token": "duolingo",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Roblox",
+    "source": "greenhouse",
+    "token": "roblox",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Samsara",
+    "source": "greenhouse",
+    "token": "samsara",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Vercel",
+    "source": "greenhouse",
+    "token": "vercel",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Anthropic",
+    "source": "greenhouse",
+    "token": "anthropic",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Discord",
+    "source": "greenhouse",
+    "token": "discord",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Airtable",
+    "source": "greenhouse",
+    "token": "airtable",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Chime",
+    "source": "greenhouse",
+    "token": "chime",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Carta",
+    "source": "greenhouse",
+    "token": "carta",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Cloudflare",
+    "source": "greenhouse",
+    "token": "cloudflare",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Checkr",
+    "source": "greenhouse",
+    "token": "checkr",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Flexport",
+    "source": "greenhouse",
+    "token": "flexport",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Scale AI",
+    "source": "greenhouse",
+    "token": "scaleai",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "PhonePe",
+    "source": "greenhouse",
+    "token": "phonepe",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "InMobi",
+    "source": "greenhouse",
+    "token": "inmobi",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Freshworks",
+    "source": "greenhouse",
+    "token": "freshworks",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Groww",
+    "source": "greenhouse",
+    "token": "groww",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Swiggy",
+    "source": "greenhouse",
+    "token": "swiggy",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Palantir",
+    "source": "lever",
+    "token": "palantir",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Spotify",
+    "source": "lever",
+    "token": "spotify",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Porter",
+    "source": "lever",
+    "token": "porter",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Jupiter",
+    "source": "lever",
+    "token": "jupiter",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Urban Company",
+    "source": "lever",
+    "token": "urbancompany",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Cursor",
+    "source": "ashby",
+    "token": "cursor",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Perplexity",
+    "source": "ashby",
+    "token": "perplexity-ai",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Replit",
+    "source": "ashby",
+    "token": "replit",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Supabase",
+    "source": "ashby",
+    "token": "supabase",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Vanta",
+    "source": "ashby",
+    "token": "vanta",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Mercury",
+    "source": "ashby",
+    "token": "mercury",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Deel",
+    "source": "ashby",
+    "token": "deel",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Clerk",
+    "source": "ashby",
+    "token": "clerk",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "PostHog",
+    "source": "ashby",
+    "token": "posthog",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "ElevenLabs",
+    "source": "ashby",
+    "token": "elevenlabs",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Glean",
+    "source": "ashby",
+    "token": "glean",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Warp",
+    "source": "ashby",
+    "token": "warp",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "IKEA",
+    "source": "smartrecruiters",
+    "token": "IKEA",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
+  },
+  {
+    "name": "Publicis Sapient",
+    "source": "smartrecruiters",
+    "token": "PublicisSapient",
+    "verified": false,
+    "note": "candidate batch 2 - verified automatically by the next run"
   }
 ]
