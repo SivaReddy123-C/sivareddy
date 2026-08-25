@@ -40,10 +40,11 @@ export class Store {
     }
     writeFileSync(this.path("state.json"), JSON.stringify(this.state, null, 1));
     const day = iso.slice(0, 10);
-    writeFileSync(
-      this.path(join("snapshots", `${day}.jsonl`)),
-      jobs.map((j) => JSON.stringify(j)).join("\n") + "\n",
-    );
+    // Snapshots stay slim (no descriptions/urls) so a daily archive stays small;
+    // latest.json keeps the full records for the current run.
+    const slim = jobs.map(({ key, source, company, companyToken, sourceJobId, title, location, publishedAt, updatedAt, hasSalaryInfo }) =>
+      JSON.stringify({ key, source, company, companyToken, sourceJobId, title, location, publishedAt, updatedAt, hasSalaryInfo }));
+    writeFileSync(this.path(join("snapshots", `${day}.jsonl`)), slim.join("\n") + "\n");
   }
 
   writeLatest(payload: unknown): void {

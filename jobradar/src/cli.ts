@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { assessGhost } from "./ghost.js";
@@ -107,6 +107,43 @@ function report(country: Country | null): void {
   }
 }
 
+/** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
+function stats(): void {
+  const store = new Store(DATA);
+  const latest = store.readLatest<{ fetchedAt: string; jobs: ScoredJob[] }>();
+  if (!latest) {
+    console.error("No data yet - run `npm run fetch` first.");
+    process.exit(1);
+  }
+  const summarize = (jobs: ScoredJob[]) => {
+    const bands = { low: 0, medium: 0, high: 0, critical: 0 };
+    const sponsor = { yes: 0, no: 0, unknown: 0 };
+    let noSalary = 0;
+    let stale90 = 0;
+    for (const j of jobs) {
+      bands[j.ghost.band]++;
+      sponsor[j.sponsorship ?? "unknown"]++;
+      if (!j.hasSalaryInfo) noSalary++;
+      if (j.ghost.signals.some((s) => s.id === "stale_90d")) stale90++;
+    }
+    return { total: jobs.length, bands, sponsor, noSalary, stale90 };
+  };
+  const byCompany: Record<string, number> = {};
+  for (const j of latest.jobs) byCompany[j.company] = (byCompany[j.company] ?? 0) + 1;
+  const out = {
+    date: latest.fetchedAt.slice(0, 10),
+    fetchedAt: latest.fetchedAt,
+    overall: summarize(latest.jobs),
+    india: summarize(latest.jobs.filter((j) => matchesCountry(j.location, "in"))),
+    usa: summarize(latest.jobs.filter((j) => matchesCountry(j.location, "us"))),
+    byCompany,
+  };
+  mkdirSync(join(DATA, "stats"), { recursive: true });
+  const file = join(DATA, "stats", `${out.date}.json`);
+  writeFileSync(file, JSON.stringify(out, null, 1));
+  console.log(`stats -> ${file}`);
+}
+
 const cmd = process.argv[2];
 const args = process.argv.slice(3);
 let country: Country | null = null;
@@ -116,7 +153,8 @@ switch (cmd) {
   case "probe": await probe(); break;
   case "fetch": await fetchAll(); break;
   case "report": report(country); break;
+  case "stats": stats(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats> [--india | --usa]");
     process.exit(1);
 }
