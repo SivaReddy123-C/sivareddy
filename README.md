@@ -45,12 +45,25 @@ This project takes the other side:
 
 ## Status
 
-**Phase 0** (this code): `jobradar/` — the ATS aggregator + ghost-job scorer.
-It is the seed of the dataset and the first public good: run it, publish
-what it finds.
+- **Phase 0** — `jobradar/`: ATS aggregator + ghost-job scorer. Live; a
+  GitHub Action fetches all boards daily and commits stats
+  (`jobradar/data/stats/`) — the beginning of the open ledger.
+- **Phase 1** — `app/`: resume builder + application tracker. Local-first
+  web app: all data stays in the user's browser (export/import JSON, no
+  accounts, no server). Resume: live ATS-safe preview, two templates,
+  print-to-PDF. Tracker: status pipeline, honest reply-rate stats,
+  likely-ghosted detection after 21 days of silence, and the
+  accepted-an-offer moment where pay-it-forward will live.
 
-Roadmap: resume builder → application tracker with receipts →
-assisted apply (client-side, human-confirmed) → employer response scorecard.
+```bash
+cd app
+npm install
+npm run dev     # local dev server
+npm run build   # static production build in app/dist
+```
+
+Next: assisted apply (client-side, human-confirmed) → employer response
+scorecard from opt-in anonymous outcomes.
 
 ## Quick start
 
