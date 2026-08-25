@@ -1,36 +1,36 @@
 {
  "date": "2026-08-25",
- "fetchedAt": "2026-08-25T08:44:24.957Z",
+ "fetchedAt": "2026-08-25T10:02:30.858Z",
  "overall": {
-  "total": 8279,
+  "total": 8281,
   "bands": {
-   "low": 4020,
-   "medium": 1827,
+   "low": 4023,
+   "medium": 1826,
    "high": 2432,
    "critical": 0
   },
   "sponsor": {
    "yes": 1,
    "no": 1,
-   "unknown": 8277
+   "unknown": 8279
   },
-  "noSalary": 7424,
+  "noSalary": 7426,
   "stale90": 2722
  },
  "india": {
-  "total": 757,
+  "total": 758,
   "bands": {
    "low": 487,
-   "medium": 114,
+   "medium": 115,
    "high": 156,
    "critical": 0
   },
   "sponsor": {
    "yes": 0,
    "no": 0,
-   "unknown": 757
+   "unknown": 758
   },
-  "noSalary": 737,
+  "noSalary": 738,
   "stale90": 157
  },
  "usa": {
@@ -50,21 +50,21 @@
   "stale90": 762
  },
  "byCompany": {
-  "Stripe": 585,
+  "Stripe": 584,
   "Postman": 69,
-  "GitLab": 210,
+  "GitLab": 211,
   "Databricks": 823,
   "Figma": 159,
   "Coinbase": 174,
-  "OpenAI": 758,
+  "OpenAI": 757,
   "Ramp": 139,
   "Linear": 32,
   "Notion": 133,
-  "Bosch": 4787,
+  "Bosch": 4789,
   "Razorpay": 24,
   "CRED": 14,
   "Meesho": 50,
-  "Airbnb": 193,
+  "Airbnb": 194,
   "Robinhood": 129
  }
 }
