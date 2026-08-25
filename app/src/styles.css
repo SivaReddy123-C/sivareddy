@@ -139,3 +139,60 @@ textarea { resize: vertical; }
   .sheet { width: auto; min-height: 0; box-shadow: none; padding: 0; }
   @page { size: A4; margin: 14mm 16mm; }
 }
+
+/* ---------- Additional templates ---------- */
+/* All templates read var(--accent), set inline from user settings. */
+
+.template-modern { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.template-modern .r-head h1 { font-size: 24pt; font-weight: 800; letter-spacing: -0.3px; }
+.template-modern .r-head { border-bottom: 3px solid var(--accent); padding-bottom: 8px; }
+.template-modern h2 { border-bottom: none; padding-left: 8px; border-left: 4px solid var(--accent); color: #1a2233; }
+
+.template-elegant { font-family: Georgia, "Times New Roman", serif; }
+.template-elegant .r-head { text-align: center; }
+.template-elegant .r-head h1 { font-variant: small-caps; letter-spacing: 2px; font-weight: 600; }
+.template-elegant h2 { text-align: center; border-bottom: none; letter-spacing: 3px; }
+.template-elegant h2::after { content: ""; display: block; width: 60px; border-bottom: 1px solid var(--accent); margin: 3px auto 0; }
+
+.template-mono { font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace; font-size: 9.5pt; line-height: 1.5; }
+.template-mono .r-head h1 { font-size: 16pt; }
+.template-mono h2 { text-transform: lowercase; letter-spacing: 0; border-bottom: 1px dashed var(--accent); }
+.template-mono h2::before { content: "## "; color: var(--accent); }
+
+.template-minimal { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.template-minimal h2 { border-bottom: none; color: #8b94a6; font-weight: 600; }
+.template-minimal .r-head h1 { font-weight: 650; }
+.template-minimal section { margin-top: 16px; }
+
+/* Density */
+.density-compact { font-size: 9.5pt; line-height: 1.32; }
+.density-compact section { margin-top: 8px; }
+.density-compact .r-entry { margin-bottom: 5px; }
+.density-compact h2 { margin-bottom: 3px; }
+
+/* Accent respected by original templates too */
+.template-compact .r-head { border-left-color: var(--accent); }
+.template-compact h2 { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------- Section order widget ---------- */
+.order-list { display: flex; flex-direction: column; gap: 4px; }
+.order-row { display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 8px; background: var(--bg); border-radius: 6px; font-size: 13px; }
+.order-row button { padding: 2px 8px; margin-left: 4px; }
+
+/* ---------- Writing hints + AI ---------- */
+.hints { margin: 4px 0 0; padding-left: 18px; }
+.hints li { font-size: 11.5px; color: #b54708; margin: 1px 0; }
+.bullet-block { display: flex; flex-direction: column; gap: 2px; }
+.ai-suggest { margin-top: 2px; }
+.ai-suggest > button { font-size: 12px; padding: 3px 10px; }
+.ai-error { font-size: 12px; color: var(--danger); margin-left: 8px; }
+.ai-options { margin-top: 6px; display: flex; flex-direction: column; gap: 6px;
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: #fbfcff; }
+.ai-option { display: flex; gap: 8px; justify-content: space-between; align-items: flex-start; font-size: 13px; }
+.ai-option button { flex-shrink: 0; }
+.ai-dismiss { align-self: flex-end; font-size: 11px; }
+.ai-settings { position: relative; }
+.ai-settings-panel { position: absolute; right: 0; top: 36px; width: 380px; z-index: 10;
+  box-shadow: 0 6px 24px rgba(20,30,60,0.18); }
+.colorpick { width: 40px; height: 28px; padding: 1px; }

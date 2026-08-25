@@ -1,6 +1,12 @@
-import type { AppState, ResumeData } from "./types.js";
+import type { AppState, ResumeData, ResumeSettings, SectionKey } from "./types.js";
 
 const KEY = "jobradar.v1";
+
+export const ALL_SECTIONS: SectionKey[] = ["summary", "experience", "projects", "education", "skills"];
+
+export function defaultSettings(): ResumeSettings {
+  return { accent: "#1f6feb", font: "template", density: "comfortable", sectionOrder: [...ALL_SECTIONS] };
+}
 
 export function emptyResume(): ResumeData {
   return {
@@ -11,7 +17,15 @@ export function emptyResume(): ResumeData {
     projects: [],
     skills: [],
     template: "classic",
+    settings: defaultSettings(),
   };
+}
+
+/** Keep known sections in the user's order, drop unknowns, append anything missing. */
+export function normalizeSectionOrder(order: unknown): SectionKey[] {
+  const given = Array.isArray(order) ? order.filter((k): k is SectionKey => (ALL_SECTIONS as string[]).includes(k)) : [];
+  const missing = ALL_SECTIONS.filter((k) => !given.includes(k));
+  return [...given, ...missing];
 }
 
 export function emptyState(): AppState {
@@ -23,9 +37,16 @@ export function normalizeState(raw: unknown): AppState {
   const base = emptyState();
   if (typeof raw !== "object" || raw === null) return base;
   const r = raw as Partial<AppState>;
+  const settings = { ...defaultSettings(), ...(r.resume?.settings ?? {}) };
+  settings.sectionOrder = normalizeSectionOrder(settings.sectionOrder);
   return {
     version: 1,
-    resume: { ...base.resume, ...(r.resume ?? {}), basics: { ...base.resume.basics, ...(r.resume?.basics ?? {}) } },
+    resume: {
+      ...base.resume,
+      ...(r.resume ?? {}),
+      basics: { ...base.resume.basics, ...(r.resume?.basics ?? {}) },
+      settings,
+    },
     applications: Array.isArray(r.applications) ? r.applications : [],
   };
 }

@@ -38,7 +38,18 @@ export interface SkillGroup {
   items: string; // comma-separated, kept as typed
 }
 
-export type TemplateId = "classic" | "compact";
+export type TemplateId = "classic" | "compact" | "modern" | "elegant" | "mono" | "minimal";
+
+export type FontChoice = "template" | "serif" | "sans" | "mono";
+export type Density = "comfortable" | "compact";
+export type SectionKey = "summary" | "experience" | "projects" | "education" | "skills";
+
+export interface ResumeSettings {
+  accent: string;      // hex color used by templates that show an accent
+  font: FontChoice;    // "template" = let the template decide
+  density: Density;
+  sectionOrder: SectionKey[];
+}
 
 export interface ResumeData {
   basics: {
@@ -55,6 +66,7 @@ export interface ResumeData {
   projects: ProjectEntry[];
   skills: SkillGroup[];
   template: TemplateId;
+  settings: ResumeSettings;
 }
 
 export type AppStatus =

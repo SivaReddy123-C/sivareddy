@@ -1,9 +1,27 @@
 import { useState } from "react";
 import { uid } from "../lib/storage.js";
+import { checkBullet, checkSummary } from "../lib/writecheck.js";
 import type {
-  EducationEntry, ExperienceEntry, ProjectEntry, ResumeData, SkillGroup,
+  EducationEntry, ExperienceEntry, ProjectEntry, ResumeData, ResumeSettings,
+  SectionKey, SkillGroup, TemplateId,
 } from "../lib/types.js";
+import { AiSettings, AiSuggest } from "./AiSuggest.js";
+import { Hints } from "./Hints.js";
 import { ResumePreview } from "./ResumePreview.js";
+
+const TEMPLATES: { id: TemplateId; label: string }[] = [
+  { id: "classic", label: "Classic — serif, single column" },
+  { id: "compact", label: "Compact — tight, accent headings" },
+  { id: "modern", label: "Modern — bold name, accent bar" },
+  { id: "elegant", label: "Elegant — centered serif header" },
+  { id: "mono", label: "Mono — technical monospace" },
+  { id: "minimal", label: "Minimal — whitespace, no rules" },
+];
+
+const SECTION_LABEL: Record<SectionKey, string> = {
+  summary: "Summary", experience: "Experience", projects: "Projects",
+  education: "Education", skills: "Skills",
+};
 
 interface Props {
   resume: ResumeData;
@@ -13,6 +31,9 @@ interface Props {
 export function ResumePage({ resume, onChange }: Props) {
   const [showEditor, setShowEditor] = useState(true);
   const set = (patch: Partial<ResumeData>) => onChange({ ...resume, ...patch });
+  const setSettings = (patch: Partial<ResumeSettings>) =>
+    set({ settings: { ...resume.settings, ...patch } });
+  const skillsSummary = resume.skills.map((s) => s.items).filter(Boolean).join(", ");
 
   return (
     <div className="resume-page">
@@ -24,12 +45,39 @@ export function ResumePage({ resume, onChange }: Props) {
           Template{" "}
           <select
             value={resume.template}
-            onChange={(e) => set({ template: e.target.value as ResumeData["template"] })}
+            onChange={(e) => set({ template: e.target.value as TemplateId })}
           >
-            <option value="classic">Classic (single column)</option>
+            {TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
+          </select>
+        </label>
+        <label>
+          Accent{" "}
+          <input
+            type="color"
+            className="colorpick"
+            value={resume.settings.accent}
+            onChange={(e) => setSettings({ accent: e.target.value })}
+          />
+        </label>
+        <label>
+          Font{" "}
+          <select value={resume.settings.font}
+            onChange={(e) => setSettings({ font: e.target.value as ResumeSettings["font"] })}>
+            <option value="template">Template default</option>
+            <option value="serif">Serif</option>
+            <option value="sans">Sans</option>
+            <option value="mono">Mono</option>
+          </select>
+        </label>
+        <label>
+          Density{" "}
+          <select value={resume.settings.density}
+            onChange={(e) => setSettings({ density: e.target.value as ResumeSettings["density"] })}>
+            <option value="comfortable">Comfortable</option>
             <option value="compact">Compact</option>
           </select>
         </label>
+        <AiSettings />
         <button className="primary" onClick={() => window.print()}>
           Download PDF
         </button>
@@ -40,6 +88,8 @@ export function ResumePage({ resume, onChange }: Props) {
         {showEditor && (
           <div className="editor no-print">
             <BasicsEditor resume={resume} set={set} />
+            <SectionOrderCard order={resume.settings.sectionOrder}
+              onChange={(sectionOrder) => setSettings({ sectionOrder })} />
             <SectionCard title="Summary">
               <textarea
                 rows={3}
@@ -47,6 +97,10 @@ export function ResumePage({ resume, onChange }: Props) {
                 value={resume.summary}
                 onChange={(e) => set({ summary: e.target.value })}
               />
+              <Hints hints={checkSummary(resume.summary)} />
+              <AiSuggest kind="summary" text={resume.summary}
+                context={{ headline: resume.basics.headline, skills: skillsSummary }}
+                onApply={(summary) => set({ summary })} />
             </SectionCard>
             <EducationEditor entries={resume.education} onChange={(education) => set({ education })} />
             <ExperienceEditor entries={resume.experience} onChange={(experience) => set({ experience })} />
@@ -59,6 +113,33 @@ export function ResumePage({ resume, onChange }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+function SectionOrderCard({ order, onChange }: { order: SectionKey[]; onChange: (o: SectionKey[]) => void }) {
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= order.length) return;
+    const next = [...order];
+    const a = next[i]!; next[i] = next[j]!; next[j] = a;
+    onChange(next);
+  }
+  return (
+    <section className="card">
+      <div className="card-head"><h3>Section order</h3></div>
+      <p className="hint">Freshers usually lead with Education or Projects; experienced folks with Experience.</p>
+      <div className="order-list">
+        {order.map((k, i) => (
+          <div className="order-row" key={k}>
+            <span>{SECTION_LABEL[k]}</span>
+            <span>
+              <button disabled={i === 0} onClick={() => move(i, -1)}>↑</button>
+              <button disabled={i === order.length - 1} onClick={() => move(i, 1)}>↓</button>
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -126,14 +207,24 @@ function EducationEditor({ entries, onChange }: { entries: EducationEntry[]; onC
   );
 }
 
-function BulletsEditor({ bullets, onChange, placeholder }: { bullets: string[]; onChange: (b: string[]) => void; placeholder: string }) {
+function BulletsEditor({ bullets, onChange, placeholder, aiContext }: {
+  bullets: string[];
+  onChange: (b: string[]) => void;
+  placeholder: string;
+  aiContext?: { role?: string; company?: string };
+}) {
   return (
     <div className="bullets">
       {bullets.map((b, i) => (
-        <div className="row" key={i}>
-          <input placeholder={placeholder} value={b}
-            onChange={(e) => onChange(bullets.map((x, j) => (j === i ? e.target.value : x)))} />
-          <button className="danger" onClick={() => onChange(bullets.filter((_, j) => j !== i))}>×</button>
+        <div className="bullet-block" key={i}>
+          <div className="row">
+            <input placeholder={placeholder} value={b}
+              onChange={(e) => onChange(bullets.map((x, j) => (j === i ? e.target.value : x)))} />
+            <button className="danger" onClick={() => onChange(bullets.filter((_, j) => j !== i))}>×</button>
+          </div>
+          <Hints hints={checkBullet(b)} />
+          <AiSuggest kind="bullet" text={b} context={aiContext ?? {}}
+            onApply={(v) => onChange(bullets.map((x, j) => (j === i ? v : x)))} />
         </div>
       ))}
       <button onClick={() => onChange([...bullets, ""])}>+ Bullet</button>
@@ -158,7 +249,8 @@ function ExperienceEditor({ entries, onChange }: { entries: ExperienceEntry[]; o
             </div>
           </div>
           <BulletsEditor bullets={e.bullets} onChange={(bullets) => update(e.id, { bullets })}
-            placeholder="Did X using Y, achieving Z (numbers beat adjectives)" />
+            placeholder="Did X using Y, achieving Z (numbers beat adjectives)"
+            aiContext={{ role: e.role, company: e.company }} />
           <button className="danger" onClick={() => onChange(entries.filter((x) => x.id !== e.id))}>Remove</button>
         </div>
       ))}
@@ -178,7 +270,8 @@ function ProjectsEditor({ entries, onChange }: { entries: ProjectEntry[]; onChan
             <input placeholder="Link (GitHub / live) — optional" value={e.link} onChange={(ev) => update(e.id, { link: ev.target.value })} />
           </div>
           <BulletsEditor bullets={e.bullets} onChange={(bullets) => update(e.id, { bullets })}
-            placeholder="What it does, what you built it with, what it achieved" />
+            placeholder="What it does, what you built it with, what it achieved"
+            aiContext={{ role: "personal project", company: e.name }} />
           <button className="danger" onClick={() => onChange(entries.filter((x) => x.id !== e.id))}>Remove</button>
         </div>
       ))}
