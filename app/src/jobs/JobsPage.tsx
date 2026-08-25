@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { daysSince } from "../lib/stats.js";
 import { uid } from "../lib/storage.js";
-import type { Application } from "../lib/types.js";
+import { buildApplicationPack } from "../lib/pack.js";
+import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
 import {
   applyFilters, defaultFilters, loadFeed, readCache,
   type Feed, type FeedJob, type JobFilters,
@@ -12,9 +13,17 @@ const PAGE = 50;
 interface Props {
   applications: Application[];
   onChange: (apps: Application[]) => void;
+  resume: ResumeData;
+  answers: AnswerEntry[];
 }
 
-export function JobsPage({ applications, onChange }: Props) {
+export function JobsPage({ applications, onChange, resume, answers }: Props) {
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  async function copyPack(key: string) {
+    await navigator.clipboard.writeText(buildApplicationPack(resume, answers));
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 1500);
+  }
   const [feed, setFeed] = useState<Feed | null>(() => readCache()?.feed ?? null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -140,6 +149,9 @@ export function JobsPage({ applications, onChange }: Props) {
               </div>
               <div className="job-actions">
                 <a className="btn-link" href={j.url} target="_blank" rel="noreferrer">Open posting ↗</a>
+                <button onClick={() => copyPack(j.key)} title="Contact info + standard answers, ready to paste">
+                  {copiedKey === j.key ? "Copied ✓" : "Copy pack"}
+                </button>
                 {applied ? (
                   <span className="applied-mark">Logged ✓</span>
                 ) : (

@@ -2,10 +2,11 @@ import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { exportJson, importJson, loadState, saveState } from "./lib/storage.js";
 import type { AppState } from "./lib/types.js";
 import { JobsPage } from "./jobs/JobsPage.js";
+import { ApplyKitPage } from "./kit/ApplyKitPage.js";
 import { ResumePage } from "./resume/ResumePage.js";
 import { TrackerPage } from "./tracker/TrackerPage.js";
 
-type Tab = "resume" | "jobs" | "foryou" | "tracker";
+type Tab = "resume" | "jobs" | "foryou" | "tracker" | "kit";
 
 // Account layer loads only when opened - keeps the base bundle small and the
 // local-first tabs fully independent of it.
@@ -61,6 +62,9 @@ export function App() {
           <button className={tab === "foryou" ? "active" : ""} onClick={() => setTab("foryou")}>
             For you
           </button>
+          <button className={tab === "kit" ? "active" : ""} onClick={() => setTab("kit")}>
+            Apply kit
+          </button>
           <button className={tab === "tracker" ? "active" : ""} onClick={() => setTab("tracker")}>
             Tracker{state.applications.length > 0 ? ` (${state.applications.length})` : ""}
           </button>
@@ -93,6 +97,8 @@ export function App() {
         <JobsPage
           applications={state.applications}
           onChange={(applications) => setState((s) => ({ ...s, applications }))}
+          resume={state.resume}
+          answers={state.answers}
         />
       )}
       {tab === "foryou" && (
@@ -100,8 +106,17 @@ export function App() {
           <ForYouPage
             applications={state.applications}
             onChange={(applications) => setState((s) => ({ ...s, applications }))}
+            resume={state.resume}
+            answers={state.answers}
           />
         </Suspense>
+      )}
+      {tab === "kit" && (
+        <ApplyKitPage
+          resume={state.resume}
+          answers={state.answers}
+          onChange={(answers) => setState((s) => ({ ...s, answers }))}
+        />
       )}
       {tab === "tracker" && (
         <TrackerPage

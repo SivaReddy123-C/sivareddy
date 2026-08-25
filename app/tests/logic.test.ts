@@ -101,3 +101,28 @@ test("job filters: country, ghost, sponsorship, search, sort", async () => {
   assert.equal(applyFilters(jobs, { ...f, q: "backend" })[0]!.key, "3");
   assert.equal(applyFilters(jobs, { ...f, sort: "ghost" })[2]!.key, "1");
 });
+
+test("application pack: contact block, filled answers only, skills", async () => {
+  const { buildApplicationPack } = await import("../src/lib/pack.js");
+  const { emptyResume } = await import("../src/lib/storage.js");
+  const resume = emptyResume();
+  resume.basics = { name: "Siva R", headline: "Engineer", email: "s@x.com", phone: "+1 555",
+    location: "Austin, TX", links: [{ label: "GitHub", url: "https://github.com/s" }] };
+  resume.skills = [{ id: "1", group: "Languages", items: "SQL, Python" }];
+  const answers = [
+    { id: "a", label: "Sponsorship?", value: "Yes, will require H-1B" },
+    { id: "b", label: "Notice period", value: "" },
+  ];
+  const pack = buildApplicationPack(resume, answers);
+  assert.ok(pack.includes("Siva R"));
+  assert.ok(pack.includes("GitHub: https://github.com/s"));
+  assert.ok(pack.includes("Sponsorship? Yes, will require H-1B"));
+  assert.ok(!pack.includes("Notice period"), "empty answers stay out of the pack");
+  assert.ok(pack.includes("Languages: SQL, Python"));
+});
+
+test("state normalization seeds default answers", () => {
+  const s = normalizeState({ resume: {}, applications: [] });
+  assert.ok(s.answers.length >= 5);
+  assert.ok(s.answers.some((a) => a.id === "sponsorship"));
+});

@@ -91,8 +91,16 @@ export interface Application {
   notes: string;
 }
 
+/** A reusable answer to a screening/knockout question. Local-first. */
+export interface AnswerEntry {
+  id: string;
+  label: string;
+  value: string;
+}
+
 export interface AppState {
   version: 1;
   resume: ResumeData;
   applications: Application[];
+  answers: AnswerEntry[];
 }
