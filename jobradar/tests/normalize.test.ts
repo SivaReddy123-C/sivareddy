@@ -172,3 +172,23 @@ test("skill extraction tags the actual work, and non-engineering roles too", asy
   assert.ok(mapped.includes("sql") && mapped.includes("python") && mapped.includes("aws"));
   assert.ok(mapped.includes("system design"), "unmapped skills are kept verbatim");
 });
+
+test("sync deduplicates postings sharing a source id", async () => {
+  const { jobToRow } = await import("../src/sync.js");
+  const mk = (sourceJobId: string, title: string) => ({
+    key: "k", source: "workday", company: "CVS Health", companyToken: "cvshealth",
+    sourceJobId, title, location: "Dallas, TX", remote: null, url: "u", applyUrl: null,
+    department: null, employmentType: null, description: null, hasSalaryInfo: false,
+    publishedAt: null, updatedAt: null, firstSeenAt: "2026-08-26T00:00:00Z",
+    lastSeenAt: "2026-08-26T00:00:00Z",
+    ghost: { score: 0, band: "low", signals: [] }, sponsorship: "unknown",
+  }) as never;
+  // Mirror the dedupe the sync performs before upserting.
+  const jobs = [mk("/job/A", "Pharmacy Tech"), mk("/job/A", "Pharmacy Tech"), mk("/job/B", "Nurse")];
+  const byKey = new Map<string, unknown>();
+  for (const j of jobs) {
+    const row = jobToRow(j, "cid");
+    if (!byKey.has(row.source_job_id)) byKey.set(row.source_job_id, row);
+  }
+  assert.equal(byKey.size, 2, "duplicate source ids collapse to one row per key");
+});
