@@ -12,7 +12,7 @@
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
-import { slotKey } from "./normalize.js";
+import { detectCountry, slotKey } from "./normalize.js";
 import type { ScoredJob, SeedCompany } from "./types.js";
 
 export interface CompanyRow {
@@ -42,7 +42,7 @@ export function jobToRow(j: ScoredJob, companyId: string) {
     slot_key: slotKey(j.source, j.companyToken, j.title, j.location),
     title: j.title,
     location: j.location,
-    country: null as string | null, // set by feed-country matching below when known
+    country: detectCountry(j.location),
     remote: j.remote,
     url: j.url,
     apply_url: j.applyUrl,

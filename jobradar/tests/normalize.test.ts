@@ -142,3 +142,15 @@ test("workday postedOn parsing via adapter shape", async () => {
   const mod = await import("../src/sources/workday.js");
   assert.equal(mod.workday.source, "workday");
 });
+
+test("multi-country detection", async () => {
+  const { detectCountry } = await import("../src/normalize.js");
+  assert.equal(detectCountry("Berlin, Germany"), "de");
+  assert.equal(detectCountry("London, United Kingdom"), "gb");
+  assert.equal(detectCountry("Dubai, UAE"), "ae");
+  assert.equal(detectCountry("Stockholm"), "se");
+  assert.equal(detectCountry("Bengaluru, India"), "in");
+  assert.equal(detectCountry("Austin, TX"), "us");
+  assert.equal(detectCountry("Toronto, Canada"), "ca");
+  assert.equal(detectCountry("Mars Colony 7"), null);
+});

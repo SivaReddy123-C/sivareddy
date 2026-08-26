@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { StubClassifier } from "./classify.js";
 import { assessGhost } from "./ghost.js";
-import { matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
+import { detectCountry, matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
 import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
@@ -205,7 +205,7 @@ function feed(): void {
   }
   const entries = latest.jobs
     .map((j) => {
-      const country = matchesCountry(j.location, "in") ? "in" : matchesCountry(j.location, "us") ? "us" : null;
+      const country = detectCountry(j.location);
       return country === null ? null : {
         key: j.key,
         company: j.company,
