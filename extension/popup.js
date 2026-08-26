@@ -9,6 +9,15 @@ chrome.storage.local.get("jobradar_profile", (data) => {
 });
 document.getElementById("fill").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (tab?.id) chrome.tabs.sendMessage(tab.id, "jobradar-fill");
+  if (!tab?.id) return;
+  try {
+    // Content script already present (Greenhouse/Lever/Ashby pages).
+    await chrome.tabs.sendMessage(tab.id, "jobradar-fill");
+  } catch {
+    // Any other site: inject on demand (activeTab grants access on this click).
+    // fill.js self-starts after injection. Works on any application form -
+    // found the job on LinkedIn or Dice? Land on the form, click Fill.
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["fill.js"] });
+  }
   window.close();
 });

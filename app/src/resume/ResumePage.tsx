@@ -6,6 +6,7 @@ import type {
   SectionKey, SkillGroup, TemplateId,
 } from "../lib/types.js";
 import { AiSettings, AiSuggest } from "./AiSuggest.js";
+import { ImportModal } from "./ImportModal.js";
 import { Hints } from "./Hints.js";
 import { ResumePreview } from "./ResumePreview.js";
 
@@ -30,6 +31,7 @@ interface Props {
 
 export function ResumePage({ resume, onChange }: Props) {
   const [showEditor, setShowEditor] = useState(true);
+  const [importing, setImporting] = useState(false);
   const set = (patch: Partial<ResumeData>) => onChange({ ...resume, ...patch });
   const setSettings = (patch: Partial<ResumeSettings>) =>
     set({ settings: { ...resume.settings, ...patch } });
@@ -77,6 +79,7 @@ export function ResumePage({ resume, onChange }: Props) {
             <option value="compact">Compact</option>
           </select>
         </label>
+        <button onClick={() => setImporting(true)}>Import resume (PDF)</button>
         <AiSettings />
         <button className="primary" onClick={() => window.print()}>
           Download PDF
@@ -84,6 +87,9 @@ export function ResumePage({ resume, onChange }: Props) {
         <span className="hint">PDF uses your browser's print dialog — choose "Save as PDF".</span>
       </div>
 
+      {importing && (
+        <ImportModal resume={resume} onApply={onChange} onClose={() => setImporting(false)} />
+      )}
       <div className={`resume-split ${showEditor ? "" : "preview-only"}`}>
         {showEditor && (
           <div className="editor no-print">

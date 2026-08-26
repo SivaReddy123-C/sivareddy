@@ -147,14 +147,6 @@ async function rank(): Promise<void> {
   console.log(`ranked: ${result.users} users, ${result.matches} matches written`);
 }
 
-/** `digest`: email each opted-in user their ranked daily list. */
-async function digest(): Promise<void> {
-  const { makeClient } = await import("./sync.js");
-  const { sendDigests } = await import("./digest.js");
-  const result = await sendDigests(makeClient());
-  console.log(`digest: ${result.sent} sent, ${result.skipped} skipped`);
-}
-
 /** `discover`: probe ATSs for the company names in data/discovery.names.json. */
 async function discoverCmd(): Promise<void> {
   const { discover } = await import("./discover.js");
@@ -248,7 +240,6 @@ switch (cmd) {
   case "feed": feed(); break;
   case "sync": await sync(); break;
   case "rank": await rank(); break;
-  case "digest": await digest(); break;
   case "discover": await discoverCmd(); break;
   default:
     console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover> [--india | --usa]");

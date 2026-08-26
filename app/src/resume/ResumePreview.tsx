@@ -116,7 +116,7 @@ export function ResumePreview({ resume }: { resume: ResumeData }) {
                 .filter(Boolean)
                 .join(" · ")}
               {basics.links.filter((l) => l.url).map((l) => (
-                <span key={l.url}> · <a href={l.url}>{l.label || l.url}</a></span>
+                <span key={l.url}> · <a href={l.url}>{l.url.replace(/^https?:\/\/(www\.)?/, "")}</a></span>
               ))}
             </p>
           </header>

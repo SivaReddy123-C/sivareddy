@@ -1,53 +1,53 @@
 {
  "date": "2026-08-26",
- "fetchedAt": "2026-08-26T04:02:49.875Z",
+ "fetchedAt": "2026-08-26T04:34:02.949Z",
  "overall": {
-  "total": 18541,
+  "total": 19152,
   "bands": {
-   "low": 9266,
-   "medium": 4012,
-   "high": 5250,
-   "critical": 13
+   "low": 11263,
+   "medium": 3345,
+   "high": 4535,
+   "critical": 9
   },
   "sponsor": {
-   "yes": 9,
+   "yes": 8,
    "no": 18,
-   "unknown": 18514
+   "unknown": 19126
   },
-  "noSalary": 16549,
-  "stale90": 5907
+  "noSalary": 17978,
+  "stale90": 4935
  },
  "india": {
-  "total": 1103,
+  "total": 1285,
   "bands": {
-   "low": 657,
-   "medium": 197,
-   "high": 249,
+   "low": 868,
+   "medium": 184,
+   "high": 233,
    "critical": 0
   },
   "sponsor": {
    "yes": 0,
    "no": 0,
-   "unknown": 1103
+   "unknown": 1285
   },
-  "noSalary": 1082,
-  "stale90": 248
+  "noSalary": 1264,
+  "stale90": 233
  },
  "usa": {
-  "total": 8209,
+  "total": 7222,
   "bands": {
-   "low": 4126,
-   "medium": 1903,
-   "high": 2170,
-   "critical": 10
+   "low": 3977,
+   "medium": 1493,
+   "high": 1745,
+   "critical": 7
   },
   "sponsor": {
-   "yes": 7,
+   "yes": 6,
    "no": 10,
-   "unknown": 8192
+   "unknown": 7206
   },
-  "noSalary": 6512,
-  "stale90": 2748
+  "noSalary": 6182,
+  "stale90": 2130
  },
  "byCompany": {
   "Stripe": 590,
@@ -60,7 +60,7 @@
   "Ramp": 135,
   "Linear": 32,
   "Notion": 133,
-  "Bosch": 4792,
+  "Bosch": 4795,
   "Razorpay": 24,
   "CRED": 14,
   "Meesho": 50,
@@ -75,7 +75,7 @@
   "Affirm": 204,
   "Gusto": 86,
   "MongoDB": 404,
-  "Elastic": 285,
+  "Elastic": 286,
   "Datadog": 451,
   "Twilio": 140,
   "Asana": 126,
@@ -106,53 +106,14 @@
   "PostHog": 14,
   "ElevenLabs": 246,
   "Warp": 18,
-  "NVIDIA": 40,
-  "Salesforce": 40,
-  "Adobe": 40,
-  "Workday": 40,
-  "Target": 40,
+  "Salesforce": 600,
+  "Adobe": 600,
+  "Workday": 367,
+  "Target": 600,
   "Capital One": 600,
-  "PayPal": 40,
-  "Faire": 62,
-  "Hex": 29,
-  "Temporal": 53,
-  "Grafana Labs": 152,
-  "Render": 32,
-  "Railway": 8,
-  "PlanetScale": 10,
-  "Neon": 18,
-  "Prisma": 64,
-  "Chainguard": 85,
-  "Tailscale": 68,
-  "LaunchDarkly": 49,
-  "Netlify": 2,
-  "CircleCI": 5,
-  "Algolia": 36,
-  "Mixpanel": 95,
-  "Amplitude": 71,
-  "Airbyte": 11,
-  "Fivetran": 246,
-  "Prefect": 7,
-  "Modal": 31,
-  "Baseten": 75,
-  "Together AI": 64,
-  "Cohere": 147,
-  "Hugging Face": 7,
-  "Pinecone": 7,
-  "Weaviate": 1,
-  "LangChain": 106,
-  "E2B": 11,
-  "StackBlitz": 11,
-  "Lovable": 140,
-  "Sierra": 200,
-  "Harvey": 361,
-  "Decagon": 136,
-  "Verkada": 280,
-  "Saronic": 200,
-  "Slice": 41,
-  "Navi": 9,
-  "Fi Money": 11,
-  "Atlan": 4,
-  "Skyflow": 8
+  "PayPal": 78,
+  "CVS Health": 600,
+  "Humana": 355,
+  "3M": 600
  }
 }

@@ -80,6 +80,9 @@ textarea { resize: vertical; }
   background: #fff; width: 210mm; min-height: 297mm; padding: 16mm 18mm;
   box-shadow: 0 2px 14px rgba(20, 30, 60, 0.12); color: #16202e;
   font-size: 10.5pt; line-height: 1.45;
+  /* Ligatures and wide letter-spacing fragment PDF text extraction - the
+     exact thing ATS parsers do first. Keep the text layer clean. */
+  font-variant-ligatures: none;
 }
 .sheet-empty { color: var(--muted); font-size: 14px; }
 .sheet a { color: inherit; }
@@ -150,8 +153,8 @@ textarea { resize: vertical; }
 
 .template-elegant { font-family: Georgia, "Times New Roman", serif; }
 .template-elegant .r-head { text-align: center; }
-.template-elegant .r-head h1 { font-variant: small-caps; letter-spacing: 2px; font-weight: 600; }
-.template-elegant h2 { text-align: center; border-bottom: none; letter-spacing: 3px; }
+.template-elegant .r-head h1 { text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; font-size: 17pt; }
+.template-elegant h2 { text-align: center; border-bottom: none; letter-spacing: 1px; }
 .template-elegant h2::after { content: ""; display: block; width: 60px; border-bottom: 1px solid var(--accent); margin: 3px auto 0; }
 
 .template-mono { font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace; font-size: 9.5pt; line-height: 1.5; }
@@ -251,3 +254,11 @@ textarea { resize: vertical; }
 .kit-label { max-width: 46%; font-weight: 600; }
 .pack-preview { background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
   padding: 10px 12px; font-size: 12px; white-space: pre-wrap; word-break: break-word; margin: 0; }
+
+/* ---------- Import modal ---------- */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); z-index: 50;
+  display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal { max-width: 680px; width: 100%; max-height: 85vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px; }
+.xray-title { margin: 4px 0 0; font-size: 13px; }
+.xray { max-height: 320px; overflow-y: auto; }

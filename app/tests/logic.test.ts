@@ -126,3 +126,22 @@ test("state normalization seeds default answers", () => {
   assert.ok(s.answers.length >= 5);
   assert.ok(s.answers.some((a) => a.id === "sponsorship"));
 });
+
+test("applyParsed maps AI output into ResumeData, keeps template, drops empties", async () => {
+  const { applyParsed } = await import("../src/lib/importer.js");
+  const { emptyResume } = await import("../src/lib/storage.js");
+  const current = emptyResume();
+  current.template = "mono";
+  const out = applyParsed(current, {
+    basics: { name: "Siva R", email: "s@x.com", links: [{ label: "", url: "https://github.com/s" }, { url: "" }] },
+    experience: [{ company: "Acme", role: "SDE", bullets: ["Did X", "  ", ""] }],
+    skills: [{ group: "Langs", items: "SQL" }, { group: "Empty", items: "  " }],
+  });
+  assert.equal(out.template, "mono");
+  assert.equal(out.basics.name, "Siva R");
+  assert.equal(out.basics.links.length, 1);
+  assert.equal(out.basics.links[0]!.label, "Link");
+  assert.equal(out.experience[0]!.bullets.length, 1);
+  assert.equal(out.skills.length, 1);
+  assert.ok(out.experience[0]!.id, "entries get ids");
+});

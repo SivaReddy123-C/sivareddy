@@ -15,7 +15,6 @@
     "feed": "tsx src/cli.ts feed",
     "sync": "tsx src/cli.ts sync",
     "rank": "tsx src/cli.ts rank",
-    "digest": "tsx src/cli.ts digest",
     "discover": "tsx src/cli.ts discover",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"
