@@ -262,3 +262,135 @@ textarea { resize: vertical; }
   display: flex; flex-direction: column; gap: 10px; }
 .xray-title { margin: 4px 0 0; font-size: 13px; }
 .xray { max-height: 320px; overflow-y: auto; }
+
+/* ============================================================
+   v2 polish layer - visual refresh of the app chrome only.
+   The resume sheet, templates, and print styles are untouched.
+   ============================================================ */
+:root {
+  --ink: #101828;
+  --muted: #667085;
+  --line: #e4e7ef;
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --accent: #4f46e5;
+  --accent-soft: #eef2ff;
+  --danger: #d92d20;
+  --ok: #067647;
+  --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+}
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(900px 300px at 15% -60px, #eef2ff 0%, rgba(238,242,255,0) 60%),
+    var(--bg);
+}
+
+/* Top bar */
+.topbar {
+  padding: 12px 24px;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; gap: 9px; }
+.brand-mark {
+  width: 12px; height: 12px; border-radius: 4px; align-self: center;
+  background: conic-gradient(from 210deg, #4f46e5, #7c3aed, #4f46e5);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.brand strong { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+.tagline { margin-left: 2px; font-size: 12px; }
+.topbar nav { gap: 4px; background: #eef0f6; padding: 4px; border-radius: 999px; }
+.topbar nav button {
+  border: 0; background: transparent; border-radius: 999px;
+  padding: 7px 15px; font-weight: 600; font-size: 13px; color: var(--muted);
+}
+.topbar nav button:hover { color: var(--ink); }
+.topbar nav button.active { background: #fff; color: var(--accent); box-shadow: var(--shadow-sm); }
+
+/* Controls */
+button {
+  border-radius: 8px; font-weight: 600; padding: 7px 13px;
+  transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+button.primary { background: var(--accent); border-color: var(--accent); box-shadow: var(--shadow-sm); }
+button.primary:hover { background: #4338ca; border-color: #4338ca; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
+input, select, textarea {
+  border-radius: 8px; padding: 8px 11px;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: none;
+}
+.filebtn { border-radius: 8px; font-weight: 600; }
+
+/* Cards */
+.card {
+  border-radius: var(--radius);
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 18px;
+}
+.card-head h3, .card h3 { font-size: 14px; font-weight: 700; letter-spacing: -0.1px; }
+.job-card, .app-row { transition: box-shadow 0.15s ease, transform 0.15s ease; }
+.job-card:hover, .app-row:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.job-title, .app-title { font-weight: 500; }
+.job-title strong, .app-title strong { font-weight: 700; }
+
+/* Stats */
+.stats-bar { gap: 10px; }
+.stat {
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  padding: 12px 18px; min-width: 120px;
+  border-top: 3px solid var(--accent-soft);
+}
+.stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.stat-label { margin-top: 1px; }
+
+/* Pills & tags */
+.tag, .ghost-badge-pill, .rank-chip { font-weight: 600; }
+.rank-chip { background: var(--accent); box-shadow: var(--shadow-sm); }
+.pill-low { background: #e7f8f0; }
+.applied-mark { color: var(--ok); }
+
+/* Sections */
+.jobs, .tracker, .foryou, .kit, .resume-page { padding: 18px 24px; max-width: 1180px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.jobs-meta { font-size: 12.5px; }
+.empty-hint {
+  background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius);
+  padding: 22px 24px; color: var(--muted); max-width: 640px;
+}
+.celebrate {
+  margin: 14px 24px 0; border-radius: var(--radius);
+  background: linear-gradient(90deg, #ecfdf3, #f0fdf9); border-color: #abefc6;
+  box-shadow: var(--shadow-sm); font-weight: 500;
+}
+.foot { font-size: 12px; padding: 22px; }
+
+/* Resume editor niceties (chrome only - sheet untouched) */
+.resume-toolbar { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 14px; box-shadow: var(--shadow-sm); }
+.editor .card { padding: 14px 16px; }
+.sheet { box-shadow: 0 8px 30px rgba(16, 24, 40, 0.12); border-radius: 4px; }
+
+/* Small screens */
+@media (max-width: 720px) {
+  .topbar { padding: 10px 12px; gap: 10px; }
+  .topbar nav { overflow-x: auto; max-width: 100%; }
+  .tagline { display: none; }
+  .jobs, .tracker, .foryou, .kit, .resume-page { padding: 14px 12px; }
+  .job-card, .app-row { flex-direction: column; }
+  .job-actions, .app-actions { flex-direction: row; width: 100%; }
+}
+@media print {
+  .sheet { box-shadow: none; border-radius: 0; }
+}
+.job-main > .ghost-badge-pill { align-self: flex-start; }

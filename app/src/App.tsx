@@ -49,6 +49,7 @@ export function App() {
     <div className="app">
       <header className="topbar no-print">
         <div className="brand">
+          <span className="brand-mark" aria-hidden="true" />
           <strong>JobRadar</strong>
           <span className="tagline">your data stays in your browser</span>
         </div>
