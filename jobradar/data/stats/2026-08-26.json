@@ -1,0 +1,120 @@
+{
+ "date": "2026-08-26",
+ "fetchedAt": "2026-08-26T04:21:10.033Z",
+ "overall": {
+  "total": 16270,
+  "bands": {
+   "low": 8389,
+   "medium": 3344,
+   "high": 4528,
+   "critical": 9
+  },
+  "sponsor": {
+   "yes": 8,
+   "no": 18,
+   "unknown": 16244
+  },
+  "noSalary": 15096,
+  "stale90": 4935
+ },
+ "india": {
+  "total": 1048,
+  "bands": {
+   "low": 631,
+   "medium": 184,
+   "high": 233,
+   "critical": 0
+  },
+  "sponsor": {
+   "yes": 0,
+   "no": 0,
+   "unknown": 1048
+  },
+  "noSalary": 1027,
+  "stale90": 233
+ },
+ "usa": {
+  "total": 6364,
+  "bands": {
+   "low": 3119,
+   "medium": 1493,
+   "high": 1745,
+   "critical": 7
+  },
+  "sponsor": {
+   "yes": 6,
+   "no": 10,
+   "unknown": 6348
+  },
+  "noSalary": 5324,
+  "stale90": 2130
+ },
+ "byCompany": {
+  "Stripe": 590,
+  "Postman": 67,
+  "GitLab": 214,
+  "Databricks": 824,
+  "Figma": 159,
+  "Coinbase": 175,
+  "OpenAI": 749,
+  "Ramp": 135,
+  "Linear": 32,
+  "Notion": 133,
+  "Bosch": 4794,
+  "Razorpay": 24,
+  "CRED": 14,
+  "Meesho": 50,
+  "Airbnb": 188,
+  "Robinhood": 130,
+  "Lyft": 165,
+  "Pinterest": 217,
+  "Reddit": 152,
+  "DoorDash": 466,
+  "Instacart": 123,
+  "Brex": 288,
+  "Affirm": 204,
+  "Gusto": 86,
+  "MongoDB": 404,
+  "Elastic": 285,
+  "Datadog": 451,
+  "Twilio": 140,
+  "Asana": 126,
+  "Dropbox": 39,
+  "Duolingo": 80,
+  "Roblox": 235,
+  "Samsara": 264,
+  "Vercel": 87,
+  "Anthropic": 546,
+  "Discord": 51,
+  "Airtable": 16,
+  "Chime": 62,
+  "Carta": 60,
+  "Cloudflare": 312,
+  "Checkr": 46,
+  "Flexport": 164,
+  "Scale AI": 216,
+  "PhonePe": 65,
+  "InMobi": 63,
+  "Groww": 5,
+  "Palantir": 308,
+  "Spotify": 89,
+  "Porter": 27,
+  "Cursor": 115,
+  "Replit": 72,
+  "Supabase": 59,
+  "Vanta": 106,
+  "PostHog": 14,
+  "ElevenLabs": 246,
+  "Warp": 18,
+  "NVIDIA": 40,
+  "Salesforce": 40,
+  "Adobe": 40,
+  "Workday": 40,
+  "Target": 40,
+  "Capital One": 600,
+  "PayPal": 40,
+  "CVS Health": 600,
+  "Humana": 40,
+  "3M": 40
+ }
+}
