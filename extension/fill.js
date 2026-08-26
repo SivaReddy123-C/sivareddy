@@ -25,20 +25,20 @@
       (profile.answers || []).find((a) => re.test(a.label || ""))?.value || "";
 
     return [
-      { re: /given[-\s]?name|first[-\s]?name|\bfname\b/i, value: firstName },
-      { re: /family[-\s]?name|last[-\s]?name|surname|\blname\b/i, value: lastName },
-      { re: /full[-\s]?name|your\s*name|^name$|\bname\b/i, value: name },
+      { re: /given[-_\s]?name|first[-_\s]?name|\bfname\b|\bfirstname\b/i, value: firstName },
+      { re: /family[-_\s]?name|last[-_\s]?name|surname|\blname\b|\blastname\b/i, value: lastName },
+      { re: /full[-_\s]?name|your\s*name|^name$|\bname\b|\bfullname\b/i, value: name },
       { re: /e-?mail/i, value: b.email || "" },
       { re: /phone|mobile|\btel\b/i, value: b.phone || "" },
-      { re: /linkedin/i, value: link("linkedin") },
-      { re: /github/i, value: link("github") },
-      { re: /portfolio|personal\s*(site|website)|website|\burl\b/i, value: link("portfolio") || link("website") },
-      { re: /current\s*(location|city)|^city$|address.*city|where.*(based|located)|^location/i, value: b.location || "" },
+      { re: /linked[-_\s]?in/i, value: link("linkedin") },
+      { re: /git[-_\s]?hub/i, value: link("github") },
+      { re: /portfolio|personal[-_\s]*(site|website)|website|\burl\b/i, value: link("portfolio") || link("website") },
+      { re: /current[-_\s]*(location|city)|^city$|address.*city|where.*(based|located)|^location|\blocation\b/i, value: b.location || "" },
       { re: /sponsor/i, value: answer(/sponsor/i) },
-      { re: /authoriz|legally\s+(able|allowed)|right\s+to\s+work|work\s+permit|eligible\s+to\s+work/i, value: answer(/authoriz/i) },
-      { re: /notice\s*period|start\s*date|when.*start|availability|available\s*to\s*start/i, value: answer(/notice|start/i) },
-      { re: /salary|compensation|pay\s*expectation|expected\s*(pay|ctc)|desired\s*pay/i, value: answer(/salary/i) },
-      { re: /years?\s*(of)?\s*(relevant|total)?\s*experience/i, value: answer(/experience/i) },
+      { re: /authoriz|legally[-_\s]+(able|allowed)|right[-_\s]+to[-_\s]+work|work[-_\s]?permit|eligible[-_\s]+to[-_\s]+work/i, value: answer(/authoriz/i) },
+      { re: /notice[-_\s]?period|start[-_\s]?date|when.*start|availab|earliest/i, value: answer(/notice|start/i) },
+      { re: /salary|compensation|pay[-_\s]?expectation|expected[-_\s]*(pay|ctc)|desired[-_\s]?(pay|salary)/i, value: answer(/salary/i) },
+      { re: /years?[-_\s]*(of)?[-_\s]*(relevant|total)?[-_\s]*experience/i, value: answer(/experience/i) },
       { re: /reloc/i, value: answer(/reloc/i) },
     ];
   }
@@ -141,18 +141,21 @@
     return out;
   }
 
-  let lastScan = { fields: 0, editable: 0, labels: [] };
+  let lastScan = { fields: 0, editable: 0, prefilled: 0, labels: [] };
 
   function fillPage(profile) {
     const matchers = buildMatchers(profile);
     const fields = collectFields();
-    lastScan = { fields: fields.length, editable: 0, labels: [] };
+    lastScan = { fields: fields.length, editable: 0, prefilled: 0, labels: [] };
     let filled = 0;
     for (const el of fields) {
       if (el.disabled || el.readOnly || filledFields.has(el)) continue;
       if (el.offsetParent === null && el.type !== "hidden") continue; // skip hidden fields
       lastScan.editable++;
-      if (!(el instanceof HTMLSelectElement) && el.value.trim()) continue; // never overwrite
+      if (!(el instanceof HTMLSelectElement) && el.value.trim()) {
+        lastScan.prefilled++;
+        continue; // never overwrite what the user or the site already put there
+      }
       const label = labelTextFor(el);
       lastScan.labels.push(label.replace(/\s+/g, " ").trim().slice(0, 80));
       const hit = matchers.find((m) => m.re.test(label) && m.value);
@@ -205,6 +208,8 @@
         banner(`JobRadar filled ${totalFilled} field${totalFilled === 1 ? "" : "s"} (outlined). Review them, attach your resume, and submit yourself.`);
       } else if (lastScan.editable === 0) {
         banner("No form fields on this page - this looks like the job description, not the application form. Click Apply, then click the JobRadar icon again.");
+      } else if (lastScan.prefilled > 0) {
+        banner(`Nothing to fill: ${lastScan.prefilled} field${lastScan.prefilled === 1 ? " already has a value" : "s already have values"} (JobRadar never overwrites what is already there).`);
       } else {
         banner(`Found ${lastScan.editable} field${lastScan.editable === 1 ? "" : "s"} but recognized none of them. Click the JobRadar icon -> Copy diagnostics to report this page.`);
       }
@@ -246,6 +251,7 @@
       frame: window.top === window.self ? "top" : "iframe",
       fieldsFound: lastScan.fields,
       editableFields: lastScan.editable,
+      alreadyFilled: lastScan.prefilled,
       filled: totalFilled,
       labelsSeen: lastScan.labels.slice(0, 25),
     };
