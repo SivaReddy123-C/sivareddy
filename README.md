@@ -15,9 +15,11 @@ the listing side, so nobody fixes it.
 
 This project takes the other side:
 
-1. **Find real jobs** — aggregate postings from official, public ATS APIs
-   (Greenhouse, Lever, Ashby, SmartRecruiters). No scraping, no LinkedIn
-   automation, no stored credentials.
+1. **Find real jobs** — aggregate postings from public ATS job-board
+   endpoints: official APIs where they exist (Greenhouse, Lever, Ashby,
+   SmartRecruiters) and, for Workday, the same public JSON endpoints its own
+   career pages call — undocumented but unauthenticated and read-only. No
+   scraping of rendered pages, no LinkedIn automation, no stored credentials.
 2. **Flag ghost jobs** — score every posting on published, explainable
    signals (staleness, repost churn, evergreen "talent pool" titles, missing
    salary/location/description) so students stop wasting hours on postings
@@ -42,6 +44,11 @@ This project takes the other side:
   user's own machine, with the user confirming each submission.
 - **Honest limits.** We cannot get anyone an interview, and mass-applying
   does not work. The product optimizes for outcomes, not application counts.
+- **Every feature must end the session faster.** The daily list is short and
+  allowed to be empty; the digest email closes with "go study"; assist fills
+  forms but never submits. A feature that makes people apply MORE fails
+  review here, however good it looks — that is the incumbent business model,
+  and it is the one thing this project must never rebuild.
 
 ## Status
 

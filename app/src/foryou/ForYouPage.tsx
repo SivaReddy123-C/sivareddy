@@ -236,6 +236,7 @@ function ProfileEditor({ initial, onSave }: {
   const [seniority, setSeniority] = useState(initial?.seniority_target ?? "");
   const [listSize, setListSize] = useState(initial?.daily_list_size ?? 30);
   const [needsSponsorship, setNeedsSponsorship] = useState(initial?.needs_sponsorship ?? false);
+  const [dailyEmail, setDailyEmail] = useState(initial?.daily_email ?? false);
 
   const toggle = (c: string) =>
     setCountries((cs) => (cs.includes(c) ? cs.filter((x) => x !== c) : [...cs, c]));
@@ -255,6 +256,9 @@ function ProfileEditor({ initial, onSave }: {
         <label className="check"><input type="checkbox" checked={countries.includes("us")} onChange={() => toggle("us")} /> USA</label>
         <label className="check" title="Postings that state they cannot sponsor are removed from your list entirely">
           <input type="checkbox" checked={needsSponsorship} onChange={(e) => setNeedsSponsorship(e.target.checked)} /> I need visa sponsorship
+        </label>
+        <label className="check" title="One email a day with your ranked list — nothing when there are no matches. Off by default.">
+          <input type="checkbox" checked={dailyEmail} onChange={(e) => setDailyEmail(e.target.checked)} /> Email me my daily list
         </label>
         <label className="field">Seniority target
           <select value={seniority} onChange={(e) => setSeniority(e.target.value)}>
@@ -281,6 +285,7 @@ function ProfileEditor({ initial, onSave }: {
         seniority_target: seniority || null,
         daily_list_size: listSize,
         needs_sponsorship: needsSponsorship,
+        daily_email: dailyEmail,
       })}>Save profile</button>
     </div>
   );

@@ -60,3 +60,17 @@ test("matched skills still score", () => {
   assert.ok(r.score >= 30);
   assert.ok((r.reasons[0] ?? "").includes("go"));
 });
+
+test("digest compose: subject counts, sponsorship surfaced, off-switch present", async () => {
+  const { composeDigest } = await import("../src/digest.js");
+  const d = composeDigest([
+    { rank: 1, title: "Backend Engineer", company: "Acme", location: "Austin, TX", url: "https://x.example/1", sponsorship: "yes", fitReasons: ["Matches your skills: go", "Fresh - posted 1d ago"] },
+    { rank: 2, title: "Platform Engineer", company: "Beta", location: "", url: "https://x.example/2", sponsorship: "unknown", fitReasons: [] },
+  ], "2026-08-26");
+  assert.ok(d.subject.includes("2"));
+  assert.ok(d.subject.toLowerCase().includes("study"));
+  assert.ok(d.text.includes("sponsors visas"));
+  assert.ok(d.text.includes("location unlisted"));
+  assert.ok(d.text.includes("Turn this email off"));
+  assert.ok(d.html.includes("https://x.example/1"));
+});
