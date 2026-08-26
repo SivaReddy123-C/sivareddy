@@ -26,7 +26,10 @@ export function ImportModal({ resume, onApply, onClose }: {
     try {
       setText(await extractPdfText(file));
     } catch (err) {
-      setError(`Couldn't read that PDF: ${(err as Error).message}`);
+      const looksLikeExport = file.name.endsWith(".json");
+      setError(looksLikeExport
+        ? "That's a JobRadar data file, not a PDF - close this and use \"Import data (.json)\" in the top-right corner of the page instead."
+        : `Couldn't read that PDF: ${(err as Error).message}`);
     } finally {
       setBusy("");
     }
