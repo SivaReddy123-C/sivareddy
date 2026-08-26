@@ -13,6 +13,8 @@ export interface FeedJob {
   ghost: { score: number; band: "low" | "medium" | "high" | "critical"; reasons: string[] };
   sponsorship: "yes" | "no" | "unknown";
   hasSalaryInfo: boolean;
+  /** Canonical skill/role tags extracted from the posting by the pipeline. */
+  tags?: string[];
 }
 
 export interface Feed {

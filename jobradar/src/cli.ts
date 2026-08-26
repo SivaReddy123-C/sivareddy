@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { StubClassifier } from "./classify.js";
 import { assessGhost } from "./ghost.js";
 import { detectCountry, matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
+import { extractTags } from "./skills.js";
 import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
@@ -219,6 +220,7 @@ function feed(): void {
         ghost: { score: j.ghost.score, band: j.ghost.band, reasons: j.ghost.signals.map((s) => s.reason) },
         sponsorship: j.sponsorship ?? "unknown",
         hasSalaryInfo: j.hasSalaryInfo,
+        tags: extractTags(j.title, j.description),
       };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);

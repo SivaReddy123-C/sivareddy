@@ -190,3 +190,50 @@ test("live ranking: excludes ghosts, honors country and sponsorship, ranks by fi
   assert.deepEqual(fromResume.skills, ["typescript", "sql", "react"]);
   assert.ok(fromResume.locations.includes("bengaluru"));
 });
+
+test("ranking caps how many roles one employer can occupy", async () => {
+  const { rankFeed } = await import("../src/lib/fit.js");
+  const NOW2 = new Date("2026-08-26T00:00:00Z");
+  const mk = (key: string, company: string) => ({
+    key, company, title: "Backend Engineer", location: "Bengaluru, India", country: "in",
+    url: "u" + key, source: "greenhouse",
+    publishedAt: "2026-08-25T00:00:00Z", firstSeenAt: "2026-08-25T00:00:00Z",
+    ghost: { score: 5, band: "low", reasons: [] }, sponsorship: "unknown", hasSalaryInfo: false,
+  }) as never;
+  // One giant board plus smaller ones - the giant must not take every slot.
+  const jobs = [
+    ...Array.from({ length: 20 }, (_, i) => mk(`bosch${i}`, "Bosch")),
+    mk("db1", "Databricks"), mk("db2", "Databricks"),
+    mk("phonepe", "PhonePe"), mk("cred", "CRED"),
+  ];
+  const out = rankFeed(jobs, {
+    skills: ["backend"], countries: ["in"], locations: [], seniorityTarget: null, needsSponsorship: false,
+  }, 10, NOW2);
+  assert.equal(out.filter((m) => m.job.company === "Bosch").length, 3, "at most 3 from one employer");
+  const companies = new Set(out.map((m) => m.job.company));
+  assert.ok(companies.has("PhonePe") && companies.has("CRED"), "smaller employers still reach the list");
+});
+
+test("irrelevant roles are excluded, not merely outranked", async () => {
+  const { rankFeed } = await import("../src/lib/fit.js");
+  const NOW2 = new Date("2026-08-26T00:00:00Z");
+  const mk = (key: string, title: string, location: string, tags: string[]) => ({
+    key, company: key, title, location, country: "us", url: "u" + key, source: "greenhouse",
+    publishedAt: "2026-08-25T00:00:00Z", firstSeenAt: "2026-08-25T00:00:00Z",
+    ghost: { score: 5, band: "low", reasons: [] }, sponsorship: "unknown",
+    hasSalaryInfo: true, tags,
+  }) as never;
+  // The sales role wins on seniority + location + freshness + salary alone;
+  // only a relevance requirement keeps it out of an engineer's list.
+  const jobs = [
+    mk("sales", "Senior Account Executive", "Chicago, IL", ["sales"]),
+    mk("eng", "Senior Software Engineer", "Seattle, WA", ["python", "aws", "postgres"]),
+  ];
+  const profile = {
+    skills: ["python", "aws", "sql"], countries: ["us"], locations: ["chicago"],
+    seniorityTarget: "senior", needsSponsorship: false,
+  };
+  const out = rankFeed(jobs, profile, 10, NOW2);
+  assert.equal(out.length, 1);
+  assert.equal(out[0]!.job.key, "eng", "the relevant role is the only one that survives");
+});

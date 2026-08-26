@@ -83,6 +83,11 @@ export function skillMentioned(haystack: string, skill: string): boolean {
  */
 export function passesHardFilters(profile: FitProfile, posting: FitPosting): boolean {
   if (profile.needsSponsorship && posting.sponsorship === "no") return false;
+  // Relevance is a requirement, not a bonus - see the app-side ranker for why.
+  if (profile.skills.length > 0) {
+    const haystack = `${posting.title} ${posting.descriptionText ?? ""}`.toLowerCase();
+    if (!profile.skills.some((s) => s.length >= 2 && haystack.includes(s))) return false;
+  }
   return true;
 }
 
