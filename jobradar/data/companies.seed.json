@@ -941,5 +941,628 @@
     "token": "leantech",
     "verified": true,
     "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "HP",
+    "source": "workday",
+    "token": "hp",
+    "verified": true,
+    "params": {
+      "host": "hp.wd5.myworkdayjobs.com",
+      "site": "ExternalCareerSite"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Micron",
+    "source": "workday",
+    "token": "micron",
+    "verified": true,
+    "params": {
+      "host": "micron.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Applied Materials",
+    "source": "workday",
+    "token": "amat",
+    "verified": true,
+    "params": {
+      "host": "amat.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Boeing",
+    "source": "workday",
+    "token": "boeing",
+    "verified": true,
+    "params": {
+      "host": "boeing.wd1.myworkdayjobs.com",
+      "site": "External_Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Amgen",
+    "source": "workday",
+    "token": "amgen",
+    "verified": true,
+    "params": {
+      "host": "amgen.wd1.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Regeneron",
+    "source": "workday",
+    "token": "regeneron",
+    "verified": true,
+    "params": {
+      "host": "regeneron.wd1.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "AstraZeneca",
+    "source": "workday",
+    "token": "astrazeneca",
+    "verified": true,
+    "params": {
+      "host": "astrazeneca.wd3.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Applied Materials",
+    "source": "ashby",
+    "token": "applied",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "General Motors",
+    "source": "greenhouse",
+    "token": "general",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Accenture",
+    "source": "recruitee",
+    "token": "accenture",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Mercury Technologies",
+    "source": "greenhouse",
+    "token": "mercury",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Miro",
+    "source": "ashby",
+    "token": "miro",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Webflow",
+    "source": "greenhouse",
+    "token": "webflow",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Contentful",
+    "source": "greenhouse",
+    "token": "contentful",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Sanity",
+    "source": "ashby",
+    "token": "sanity",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Bubble",
+    "source": "ashby",
+    "token": "bubble",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Zapier",
+    "source": "ashby",
+    "token": "zapier",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Make",
+    "source": "greenhouse",
+    "token": "make",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "n8n",
+    "source": "ashby",
+    "token": "n8n",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Hightouch",
+    "source": "greenhouse",
+    "token": "hightouch",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Hightouch",
+    "source": "ashby",
+    "token": "hightouch",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "FullStory",
+    "source": "ashby",
+    "token": "fullstory",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Sentry",
+    "source": "ashby",
+    "token": "sentry",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Datafold",
+    "source": "ashby",
+    "token": "datafold",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Astronomer",
+    "source": "ashby",
+    "token": "astronomer",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Starburst",
+    "source": "greenhouse",
+    "token": "starburst",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "ClickHouse",
+    "source": "greenhouse",
+    "token": "clickhouse",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "ClickHouse",
+    "source": "ashby",
+    "token": "clickhouse",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cockroach Labs",
+    "source": "greenhouse",
+    "token": "cockroachlabs",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "SingleStore",
+    "source": "greenhouse",
+    "token": "singlestore",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Redis Labs",
+    "source": "ashby",
+    "token": "redis",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Confluent",
+    "source": "ashby",
+    "token": "confluent",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Materialize",
+    "source": "ashby",
+    "token": "materialize",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Honeycomb",
+    "source": "greenhouse",
+    "token": "honeycomb",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cribl",
+    "source": "greenhouse",
+    "token": "cribl",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Socket",
+    "source": "ashby",
+    "token": "socket",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Semgrep",
+    "source": "ashby",
+    "token": "semgrep",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Doppler",
+    "source": "ashby",
+    "token": "doppler",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "1Password",
+    "source": "ashby",
+    "token": "1password",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Okta",
+    "source": "greenhouse",
+    "token": "okta",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "WorkOS",
+    "source": "ashby",
+    "token": "workos",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Descope",
+    "source": "greenhouse",
+    "token": "descope",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Stytch",
+    "source": "ashby",
+    "token": "stytch",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Alloy",
+    "source": "greenhouse",
+    "token": "alloy",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Persona",
+    "source": "ashby",
+    "token": "persona",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Alloy",
+    "source": "lever",
+    "token": "alloy",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Middesk",
+    "source": "ashby",
+    "token": "middesk",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Everlaw",
+    "source": "greenhouse",
+    "token": "everlaw",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Numeral",
+    "source": "ashby",
+    "token": "numeral",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Anrok",
+    "source": "ashby",
+    "token": "anrok",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Orb",
+    "source": "ashby",
+    "token": "orb",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Lago",
+    "source": "ashby",
+    "token": "lago",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Paddle",
+    "source": "ashby",
+    "token": "paddle",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Abnormal Security",
+    "source": "greenhouse",
+    "token": "abnormalsecurity",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Remote",
+    "source": "greenhouse",
+    "token": "remote",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Oyster",
+    "source": "ashby",
+    "token": "oyster",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Adyen",
+    "source": "greenhouse",
+    "token": "adyen",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Velocity Global",
+    "source": "ashby",
+    "token": "velocity",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "SumUp",
+    "source": "greenhouse",
+    "token": "sumup",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Mollie",
+    "source": "ashby",
+    "token": "mollie",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Qonto",
+    "source": "ashby",
+    "token": "qonto",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Qonto",
+    "source": "lever",
+    "token": "qonto",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Doctolib",
+    "source": "greenhouse",
+    "token": "doctolib",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Alan",
+    "source": "ashby",
+    "token": "alan",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Swile",
+    "source": "lever",
+    "token": "swile",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Doctolib",
+    "source": "ashby",
+    "token": "doctolib",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Pennylane",
+    "source": "ashby",
+    "token": "pennylane",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Flink",
+    "source": "ashby",
+    "token": "flink",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "HelloFresh",
+    "source": "greenhouse",
+    "token": "hellofresh",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Trade Republic",
+    "source": "greenhouse",
+    "token": "traderepublic",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "N26",
+    "source": "greenhouse",
+    "token": "n26",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Raisin",
+    "source": "greenhouse",
+    "token": "raisin",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Flix",
+    "source": "greenhouse",
+    "token": "flix",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Forto",
+    "source": "ashby",
+    "token": "forto",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Wayve",
+    "source": "greenhouse",
+    "token": "wayve",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Wayve",
+    "source": "ashby",
+    "token": "wayve",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Tractable",
+    "source": "ashby",
+    "token": "tractable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Synthesia",
+    "source": "ashby",
+    "token": "synthesia",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Stability AI",
+    "source": "greenhouse",
+    "token": "stabilityai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Faculty",
+    "source": "ashby",
+    "token": "faculty",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Improbable",
+    "source": "ashby",
+    "token": "improbable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Quantexa",
+    "source": "ashby",
+    "token": "quantexa",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "GoCardless",
+    "source": "greenhouse",
+    "token": "gocardless",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Zilch",
+    "source": "ashby",
+    "token": "zilch",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Marshmallow",
+    "source": "ashby",
+    "token": "marshmallow",
+    "verified": true,
+    "note": "discovered 2026-08-26"
   }
 ]
