@@ -55,5 +55,9 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Daily fetch: update longitudinal state and stats"
+            # The run takes minutes and main moves under it (a merge, another
+            # workflow). A bare push then rejects and fails the whole run at
+            # the finish line. Rebase our one data commit onto whatever landed.
+            git pull --rebase origin main
             git push
           fi
