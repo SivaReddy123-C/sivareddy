@@ -162,6 +162,19 @@ async function digestCmd(): Promise<void> {
   console.log(`digest: ${result.sent} sent, ${result.skipped} skipped`);
 }
 
+/** `sponsors`: ingest US federal H-1B filings and join them to our companies. */
+async function sponsorsCmd(): Promise<void> {
+  const { makeClient } = await import("./sync.js");
+  const { ingestSponsors, matchCompanies } = await import("./sponsorship.js");
+  const db = makeClient();
+  // USCIS publishes by fiscal year; take the last three so a company that
+  // sponsored recently is still visible if this year's file lags.
+  const thisFy = new Date().getUTCFullYear();
+  const stored = await ingestSponsors(db, [thisFy, thisFy - 1, thisFy - 2]);
+  const { matched, total } = await matchCompanies(db);
+  console.log(`sponsors: ${stored} employer-years stored; ${matched}/${total} of our companies matched to federal filings`);
+}
+
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
 function stats(): void {
   const store = new Store(DATA);
@@ -252,7 +265,8 @@ switch (cmd) {
   case "rank": await rank(); break;
   case "discover": await discoverCmd(); break;
   case "digest": await digestCmd(); break;
+  case "sponsors": await sponsorsCmd(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest|sponsors> [--india | --usa]");
     process.exit(1);
 }

@@ -204,3 +204,42 @@ test("sync strips characters Postgres rejects inside json", async () => {
   assert.equal(cleanText("emoji \u{1F600} ok"), "emoji \u{1F600} ok");
   assert.equal(cleanText(null), null);
 });
+
+test("employer normalization joins federal filings to job boards", async () => {
+  const { normalizeEmployer } = await import("../src/sponsorship.js");
+  // The same company, spelled as each source spells it.
+  assert.equal(normalizeEmployer("STRIPE, INC."), normalizeEmployer("Stripe"));
+  assert.equal(normalizeEmployer("DATABRICKS, INC."), normalizeEmployer("Databricks"));
+  assert.equal(normalizeEmployer("Cognizant Technology Solutions US Corp"), "cognizant");
+  assert.equal(normalizeEmployer("NVIDIA Corporation"), "nvidia");
+  // Different companies must not collide.
+  assert.notEqual(normalizeEmployer("Meta Platforms"), normalizeEmployer("Metabase"));
+});
+
+test("USCIS csv parsing sums an employer's offices and reads real headers", async () => {
+  const { rowsFromCsv, parseCsv } = await import("../src/sponsorship.js");
+  const csv = [
+    'Fiscal Year,Employer (Petitioner) Name,Initial Approval,Initial Denial,Continuing Approval,Continuing Denial,Petitioner City,Petitioner State',
+    '2025,"ACME, INC.",10,1,5,0,Austin,TX',
+    '2025,"ACME, INC.",3,0,2,1,Seattle,WA',
+    '2025,"BETA LLC",7,2,1,0,"New York, Borough of Queens",NY',
+  ].join("\n");
+  // Quoted commas must not split a field.
+  assert.equal(parseCsv(csv)[3]![6], "New York, Borough of Queens");
+
+  const rows = rowsFromCsv(csv, 2025);
+  assert.equal(rows.length, 2, "two employers, offices summed");
+  const acme = rows.find((r) => r.employer_norm === "acme")!;
+  assert.equal(acme.initial_approval, 13);
+  assert.equal(acme.continuing_approval, 7);
+  assert.equal(acme.initial_denial, 1);
+  assert.equal(acme.fiscal_year, 2025);
+});
+
+test("csv parser tolerates a renamed header column", async () => {
+  const { rowsFromCsv } = await import("../src/sponsorship.js");
+  const csv = 'Fiscal Year,Employer,Initial Approvals,Initial Denials,Continuing Approvals,Continuing Denials\n2025,"GAMMA CORP",4,0,1,0';
+  const rows = rowsFromCsv(csv, 2025);
+  assert.equal(rows[0]!.employer_norm, "gamma");
+  assert.equal(rows[0]!.initial_approval, 4);
+});
