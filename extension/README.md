@@ -1,9 +1,21 @@
 # JobRadar Assist (browser extension)
 
-Autofills job application forms on **Greenhouse, Lever, and Ashby** from the
+Autofills job application forms on **Greenhouse, Lever, Ashby, Workday,
+SmartRecruiters, Workable and Recruitee** (and any other site on demand) from the
 data you already keep in the JobRadar app. It outlines every field it filled
 and **never submits** — you review, attach your resume, and click Submit
 yourself. No credentials, nothing leaves your browser.
+
+## If it isn't filling anything
+
+1. **Open the JobRadar app once in this browser** with the extension installed -
+   that is when your data syncs. The extension icon's popup tells you whether
+   data is synced and when.
+2. **Reload the extension** after pulling a new version: `chrome://extensions`
+   (or `brave://extensions`) -> Reload on JobRadar Assist. An old copy will not
+   have the newer site patterns.
+3. On slow single-page forms, fields are filled as they appear for ~20 seconds.
+   You can always click the icon -> **Fill form on this page** to re-run.
 
 ## Install (Chrome / Edge / Brave)
 
