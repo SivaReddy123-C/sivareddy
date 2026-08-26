@@ -7,6 +7,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { GHOST_CUTOFF, passesHardFilters, scoreFit, type FitPosting, type FitProfile } from "./fit.js";
 import { detectCountry } from "./normalize.js";
 
+/** One employer may not occupy more than this many slots in a daily list. */
+const MAX_PER_COMPANY = 3;
+
 interface ProfileRow {
   user_id: string;
   skills: string[] | null;
@@ -19,6 +22,7 @@ interface ProfileRow {
 
 interface PostingRow {
   id: string;
+  company_id: string;
   title: string;
   location: string;
   country: string | null;
@@ -84,10 +88,21 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
         post,
         fit: scoreFit(profile, toFitPosting(post), now),
       }))
-      .sort((a, b) => b.fit.score - a.fit.score)
-      .slice(0, listSize);
+      .sort((a, b) => b.fit.score - a.fit.score);
 
-    const rows = scored.map((s, i) => ({
+    // Cap per employer for the same reason the live ranker does: one huge
+    // board would otherwise be the entire list.
+    const perCompany = new Map<string, number>();
+    const capped: typeof scored = [];
+    for (const s of scored) {
+      if (capped.length >= listSize) break;
+      const seen = perCompany.get(s.post.company_id) ?? 0;
+      if (seen >= MAX_PER_COMPANY) continue;
+      perCompany.set(s.post.company_id, seen + 1);
+      capped.push(s);
+    }
+
+    const rows = capped.map((s, i) => ({
       user_id: p.user_id,
       posting_id: s.post.id,
       match_date: matchDate,

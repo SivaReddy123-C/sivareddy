@@ -96,9 +96,20 @@ export function scoreFit(profile: FitProfile, job: FeedJob, now = new Date()): S
   return { job, score, reasons };
 }
 
-/** Rank the whole feed for one profile. Ghosts are excluded, never ranked down. */
-export function rankFeed(jobs: FeedJob[], profile: FitProfile, limit: number, now = new Date()): ScoredMatch[] {
-  return jobs
+/**
+ * Rank the whole feed for one profile. Ghosts are excluded, never ranked down.
+ * At most `maxPerCompany` roles from any one employer reach the list: without
+ * that cap a board with thousands of postings (Bosch has ~4,800) crowds out
+ * every other company, which is useless to the person reading it.
+ */
+export function rankFeed(
+  jobs: FeedJob[],
+  profile: FitProfile,
+  limit: number,
+  now = new Date(),
+  maxPerCompany = 3,
+): ScoredMatch[] {
+  const ranked = jobs
     .filter((j) => {
       if (j.ghost.score >= GHOST_CUTOFF) return false;
       if (profile.needsSponsorship && j.sponsorship === "no") return false;
@@ -106,8 +117,18 @@ export function rankFeed(jobs: FeedJob[], profile: FitProfile, limit: number, no
       return true;
     })
     .map((j) => scoreFit(profile, j, now))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
+    .sort((a, b) => b.score - a.score);
+
+  const perCompany = new Map<string, number>();
+  const out: ScoredMatch[] = [];
+  for (const m of ranked) {
+    if (out.length >= limit) break;
+    const seen = perCompany.get(m.job.company) ?? 0;
+    if (seen >= maxPerCompany) continue;
+    perCompany.set(m.job.company, seen + 1);
+    out.push(m);
+  }
+  return out;
 }
 
 /** Skills and locations a resume already states - used to prefill the profile. */

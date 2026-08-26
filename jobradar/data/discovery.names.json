@@ -1,41 +1,632 @@
 [
-  {"name": "Retool"}, {"name": "Whatnot"}, {"name": "Rippling"}, {"name": "Faire"},
-  {"name": "Wiz"}, {"name": "Anduril"}, {"name": "Hex"}, {"name": "dbt Labs", "tokens": ["dbtlabsinc", "dbtlabs"]},
-  {"name": "Temporal"}, {"name": "Grafana Labs", "tokens": ["grafanalabs"]}, {"name": "HashiCorp"},
-  {"name": "Render"}, {"name": "Railway"}, {"name": "Fly.io", "tokens": ["flyio", "fly"]},
-  {"name": "Neon"}, {"name": "PlanetScale"}, {"name": "Prisma"}, {"name": "Sourcegraph"},
-  {"name": "Chainguard"}, {"name": "Tailscale"}, {"name": "Teleport"}, {"name": "Snyk"},
-  {"name": "LaunchDarkly"}, {"name": "CircleCI"}, {"name": "Netlify"}, {"name": "Algolia"},
-  {"name": "Mixpanel"}, {"name": "Amplitude"}, {"name": "RudderStack"}, {"name": "Airbyte"},
-  {"name": "Fivetran"}, {"name": "Dagster Labs", "tokens": ["dagsterlabs", "dagster"]}, {"name": "Prefect"},
-  {"name": "Modal"}, {"name": "Baseten"}, {"name": "Together AI", "tokens": ["togetherai", "together"]},
-  {"name": "Groq"}, {"name": "Mistral AI", "tokens": ["mistral"]}, {"name": "Cohere"},
-  {"name": "Hugging Face", "tokens": ["huggingface"]}, {"name": "Weights and Biases", "tokens": ["wandb"]},
-  {"name": "Pinecone"}, {"name": "Weaviate"}, {"name": "LangChain", "tokens": ["langchain"]},
-  {"name": "E2B", "tokens": ["e2b"]}, {"name": "StackBlitz"}, {"name": "Lovable"},
-  {"name": "Sierra"}, {"name": "Harvey"}, {"name": "Decagon"}, {"name": "Clay"},
-  {"name": "Zip", "tokens": ["ziphq"]}, {"name": "Verkada"}, {"name": "Flock Safety", "tokens": ["flocksafety"]},
-  {"name": "Applied Intuition", "tokens": ["appliedintuition"]}, {"name": "Zipline"},
-  {"name": "Gecko Robotics", "tokens": ["geckorobotics"]}, {"name": "Saronic"},
-  {"name": "Nominal"}, {"name": "Windsurf"}, {"name": "Codeium"},
-  {"name": "Zomato"}, {"name": "Zepto", "tokens": ["zepto", "kiranakart"]},
-  {"name": "Oyo", "tokens": ["oyo", "oyorooms"]}, {"name": "Ola", "tokens": ["ola", "olacabs", "anitechnologies"]},
-  {"name": "Myntra"}, {"name": "Nykaa"}, {"name": "Lenskart"}, {"name": "Upstox"},
-  {"name": "Slice", "tokens": ["sliceit", "slice"]}, {"name": "Navi", "tokens": ["navi", "navitechnologies"]},
-  {"name": "Jar", "tokens": ["jar", "jarapp"]}, {"name": "Fi Money", "tokens": ["fimoney", "epifi"]},
-  {"name": "Khatabook"}, {"name": "Zetwerk"}, {"name": "Moglix"}, {"name": "Delhivery"},
-  {"name": "Rapido"}, {"name": "Cars24"}, {"name": "Spinny"},
-  {"name": "Dream Sports", "tokens": ["dreamsports", "dream11"]}, {"name": "MPL", "tokens": ["mpl"]},
-  {"name": "Games24x7", "tokens": ["games24x7"]}, {"name": "ShareChat"}, {"name": "Unacademy"},
-  {"name": "Physics Wallah", "tokens": ["physicswallah", "pw"]}, {"name": "Vedantu"},
-  {"name": "Cult.fit", "tokens": ["cultfit", "curefit"]}, {"name": "PharmEasy"}, {"name": "Practo"},
-  {"name": "HealthKart"}, {"name": "Atlan"}, {"name": "Hasura"}, {"name": "Chargebee"},
-  {"name": "BrowserStack"}, {"name": "Whatfix"}, {"name": "LeadSquared"}, {"name": "Darwinbox"},
-  {"name": "Keka"}, {"name": "Zluri"}, {"name": "Skyflow"}, {"name": "Yellow.ai", "tokens": ["yellowai", "yellow"]},
-  {"name": "Gupshup"}, {"name": "CleverTap"}, {"name": "MoEngage"}, {"name": "Juspay"},
-  {"name": "Pine Labs", "tokens": ["pinelabs"]}, {"name": "Signeasy"}, {"name": "Airmeet"},
-  {"name": "InVideo"}, {"name": "Dukaan"}, {"name": "Jupiter Money", "tokens": ["jupitermoney", "jupiter-money"]},
-  {"name": "Smallcase"}, {"name": "Wint Wealth", "tokens": ["wintwealth"]}, {"name": "Zerodha"},
-  {"name": "Plum", "tokens": ["plumhq"]}, {"name": "Onsurity"}, {"name": "Setu"},
-  {"name": "Open Financial", "tokens": ["open", "openfinancial", "bankopen"]}, {"name": "RazorpayX", "tokens": ["razorpayx"]}
+  {
+    "name": "Retool"
+  },
+  {
+    "name": "Whatnot"
+  },
+  {
+    "name": "Rippling"
+  },
+  {
+    "name": "Faire"
+  },
+  {
+    "name": "Wiz"
+  },
+  {
+    "name": "Anduril"
+  },
+  {
+    "name": "Hex"
+  },
+  {
+    "name": "dbt Labs",
+    "tokens": [
+      "dbtlabsinc",
+      "dbtlabs"
+    ]
+  },
+  {
+    "name": "Temporal"
+  },
+  {
+    "name": "Grafana Labs",
+    "tokens": [
+      "grafanalabs"
+    ]
+  },
+  {
+    "name": "HashiCorp"
+  },
+  {
+    "name": "Render"
+  },
+  {
+    "name": "Railway"
+  },
+  {
+    "name": "Fly.io",
+    "tokens": [
+      "flyio",
+      "fly"
+    ]
+  },
+  {
+    "name": "Neon"
+  },
+  {
+    "name": "PlanetScale"
+  },
+  {
+    "name": "Prisma"
+  },
+  {
+    "name": "Sourcegraph"
+  },
+  {
+    "name": "Chainguard"
+  },
+  {
+    "name": "Tailscale"
+  },
+  {
+    "name": "Teleport"
+  },
+  {
+    "name": "Snyk"
+  },
+  {
+    "name": "LaunchDarkly"
+  },
+  {
+    "name": "CircleCI"
+  },
+  {
+    "name": "Netlify"
+  },
+  {
+    "name": "Algolia"
+  },
+  {
+    "name": "Mixpanel"
+  },
+  {
+    "name": "Amplitude"
+  },
+  {
+    "name": "RudderStack"
+  },
+  {
+    "name": "Airbyte"
+  },
+  {
+    "name": "Fivetran"
+  },
+  {
+    "name": "Dagster Labs",
+    "tokens": [
+      "dagsterlabs",
+      "dagster"
+    ]
+  },
+  {
+    "name": "Prefect"
+  },
+  {
+    "name": "Modal"
+  },
+  {
+    "name": "Baseten"
+  },
+  {
+    "name": "Together AI",
+    "tokens": [
+      "togetherai",
+      "together"
+    ]
+  },
+  {
+    "name": "Groq"
+  },
+  {
+    "name": "Mistral AI",
+    "tokens": [
+      "mistral"
+    ]
+  },
+  {
+    "name": "Cohere"
+  },
+  {
+    "name": "Hugging Face",
+    "tokens": [
+      "huggingface"
+    ]
+  },
+  {
+    "name": "Weights and Biases",
+    "tokens": [
+      "wandb"
+    ]
+  },
+  {
+    "name": "Pinecone"
+  },
+  {
+    "name": "Weaviate"
+  },
+  {
+    "name": "LangChain",
+    "tokens": [
+      "langchain"
+    ]
+  },
+  {
+    "name": "E2B",
+    "tokens": [
+      "e2b"
+    ]
+  },
+  {
+    "name": "StackBlitz"
+  },
+  {
+    "name": "Lovable"
+  },
+  {
+    "name": "Sierra"
+  },
+  {
+    "name": "Harvey"
+  },
+  {
+    "name": "Decagon"
+  },
+  {
+    "name": "Clay"
+  },
+  {
+    "name": "Zip",
+    "tokens": [
+      "ziphq"
+    ]
+  },
+  {
+    "name": "Verkada"
+  },
+  {
+    "name": "Flock Safety",
+    "tokens": [
+      "flocksafety"
+    ]
+  },
+  {
+    "name": "Applied Intuition",
+    "tokens": [
+      "appliedintuition"
+    ]
+  },
+  {
+    "name": "Zipline"
+  },
+  {
+    "name": "Gecko Robotics",
+    "tokens": [
+      "geckorobotics"
+    ]
+  },
+  {
+    "name": "Saronic"
+  },
+  {
+    "name": "Nominal"
+  },
+  {
+    "name": "Windsurf"
+  },
+  {
+    "name": "Codeium"
+  },
+  {
+    "name": "Zomato"
+  },
+  {
+    "name": "Zepto",
+    "tokens": [
+      "zepto",
+      "kiranakart"
+    ]
+  },
+  {
+    "name": "Oyo",
+    "tokens": [
+      "oyo",
+      "oyorooms"
+    ]
+  },
+  {
+    "name": "Ola",
+    "tokens": [
+      "ola",
+      "olacabs",
+      "anitechnologies"
+    ]
+  },
+  {
+    "name": "Myntra"
+  },
+  {
+    "name": "Nykaa"
+  },
+  {
+    "name": "Lenskart"
+  },
+  {
+    "name": "Upstox"
+  },
+  {
+    "name": "Slice",
+    "tokens": [
+      "sliceit",
+      "slice"
+    ]
+  },
+  {
+    "name": "Navi",
+    "tokens": [
+      "navi",
+      "navitechnologies"
+    ]
+  },
+  {
+    "name": "Jar",
+    "tokens": [
+      "jar",
+      "jarapp"
+    ]
+  },
+  {
+    "name": "Fi Money",
+    "tokens": [
+      "fimoney",
+      "epifi"
+    ]
+  },
+  {
+    "name": "Khatabook"
+  },
+  {
+    "name": "Zetwerk"
+  },
+  {
+    "name": "Moglix"
+  },
+  {
+    "name": "Delhivery"
+  },
+  {
+    "name": "Rapido"
+  },
+  {
+    "name": "Cars24"
+  },
+  {
+    "name": "Spinny"
+  },
+  {
+    "name": "Dream Sports",
+    "tokens": [
+      "dreamsports",
+      "dream11"
+    ]
+  },
+  {
+    "name": "MPL",
+    "tokens": [
+      "mpl"
+    ]
+  },
+  {
+    "name": "Games24x7",
+    "tokens": [
+      "games24x7"
+    ]
+  },
+  {
+    "name": "ShareChat"
+  },
+  {
+    "name": "Unacademy"
+  },
+  {
+    "name": "Physics Wallah",
+    "tokens": [
+      "physicswallah",
+      "pw"
+    ]
+  },
+  {
+    "name": "Vedantu"
+  },
+  {
+    "name": "Cult.fit",
+    "tokens": [
+      "cultfit",
+      "curefit"
+    ]
+  },
+  {
+    "name": "PharmEasy"
+  },
+  {
+    "name": "Practo"
+  },
+  {
+    "name": "HealthKart"
+  },
+  {
+    "name": "Atlan"
+  },
+  {
+    "name": "Hasura"
+  },
+  {
+    "name": "Chargebee"
+  },
+  {
+    "name": "BrowserStack"
+  },
+  {
+    "name": "Whatfix"
+  },
+  {
+    "name": "LeadSquared"
+  },
+  {
+    "name": "Darwinbox"
+  },
+  {
+    "name": "Keka"
+  },
+  {
+    "name": "Zluri"
+  },
+  {
+    "name": "Skyflow"
+  },
+  {
+    "name": "Yellow.ai",
+    "tokens": [
+      "yellowai",
+      "yellow"
+    ]
+  },
+  {
+    "name": "Gupshup"
+  },
+  {
+    "name": "CleverTap"
+  },
+  {
+    "name": "MoEngage"
+  },
+  {
+    "name": "Juspay"
+  },
+  {
+    "name": "Pine Labs",
+    "tokens": [
+      "pinelabs"
+    ]
+  },
+  {
+    "name": "Signeasy"
+  },
+  {
+    "name": "Airmeet"
+  },
+  {
+    "name": "InVideo"
+  },
+  {
+    "name": "Dukaan"
+  },
+  {
+    "name": "Jupiter Money",
+    "tokens": [
+      "jupitermoney",
+      "jupiter-money"
+    ]
+  },
+  {
+    "name": "Smallcase"
+  },
+  {
+    "name": "Wint Wealth",
+    "tokens": [
+      "wintwealth"
+    ]
+  },
+  {
+    "name": "Zerodha"
+  },
+  {
+    "name": "Plum",
+    "tokens": [
+      "plumhq"
+    ]
+  },
+  {
+    "name": "Onsurity"
+  },
+  {
+    "name": "Setu"
+  },
+  {
+    "name": "Open Financial",
+    "tokens": [
+      "open",
+      "openfinancial",
+      "bankopen"
+    ]
+  },
+  {
+    "name": "RazorpayX",
+    "tokens": [
+      "razorpayx"
+    ]
+  },
+  {
+    "name": "Careem"
+  },
+  {
+    "name": "Talabat"
+  },
+  {
+    "name": "Noon",
+    "tokens": [
+      "noon"
+    ]
+  },
+  {
+    "name": "Tabby"
+  },
+  {
+    "name": "Tamara"
+  },
+  {
+    "name": "Kitopi"
+  },
+  {
+    "name": "Swvl"
+  },
+  {
+    "name": "Anghami"
+  },
+  {
+    "name": "Property Finder",
+    "tokens": [
+      "propertyfinder"
+    ]
+  },
+  {
+    "name": "Dubizzle"
+  },
+  {
+    "name": "Bayut"
+  },
+  {
+    "name": "Alef Education",
+    "tokens": [
+      "alefeducation"
+    ]
+  },
+  {
+    "name": "Sary"
+  },
+  {
+    "name": "Foodics"
+  },
+  {
+    "name": "Unifonic"
+  },
+  {
+    "name": "Rain",
+    "tokens": [
+      "rainfinancial"
+    ]
+  },
+  {
+    "name": "Zid"
+  },
+  {
+    "name": "Nana"
+  },
+  {
+    "name": "Jahez"
+  },
+  {
+    "name": "Mrsool"
+  },
+  {
+    "name": "Trukker"
+  },
+  {
+    "name": "Yalla"
+  },
+  {
+    "name": "Bitpanda"
+  },
+  {
+    "name": "Deliveroo"
+  },
+  {
+    "name": "Delivery Hero",
+    "tokens": [
+      "deliveryhero"
+    ]
+  },
+  {
+    "name": "G42"
+  },
+  {
+    "name": "Presight"
+  },
+  {
+    "name": "Astra Tech",
+    "tokens": [
+      "astratech"
+    ]
+  },
+  {
+    "name": "PureHealth"
+  },
+  {
+    "name": "Emirates NBD",
+    "tokens": [
+      "emiratesnbd"
+    ]
+  },
+  {
+    "name": "Mashreq"
+  },
+  {
+    "name": "stc",
+    "tokens": [
+      "stcgroup"
+    ]
+  },
+  {
+    "name": "Ninja"
+  },
+  {
+    "name": "Salla"
+  },
+  {
+    "name": "Lean Technologies",
+    "tokens": [
+      "leantech",
+      "leantechnologies"
+    ]
+  },
+  {
+    "name": "Huspy"
+  },
+  {
+    "name": "Baraka"
+  },
+  {
+    "name": "Wio Bank",
+    "tokens": [
+      "wiobank",
+      "wio"
+    ]
+  },
+  {
+    "name": "Aramco Digital",
+    "tokens": [
+      "aramcodigital"
+    ]
+  }
 ]
