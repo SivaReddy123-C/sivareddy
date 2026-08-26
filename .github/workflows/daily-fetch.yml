@@ -58,6 +58,6 @@ jobs:
             # The run takes minutes and main moves under it (a merge, another
             # workflow). A bare push then rejects and fails the whole run at
             # the finish line. Rebase our one data commit onto whatever landed.
-            git pull --rebase origin main
+            git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
