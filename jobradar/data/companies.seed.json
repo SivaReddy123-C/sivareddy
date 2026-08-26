@@ -566,5 +566,331 @@
       "site": "DeloitteUS"
     },
     "note": "site-name retry - verified by fire"
+  },
+  {
+    "name": "Intuit",
+    "source": "workday",
+    "token": "intuit",
+    "verified": false,
+    "params": {
+      "host": "intuit.wd1.myworkdayjobs.com",
+      "site": "Intuit_Careers"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Faire",
+    "source": "greenhouse",
+    "token": "faire",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Hex",
+    "source": "ashby",
+    "token": "hex",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Temporal",
+    "source": "ashby",
+    "token": "temporal",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Grafana Labs",
+    "source": "greenhouse",
+    "token": "grafanalabs",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Render",
+    "source": "ashby",
+    "token": "render",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Railway",
+    "source": "ashby",
+    "token": "railway",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "PlanetScale",
+    "source": "greenhouse",
+    "token": "planetscale",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Neon",
+    "source": "ashby",
+    "token": "neon",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Neon",
+    "source": "lever",
+    "token": "neon",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Prisma",
+    "source": "greenhouse",
+    "token": "prisma",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Chainguard",
+    "source": "greenhouse",
+    "token": "chainguard",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Tailscale",
+    "source": "greenhouse",
+    "token": "tailscale",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "LaunchDarkly",
+    "source": "greenhouse",
+    "token": "launchdarkly",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Netlify",
+    "source": "greenhouse",
+    "token": "netlify",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "CircleCI",
+    "source": "greenhouse",
+    "token": "circleci",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Algolia",
+    "source": "greenhouse",
+    "token": "algolia",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Mixpanel",
+    "source": "greenhouse",
+    "token": "mixpanel",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Amplitude",
+    "source": "greenhouse",
+    "token": "amplitude",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Amplitude",
+    "source": "ashby",
+    "token": "amplitude",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Airbyte",
+    "source": "ashby",
+    "token": "airbyte",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Fivetran",
+    "source": "greenhouse",
+    "token": "fivetran",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Prisma",
+    "source": "recruitee",
+    "token": "prisma",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Prefect",
+    "source": "ashby",
+    "token": "prefect",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Modal",
+    "source": "ashby",
+    "token": "modal",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Baseten",
+    "source": "ashby",
+    "token": "baseten",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Together AI",
+    "source": "greenhouse",
+    "token": "togetherai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cohere",
+    "source": "ashby",
+    "token": "cohere",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Hugging Face",
+    "source": "workable",
+    "token": "huggingface",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Pinecone",
+    "source": "ashby",
+    "token": "pinecone",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Weaviate",
+    "source": "ashby",
+    "token": "weaviate",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "LangChain",
+    "source": "ashby",
+    "token": "langchain",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "E2B",
+    "source": "ashby",
+    "token": "e2b",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "StackBlitz",
+    "source": "greenhouse",
+    "token": "stackblitz",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Lovable",
+    "source": "greenhouse",
+    "token": "lovable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Lovable",
+    "source": "ashby",
+    "token": "lovable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Sierra",
+    "source": "ashby",
+    "token": "sierra",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Harvey",
+    "source": "ashby",
+    "token": "harvey",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Decagon",
+    "source": "ashby",
+    "token": "decagon",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Verkada",
+    "source": "greenhouse",
+    "token": "verkada",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Saronic",
+    "source": "ashby",
+    "token": "saronic",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Slice",
+    "source": "greenhouse",
+    "token": "slice",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Navi",
+    "source": "ashby",
+    "token": "navi",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Fi Money",
+    "source": "lever",
+    "token": "epifi",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Atlan",
+    "source": "ashby",
+    "token": "atlan",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Skyflow",
+    "source": "ashby",
+    "token": "skyflow",
+    "verified": true,
+    "note": "discovered 2026-08-26"
   }
 ]
