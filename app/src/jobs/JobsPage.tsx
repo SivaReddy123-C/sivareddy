@@ -4,7 +4,7 @@ import { uid } from "../lib/storage.js";
 import { buildApplicationPack } from "../lib/pack.js";
 import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
 import {
-  applyFilters, defaultFilters, loadFeed, readCache,
+  COUNTRY_LABELS, applyFilters, defaultFilters, loadFeed, readCache,
   type Feed, type FeedJob, type JobFilters,
 } from "./feed.js";
 
@@ -84,10 +84,11 @@ export function JobsPage({ applications, onChange, resume, answers }: Props) {
           onChange={(e) => setFilters({ ...filters, q: e.target.value })}
         />
         <select value={filters.country}
-          onChange={(e) => setFilters({ ...filters, country: e.target.value as JobFilters["country"] })}>
-          <option value="all">India + USA</option>
-          <option value="in">India</option>
-          <option value="us">USA</option>
+          onChange={(e) => setFilters({ ...filters, country: e.target.value })}>
+          <option value="all">All countries</option>
+          {Object.entries(COUNTRY_LABELS).map(([code, label]) => (
+            <option key={code} value={code}>{label}</option>
+          ))}
         </select>
         <select value={filters.sort}
           onChange={(e) => setFilters({ ...filters, sort: e.target.value as JobFilters["sort"] })}>

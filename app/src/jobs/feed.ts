@@ -5,7 +5,7 @@ export interface FeedJob {
   company: string;
   title: string;
   location: string;
-  country: "in" | "us";
+  country: string;
   url: string;
   source: string;
   publishedAt: string | null;
@@ -77,9 +77,15 @@ export async function loadFeed(force = false): Promise<Feed> {
 
 export type SortKey = "ghost" | "newest" | "company";
 
+export const COUNTRY_LABELS: Record<string, string> = {
+  in: "India", us: "USA", gb: "UK", de: "Germany", nl: "Netherlands",
+  ae: "UAE", ca: "Canada", sg: "Singapore", au: "Australia",
+  se: "Sweden", fr: "France", ie: "Ireland",
+};
+
 export interface JobFilters {
   q: string;
-  country: "all" | "in" | "us";
+  country: string; // "all" or a COUNTRY_LABELS key
   hideHighGhost: boolean;
   sponsorshipOnly: boolean;
   sort: SortKey;

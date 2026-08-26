@@ -3,6 +3,7 @@ import { daysSince } from "../lib/stats.js";
 import { uid } from "../lib/storage.js";
 import { buildApplicationPack } from "../lib/pack.js";
 import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
+import { COUNTRY_LABELS } from "../jobs/feed.js";
 import {
   fetchMatches, logApplicationEvent, setMatchStatus, supabase,
   type MatchRecord, type ProfileRecord, type Session,
@@ -269,10 +270,13 @@ function ProfileEditor({ initial, onSave }: {
         </label>
       </div>
       <div className="pref-group">
-        <span className="pref-title">Countries</span>
-        <div className="row">
-          <label className="check"><input type="checkbox" checked={countries.includes("in")} onChange={() => toggle("in")} /> India</label>
-          <label className="check"><input type="checkbox" checked={countries.includes("us")} onChange={() => toggle("us")} /> USA</label>
+        <span className="pref-title">Countries — pick everywhere you can and want to work</span>
+        <div className="country-grid">
+          {Object.entries(COUNTRY_LABELS).map(([code, label]) => (
+            <label className="check" key={code}>
+              <input type="checkbox" checked={countries.includes(code)} onChange={() => toggle(code)} /> {label}
+            </label>
+          ))}
         </div>
       </div>
       <div className="pref-group">

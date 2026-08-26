@@ -59,12 +59,36 @@ const US_HINTS = [
   "los angeles", "denver", "atlanta", "dallas", "miami", "washington",
 ];
 
-export type Country = "in" | "us";
+export type Country = "in" | "us" | "gb" | "de" | "nl" | "ae" | "ca" | "sg" | "au" | "se" | "fr" | "ie";
+
+const COUNTRY_HINTS: Record<Exclude<Country, "in" | "us">, string[]> = {
+  gb: ["united kingdom", "uk", "london", "manchester", "cambridge, uk", "edinburgh"],
+  de: ["germany", "deutschland", "berlin", "munich", "münchen", "stuttgart", "hamburg", "frankfurt", "cologne", "karlsruhe", "leonberg", "renningen", "abstatt", "hildesheim", ", de"],
+  nl: ["netherlands", "amsterdam", "eindhoven", "rotterdam", ", nl"],
+  ae: ["united arab emirates", "uae", "dubai", "abu dhabi", "sharjah"],
+  ca: ["canada", "toronto", "vancouver", "montreal", "ottawa", "waterloo", ", ca"],
+  sg: ["singapore"],
+  au: ["australia", "sydney", "melbourne", "brisbane", "perth"],
+  se: ["sweden", "stockholm", "gothenburg"],
+  fr: ["france", "paris", "lyon", "grenoble"],
+  ie: ["ireland", "dublin", "cork"],
+};
 
 export function matchesCountry(location: string, country: Country): boolean {
-  if (country === "in") return looksIndian(location);
   const l = location.toLowerCase();
-  return US_HINTS.some((h) => l.includes(h)) || US_STATE_RE.test(location);
+  if (country === "in") return looksIndian(location);
+  if (country === "us") return US_HINTS.some((h) => l.includes(h)) || US_STATE_RE.test(location);
+  return COUNTRY_HINTS[country].some((h) => h.startsWith(",") ? l.endsWith(h) || l.includes(h + ";") : l.includes(h));
+}
+
+export const ALL_COUNTRIES: Country[] = ["in", "us", "gb", "de", "nl", "ae", "ca", "sg", "au", "se", "fr", "ie"];
+
+/** Best-effort country for a location string; null when nothing matches. */
+export function detectCountry(location: string): Country | null {
+  for (const c of ALL_COUNTRIES) {
+    if (matchesCountry(location, c)) return c;
+  }
+  return null;
 }
 
 export type SponsorshipSignal = "no" | "yes" | "unknown";

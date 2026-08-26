@@ -5,7 +5,7 @@
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { GHOST_CUTOFF, passesHardFilters, scoreFit, type FitPosting, type FitProfile } from "./fit.js";
-import { matchesCountry } from "./normalize.js";
+import { detectCountry } from "./normalize.js";
 
 interface ProfileRow {
   user_id: string;
@@ -77,9 +77,8 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
         if (!passesHardFilters(profile, toFitPosting(post))) return false;
         if (profile.countries.length === 0) return true;
         // Country column may be null on older rows - fall back to location text.
-        const c = post.country?.toLowerCase();
-        if (c) return profile.countries.includes(c);
-        return profile.countries.some((cc) => matchesCountry(post.location, cc as "in" | "us"));
+        const c = post.country?.toLowerCase() ?? detectCountry(post.location);
+        return c !== null && profile.countries.includes(c);
       })
       .map((post) => ({
         post,

@@ -409,3 +409,5 @@ input:focus, select:focus, textarea:focus {
 .pref-line input { margin-top: 3px; }
 .pref-line em { color: var(--muted); font-style: normal; font-weight: 400; }
 .auth-card .primary { padding: 10px; font-size: 14px; }
+.country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 12px; }
+@media (max-width: 560px) { .country-grid { grid-template-columns: repeat(2, 1fr); } }
