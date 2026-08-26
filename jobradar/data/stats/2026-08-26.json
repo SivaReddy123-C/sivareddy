@@ -1,26 +1,26 @@
 {
  "date": "2026-08-26",
- "fetchedAt": "2026-08-26T04:21:10.033Z",
+ "fetchedAt": "2026-08-26T04:34:02.949Z",
  "overall": {
-  "total": 16270,
+  "total": 19152,
   "bands": {
-   "low": 8389,
-   "medium": 3344,
-   "high": 4528,
+   "low": 11263,
+   "medium": 3345,
+   "high": 4535,
    "critical": 9
   },
   "sponsor": {
    "yes": 8,
    "no": 18,
-   "unknown": 16244
+   "unknown": 19126
   },
-  "noSalary": 15096,
+  "noSalary": 17978,
   "stale90": 4935
  },
  "india": {
-  "total": 1048,
+  "total": 1285,
   "bands": {
-   "low": 631,
+   "low": 868,
    "medium": 184,
    "high": 233,
    "critical": 0
@@ -28,15 +28,15 @@
   "sponsor": {
    "yes": 0,
    "no": 0,
-   "unknown": 1048
+   "unknown": 1285
   },
-  "noSalary": 1027,
+  "noSalary": 1264,
   "stale90": 233
  },
  "usa": {
-  "total": 6364,
+  "total": 7222,
   "bands": {
-   "low": 3119,
+   "low": 3977,
    "medium": 1493,
    "high": 1745,
    "critical": 7
@@ -44,9 +44,9 @@
   "sponsor": {
    "yes": 6,
    "no": 10,
-   "unknown": 6348
+   "unknown": 7206
   },
-  "noSalary": 5324,
+  "noSalary": 6182,
   "stale90": 2130
  },
  "byCompany": {
@@ -60,7 +60,7 @@
   "Ramp": 135,
   "Linear": 32,
   "Notion": 133,
-  "Bosch": 4794,
+  "Bosch": 4795,
   "Razorpay": 24,
   "CRED": 14,
   "Meesho": 50,
@@ -75,7 +75,7 @@
   "Affirm": 204,
   "Gusto": 86,
   "MongoDB": 404,
-  "Elastic": 285,
+  "Elastic": 286,
   "Datadog": 451,
   "Twilio": 140,
   "Asana": 126,
@@ -106,15 +106,14 @@
   "PostHog": 14,
   "ElevenLabs": 246,
   "Warp": 18,
-  "NVIDIA": 40,
-  "Salesforce": 40,
-  "Adobe": 40,
-  "Workday": 40,
-  "Target": 40,
+  "Salesforce": 600,
+  "Adobe": 600,
+  "Workday": 367,
+  "Target": 600,
   "Capital One": 600,
-  "PayPal": 40,
+  "PayPal": 78,
   "CVS Health": 600,
-  "Humana": 40,
-  "3M": 40
+  "Humana": 355,
+  "3M": 600
  }
 }
