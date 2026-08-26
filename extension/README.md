@@ -22,6 +22,9 @@ yourself. No credentials, nothing leaves your browser.
    to re-run, e.g. after moving to the next step of a multi-page form.
 3. Review everything, attach your resume PDF, answer anything it could not,
    and submit.
+4. **Any other site** (a form you reached from LinkedIn, Dice, a recruiter
+   email): open the form, click the extension icon -> **Fill form on this
+   page**. Same rules apply - outlines what it filled, never submits.
 
 ## What it deliberately does not do
 

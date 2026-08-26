@@ -478,5 +478,16 @@
       "site": "jobs"
     },
     "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Walmart",
+    "source": "workday",
+    "token": "walmart",
+    "verified": false,
+    "params": {
+      "host": "walmart.wd5.myworkdayjobs.com",
+      "site": "WalmartExternal"
+    },
+    "note": "workday candidate - verified by fire on next run"
   }
 ]
