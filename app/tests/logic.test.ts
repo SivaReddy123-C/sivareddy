@@ -68,8 +68,15 @@ test("writing check flags weak openers and missing numbers", async () => {
   const { checkBullet, checkSummary } = await import("../src/lib/writecheck.js");
   const weak = checkBullet("Responsible for testing the website");
   assert.ok(weak.some((h) => h.includes("Starts with")));
-  assert.ok(weak.some((h) => h.includes("No number")));
+  assert.ok(weak.some((h) => h.includes("number")));
+  // Weak-opener hint outranks the metric nag - only the first hint is shown.
+  assert.ok(weak[0]!.includes("Starts with"));
   assert.deepEqual(checkBullet("Reduced build time 40% by caching dependencies"), []);
+  // No metric nag on bullets carrying a placeholder the writer will fill...
+  assert.ok(!checkBullet("Shipped [X] releases across the enterprise system").some((h) => h.includes("number")));
+  // ...nor on long bullets, where there is no room for one anyway.
+  const long = "Built and operated a multi-tenant platform " + "x".repeat(120);
+  assert.ok(!checkBullet(long).some((h) => h.includes("number")));
   assert.ok(checkSummary("I am a passionate hardworking team player").length > 0);
 });
 

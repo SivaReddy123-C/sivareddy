@@ -184,8 +184,6 @@ textarea { resize: vertical; }
 .order-row button { padding: 2px 8px; margin-left: 4px; }
 
 /* ---------- Writing hints + AI ---------- */
-.hints { margin: 4px 0 0; padding-left: 18px; }
-.hints li { font-size: 11.5px; color: #b54708; margin: 1px 0; }
 .bullet-block { display: flex; flex-direction: column; gap: 2px; }
 .ai-suggest { margin-top: 2px; }
 .ai-suggest > button { font-size: 12px; padding: 3px 10px; }
@@ -411,3 +409,16 @@ input:focus, select:focus, textarea:focus {
 .auth-card .primary { padding: 10px; font-size: 14px; }
 .country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 12px; }
 @media (max-width: 560px) { .country-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Hints: one quiet line for the field you're editing, not a wall */
+.hint-line {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 11.5px; color: #b54708; background: #fffcf5;
+  border: 1px solid #fedf89; border-radius: 6px; padding: 4px 8px; margin-top: 4px;
+}
+.hint-line span { flex: 1; }
+.hint-dismiss {
+  border: 0; background: transparent; color: #b54708; padding: 0 2px;
+  font-size: 14px; line-height: 1; cursor: pointer; font-weight: 700;
+}
+.hint-dismiss:hover { color: #7a2e0e; }
