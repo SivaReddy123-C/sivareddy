@@ -199,8 +199,10 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
 
       {!editing && !loading && profile && matches.length === 0 && (
         <p className="empty-hint">
-          No matches yet for this profile. Widen it — add countries, add skills as they appear in job
-          titles (e.g. "backend", "data", "react"), or raise your list size — and the list updates the
+          No matches for this profile. Every match must genuinely involve one of your skills — we
+          won't pad the list with nearby, recent, senior-sounding roles that have nothing to do with
+          your work. Add more skills (both tools and role words: <em>python, aws, backend, data
+          engineer, full stack</em>), add countries, or raise your list size. The list updates the
           moment you save.
         </p>
       )}

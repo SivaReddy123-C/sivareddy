@@ -154,3 +154,21 @@ test("multi-country detection", async () => {
   assert.equal(detectCountry("Toronto, Canada"), "ca");
   assert.equal(detectCountry("Mars Colony 7"), null);
 });
+
+test("skill extraction tags the actual work, and non-engineering roles too", async () => {
+  const { extractTags, normalizeProfileSkills } = await import("../src/skills.js");
+  const backend = extractTags("Senior Software Engineer",
+    "Build services in Python on AWS, querying PostgreSQL. Experience with Kubernetes a plus.");
+  assert.ok(backend.includes("python") && backend.includes("aws") && backend.includes("postgres"));
+  assert.ok(backend.includes("kubernetes"));
+
+  // A sales role must be tagged as sales so it can be kept out of an engineer's list.
+  const sales = extractTags("Account Executive, Enterprise", "Own a quota and drive new business.");
+  assert.ok(sales.includes("sales"));
+  assert.ok(!sales.includes("python"));
+
+  // Profile skills map onto the same vocabulary.
+  const mapped = normalizeProfileSkills(["SQL", "Python", "system design", "AWS"]);
+  assert.ok(mapped.includes("sql") && mapped.includes("python") && mapped.includes("aws"));
+  assert.ok(mapped.includes("system design"), "unmapped skills are kept verbatim");
+});

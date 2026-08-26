@@ -13,6 +13,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
 import { detectCountry, slotKey } from "./normalize.js";
+import { extractTags } from "./skills.js";
 import type { ScoredJob, SeedCompany } from "./types.js";
 
 export interface CompanyRow {
@@ -52,6 +53,7 @@ export function jobToRow(j: ScoredJob, companyId: string) {
     description_hash: j.description ? createHash("sha256").update(j.description).digest("hex").slice(0, 32) : null,
     has_salary: j.hasSalaryInfo,
     sponsorship: j.sponsorship ?? "unknown",
+    skills: extractTags(j.title, j.description),
     posted_at: j.publishedAt,
     last_seen_at: new Date().toISOString(),
     closed_at: null as string | null,

@@ -24,6 +24,13 @@ export interface ScoredMatch {
   reasons: string[];
 }
 
+/** Skills the posting genuinely evidences, via its title and pipeline tags. */
+export function matchedSkills(profile: FitProfile, job: FeedJob): string[] {
+  const title = job.title.toLowerCase();
+  const tags = new Set((job.tags ?? []).map((t) => t.toLowerCase()));
+  return profile.skills.filter((s) => s.length >= 2 && (title.includes(s) || tags.has(s)));
+}
+
 export function seniorityOfTitle(title: string): string | null {
   const t = title.toLowerCase();
   if (/\bintern(ship)?\b/.test(t)) return "intern";
@@ -38,10 +45,7 @@ export function scoreFit(profile: FitProfile, job: FeedJob, now = new Date()): S
   const reasons: string[] = [];
   let score = 0;
 
-  // Feed jobs carry no description, so skills match against the title only -
-  // stricter than the nightly job, which is honest rather than generous.
-  const haystack = job.title.toLowerCase();
-  const matched = profile.skills.filter((s) => s.length >= 2 && haystack.includes(s));
+  const matched = matchedSkills(profile, job);
   if (matched.length > 0) {
     score += Math.min(45, matched.length * 15);
     reasons.push(`Matches your skills: ${matched.slice(0, 5).join(", ")}`);
@@ -114,6 +118,10 @@ export function rankFeed(
       if (j.ghost.score >= GHOST_CUTOFF) return false;
       if (profile.needsSponsorship && j.sponsorship === "no") return false;
       if (profile.countries.length > 0 && !profile.countries.includes(j.country)) return false;
+      // Relevance is a requirement, not a bonus. Without this, "senior +
+      // nearby + recent" outranks an actual match: a Senior Account Executive
+      // in your city beats a perfect backend role one state over.
+      if (profile.skills.length > 0 && matchedSkills(profile, j).length === 0) return false;
       return true;
     })
     .map((j) => scoreFit(profile, j, now))
