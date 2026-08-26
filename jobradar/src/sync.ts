@@ -100,7 +100,19 @@ export async function syncRun(
     if (cErr || !comp) throw new Error(`company upsert failed for ${company.name}: ${cErr?.message}`);
 
     // Upsert postings in chunks; first_seen_at defaults on insert and is never sent.
-    const rows = jobs.map((j) => jobToRow(j, comp.id));
+    // Deduplicate by the conflict target first: a board can return the same
+    // requisition twice in one response (Workday lists a req once per
+    // location), and Postgres rejects an ON CONFLICT batch that would touch
+    // the same row twice - which previously killed the whole run at CVS.
+    const byKey = new Map<string, ReturnType<typeof jobToRow>>();
+    for (const j of jobs) {
+      const row = jobToRow(j, comp.id);
+      if (!byKey.has(row.source_job_id)) byKey.set(row.source_job_id, row);
+    }
+    if (byKey.size !== jobs.length) {
+      console.log(`  note: ${company.name} returned ${jobs.length - byKey.size} duplicate posting id(s); kept one of each`);
+    }
+    const rows = [...byKey.values()];
     for (let i = 0; i < rows.length; i += 500) {
       const chunk = rows.slice(i, i + 500);
       const { error } = await db

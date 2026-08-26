@@ -31,7 +31,10 @@ const FEED_URLS = [
 ];
 
 const CACHE_KEY = "jobradar.feed.v1";
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+// Short: the feed is rebuilt daily and users iterate on their profile in
+// minutes, so a long cache makes the product look broken ("I changed my
+// profile and nothing happened"). Callers also revalidate in the background.
+const CACHE_TTL_MS = 30 * 60 * 1000;
 
 interface CacheEnvelope {
   cachedAt: number;
@@ -75,6 +78,24 @@ export async function loadFeed(force = false): Promise<Feed> {
   }
   if (cached) return cached.feed; // stale beats nothing
   throw lastErr;
+}
+
+/**
+ * Stale-while-revalidate: hand back whatever is cached immediately so the UI
+ * paints, then fetch in the background and call `onFresh` if the feed actually
+ * changed. Nobody waits for a megabyte to download to see their list.
+ */
+export function loadFeedSWR(onFresh: (feed: Feed) => void): Feed | null {
+  const cached = readCache();
+  void (async () => {
+    try {
+      const fresh = await loadFeed(true);
+      if (!cached || fresh.generatedAt !== cached.feed.generatedAt) onFresh(fresh);
+    } catch {
+      // Offline or GitHub hiccup - the cached feed still works.
+    }
+  })();
+  return cached?.feed ?? null;
 }
 
 export type SortKey = "ghost" | "newest" | "company";

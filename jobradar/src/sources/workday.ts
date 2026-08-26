@@ -55,7 +55,9 @@ export const workday: SourceAdapter = {
       if (offset === 0 && typeof data.total === "number" && data.total > 0) knownTotal = data.total;
       const page = data.jobPostings ?? [];
       for (const p of page) {
-        const id = p.bulletFields?.[0] ?? p.externalPath;
+        // bulletFields[0] is the requisition id, which Workday repeats across
+        // locations; the path is what actually identifies one posting.
+        const id = p.externalPath || p.bulletFields?.[0] || p.title;
         jobs.push({
           key: `workday:${company.token}:${id}`,
           source: "workday",

@@ -3,7 +3,7 @@ import { daysSince } from "../lib/stats.js";
 import { uid } from "../lib/storage.js";
 import { buildApplicationPack } from "../lib/pack.js";
 import { profileFromResume, rankFeed, type ScoredMatch } from "../lib/fit.js";
-import { loadFeed, type Feed } from "../jobs/feed.js";
+import { loadFeed, loadFeedSWR, type Feed } from "../jobs/feed.js";
 import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
 import { uid as newId } from "../lib/storage.js";
 import { COUNTRY_LABELS } from "../jobs/feed.js";
@@ -109,9 +109,11 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
     void (async () => {
       try {
         const db = supabase();
+        // Paint from cache at once, then swap in a newer feed when it lands.
+        const cachedFeed = loadFeedSWR(setFeed);
         const [{ data, error: pErr }, loadedFeed] = await Promise.all([
           db.from("jr_user_profiles").select("*").eq("user_id", session.user.id).maybeSingle(),
-          loadFeed(false).catch(() => null),
+          cachedFeed ? Promise.resolve(cachedFeed) : loadFeed(false).catch(() => null),
         ]);
         if (pErr) throw pErr;
         setFeed(loadedFeed);
@@ -211,8 +213,9 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
         <>
           <p className="jobs-meta">
             Your top {matches.length} matches, ranked live against your profile from
-            {" "}{feed?.total.toLocaleString()} scored postings · ghosts (score ≥50) excluded before
-            ranking · edit your profile and this list changes immediately
+            {" "}{feed?.total.toLocaleString()} scored postings from {feed?.generatedAt.slice(0, 10)} ·
+            ghosts (score ≥50) excluded · every match involves one of your skills · edit your
+            profile and this list changes immediately
           </p>
           <div className="job-list">
             {matches.map((m, i) => {
