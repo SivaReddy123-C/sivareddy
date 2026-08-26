@@ -10,6 +10,9 @@
     return;
   }
 
+  const FIELD_SELECTOR =
+    'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input:not([type]), textarea, select';
+
   // ---- matching: label/attribute text -> value from the user's profile ----
   function buildMatchers(profile) {
     const b = profile.basics || {};
@@ -42,33 +45,43 @@
 
   // ---- where a field's meaning can be found ----
   function labelTextFor(el) {
-    const parts = [];
+    const root = el.getRootNode ? el.getRootNode() : document;
+    const scope = root.querySelector ? root : document;
+
+    // Strong signals first: an explicit association or the field's own
+    // attributes. These are unambiguous, so when one exists we use only those.
+    const strong = [];
     if (el.id) {
-      const lab = document.querySelector(`label[for="${CSS.escape(el.id)}"]`);
-      if (lab) parts.push(lab.textContent || "");
+      const lab = scope.querySelector(`label[for="${CSS.escape(el.id)}"]`);
+      if (lab) strong.push(lab.textContent || "");
     }
     const wrap = el.closest("label");
-    if (wrap) parts.push(wrap.textContent || "");
-    // Attributes carry the strongest signals on modern ATS forms: Workday uses
-    // data-automation-id, and autocomplete hints are standardized.
-    for (const attr of ["aria-label", "placeholder", "name", "id", "autocomplete",
-                        "data-automation-id", "data-qa", "data-testid"]) {
-      const v = el.getAttribute(attr);
-      if (v) parts.push(v);
-    }
+    if (wrap) strong.push(wrap.textContent || "");
     const labelledBy = el.getAttribute("aria-labelledby");
     if (labelledBy) {
       for (const id of labelledBy.split(/\s+/)) {
-        const node = document.getElementById(id);
-        if (node) parts.push(node.textContent || "");
+        const node = scope.getElementById ? scope.getElementById(id) : null;
+        if (node) strong.push(node.textContent || "");
       }
     }
-    let container = el.parentElement;
-    for (let depth = 0; container && depth < 3; depth++, container = container.parentElement) {
-      const lab = container.querySelector("label, .label, [class*='label' i]");
-      if (lab && lab.textContent) { parts.push(lab.textContent); break; }
+    for (const attr of ["aria-label", "placeholder", "autocomplete",
+                        "data-automation-id", "data-qa", "data-testid", "name", "id"]) {
+      const v = el.getAttribute(attr);
+      if (v) strong.push(v);
     }
-    return parts.join(" ").slice(0, 400);
+    if (strong.length > 0) return strong.join(" ").slice(0, 400);
+
+    // Weak fallback: a label sitting in an ancestor. Only trustworthy when that
+    // ancestor holds exactly one field - otherwise the first label in a shared
+    // container would be applied to every field inside it.
+    let container = el.parentNode;
+    for (let depth = 0; container && depth < 4; depth++, container = container.parentNode) {
+      if (!container.querySelector) continue;
+      if (container.querySelectorAll(FIELD_SELECTOR).length !== 1) continue;
+      const lab = container.querySelector("label, .label, [class*='label' i]");
+      if (lab && lab.textContent) return lab.textContent.slice(0, 400);
+    }
+    return "";
   }
 
   // React-controlled inputs ignore plain .value writes; use the native setter.
@@ -99,17 +112,50 @@
 
   const filledFields = new WeakSet();
 
+  /**
+   * Collect fields from the document, any open shadow roots (web-component
+   * based ATS forms), and same-origin iframes. Cross-origin iframes are
+   * unreachable from here by design - the manifest's all_frames handles those.
+   */
+  function collectFields(root = document, depth = 0) {
+    const out = [];
+    if (depth > 4) return out;
+    try {
+      out.push(...root.querySelectorAll(FIELD_SELECTOR));
+      for (const el of root.querySelectorAll("*")) {
+        if (el.shadowRoot) out.push(...collectFields(el.shadowRoot, depth + 1));
+      }
+      if (root === document) {
+        for (const frame of document.querySelectorAll("iframe")) {
+          try {
+            const doc = frame.contentDocument;
+            if (doc) out.push(...collectFields(doc, depth + 1));
+          } catch {
+            // Cross-origin frame - the content script runs inside it instead.
+          }
+        }
+      }
+    } catch {
+      // Defensive: a hostile or detached root must never break the fill.
+    }
+    return out;
+  }
+
+  let lastScan = { fields: 0, editable: 0, labels: [] };
+
   function fillPage(profile) {
     const matchers = buildMatchers(profile);
-    const fields = document.querySelectorAll(
-      'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input:not([type]), textarea, select',
-    );
+    const fields = collectFields();
+    lastScan = { fields: fields.length, editable: 0, labels: [] };
     let filled = 0;
     for (const el of fields) {
       if (el.disabled || el.readOnly || filledFields.has(el)) continue;
       if (el.offsetParent === null && el.type !== "hidden") continue; // skip hidden fields
+      lastScan.editable++;
       if (!(el instanceof HTMLSelectElement) && el.value.trim()) continue; // never overwrite
-      const hit = matchers.find((m) => m.re.test(labelTextFor(el)) && m.value);
+      const label = labelTextFor(el);
+      lastScan.labels.push(label.replace(/\s+/g, " ").trim().slice(0, 80));
+      const hit = matchers.find((m) => m.re.test(label) && m.value);
       if (!hit) continue;
       if (el instanceof HTMLSelectElement) {
         if (!el.value && fillSelect(el, hit.value)) { mark(el); filled++; }
@@ -155,9 +201,13 @@
     const n = fillPage(profile);
     totalFilled += n;
     if (announce) {
-      banner(totalFilled > 0
-        ? `JobRadar filled ${totalFilled} field${totalFilled === 1 ? "" : "s"} (outlined). Review them, attach your resume, and submit yourself.`
-        : "JobRadar found no fields it recognized here yet. If the form loads in a moment, click the extension icon again.");
+      if (totalFilled > 0) {
+        banner(`JobRadar filled ${totalFilled} field${totalFilled === 1 ? "" : "s"} (outlined). Review them, attach your resume, and submit yourself.`);
+      } else if (lastScan.editable === 0) {
+        banner("No form fields on this page - this looks like the job description, not the application form. Click Apply, then click the JobRadar icon again.");
+      } else {
+        banner(`Found ${lastScan.editable} field${lastScan.editable === 1 ? "" : "s"} but recognized none of them. Click the JobRadar icon -> Copy diagnostics to report this page.`);
+      }
     }
     return n;
   }
@@ -190,7 +240,18 @@
     });
   }
 
-  window.__jobradarAssist = { run, fillPage };
+  function diagnose() {
+    return {
+      url: location.href,
+      frame: window.top === window.self ? "top" : "iframe",
+      fieldsFound: lastScan.fields,
+      editableFields: lastScan.editable,
+      filled: totalFilled,
+      labelsSeen: lastScan.labels.slice(0, 25),
+    };
+  }
+
+  window.__jobradarAssist = { run, fillPage, diagnose };
   window.__jobradarFill = fillPage; // test hook used by the fixture suite
 
   if (typeof chrome !== "undefined" && chrome.storage?.local) {
