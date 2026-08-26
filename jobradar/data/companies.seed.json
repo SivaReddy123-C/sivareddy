@@ -390,5 +390,93 @@
     "token": "warp",
     "verified": true,
     "note": "18 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "NVIDIA",
+    "source": "workday",
+    "token": "nvidia",
+    "verified": false,
+    "params": {
+      "host": "nvidia.wd5.myworkdayjobs.com",
+      "site": "NVIDIAExternalCareerSite"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Salesforce",
+    "source": "workday",
+    "token": "salesforce",
+    "verified": false,
+    "params": {
+      "host": "salesforce.wd12.myworkdayjobs.com",
+      "site": "External_Career_Site"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Adobe",
+    "source": "workday",
+    "token": "adobe",
+    "verified": false,
+    "params": {
+      "host": "adobe.wd5.myworkdayjobs.com",
+      "site": "external_experienced"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Workday",
+    "source": "workday",
+    "token": "workdayinc",
+    "verified": false,
+    "params": {
+      "host": "workday.wd5.myworkdayjobs.com",
+      "site": "Workday"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Target",
+    "source": "workday",
+    "token": "target",
+    "verified": false,
+    "params": {
+      "host": "target.wd5.myworkdayjobs.com",
+      "site": "targetcareers"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Capital One",
+    "source": "workday",
+    "token": "capitalone",
+    "verified": false,
+    "params": {
+      "host": "capitalone.wd12.myworkdayjobs.com",
+      "site": "Capital_One"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Intuit",
+    "source": "workday",
+    "token": "intuit",
+    "verified": false,
+    "params": {
+      "host": "intuit.wd1.myworkdayjobs.com",
+      "site": "Intuit_Careers"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "PayPal",
+    "source": "workday",
+    "token": "paypal",
+    "verified": false,
+    "params": {
+      "host": "paypal.wd1.myworkdayjobs.com",
+      "site": "jobs"
+    },
+    "note": "workday candidate - verified by fire on next run"
   }
 ]

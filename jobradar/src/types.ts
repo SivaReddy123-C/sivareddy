@@ -24,7 +24,9 @@ export interface Job {
   updatedAt: string | null;
 }
 
-export type SourceName = "greenhouse" | "lever" | "ashby" | "smartrecruiters";
+export type SourceName =
+  | "greenhouse" | "lever" | "ashby" | "smartrecruiters"
+  | "workable" | "recruitee" | "workday";
 
 export interface SeedCompany {
   name: string;
@@ -35,6 +37,8 @@ export interface SeedCompany {
   note?: string;
   /** Stored employer classification; scoring reads this, never computes it. */
   employerType?: "product" | "staffing" | "consultancy" | "agency" | "unknown";
+  /** Source-specific settings (e.g. workday: { host, site }). */
+  params?: Record<string, string>;
 }
 
 export interface SourceAdapter {
