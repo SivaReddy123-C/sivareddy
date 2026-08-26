@@ -17,7 +17,19 @@ document.getElementById("fill").addEventListener("click", async () => {
     // Any other site: inject on demand (activeTab grants access on this click).
     // fill.js self-starts after injection. Works on any application form -
     // found the job on LinkedIn or Dice? Land on the form, click Fill.
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["fill.js"] });
+    await chrome.scripting.executeScript({ target: { tabId: tab.id, allFrames: true }, files: ["fill.js"] });
   }
   window.close();
+});
+
+document.getElementById("diag").addEventListener("click", async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab?.id) return;
+  const results = await chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    func: () => (window.__jobradarAssist ? window.__jobradarAssist.diagnose() : { note: "not loaded in this frame" }),
+  });
+  const report = JSON.stringify(results.map((r) => r.result), null, 1);
+  await navigator.clipboard.writeText(report);
+  document.getElementById("status").textContent = "Diagnostics copied to clipboard - paste them to report the page.";
 });
