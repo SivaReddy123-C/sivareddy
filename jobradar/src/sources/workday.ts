@@ -70,7 +70,12 @@ export const workday: SourceAdapter = {
           updatedAt: null,
         });
       }
-      if (page.length < PAGE || jobs.length >= (data.total ?? 0)) break;
+      if (page.length < PAGE || jobs.length >= (data.total ?? 0)) {
+        if ((data.total ?? 0) <= 60 ) {
+          console.log(`  note: ${company.name} workday site '${site}' reports only ${data.total} total jobs - likely a filtered sub-view; main site name needed`);
+        }
+        break;
+      }
       await new Promise((r) => setTimeout(r, 250)); // be polite
     }
     return jobs;

@@ -489,5 +489,115 @@
       "site": "WalmartExternal"
     },
     "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "CVS Health",
+    "source": "workday",
+    "token": "cvshealth",
+    "verified": false,
+    "params": {
+      "host": "cvshealth.wd1.myworkdayjobs.com",
+      "site": "CVS_Health_Careers"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Lowe's",
+    "source": "workday",
+    "token": "lowes",
+    "verified": false,
+    "params": {
+      "host": "lowes.wd5.myworkdayjobs.com",
+      "site": "LWS_External"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Marriott",
+    "source": "workday",
+    "token": "marriott",
+    "verified": false,
+    "params": {
+      "host": "marriott.wd1.myworkdayjobs.com",
+      "site": "careers"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Hilton",
+    "source": "workday",
+    "token": "hilton",
+    "verified": false,
+    "params": {
+      "host": "hilton.wd5.myworkdayjobs.com",
+      "site": "HiltonWorldwide"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Humana",
+    "source": "workday",
+    "token": "humana",
+    "verified": false,
+    "params": {
+      "host": "humana.wd5.myworkdayjobs.com",
+      "site": "Humana_External_Career_Site"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "3M",
+    "source": "workday",
+    "token": "3m",
+    "verified": false,
+    "params": {
+      "host": "3m.wd1.myworkdayjobs.com",
+      "site": "Search"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Cognizant",
+    "source": "workday",
+    "token": "cognizant",
+    "verified": false,
+    "params": {
+      "host": "cdpj.wd3.myworkdayjobs.com",
+      "site": "External_Careers"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Deloitte US",
+    "source": "workday",
+    "token": "deloitteus",
+    "verified": false,
+    "params": {
+      "host": "deloitteus.wd1.myworkdayjobs.com",
+      "site": "External_Careers"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "NVIDIA (alt site)",
+    "source": "workday",
+    "token": "nvidia-ext",
+    "verified": false,
+    "params": {
+      "host": "nvidia.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
+  },
+  {
+    "name": "Salesforce (alt site)",
+    "source": "workday",
+    "token": "salesforce-ext",
+    "verified": false,
+    "params": {
+      "host": "salesforce.wd12.myworkdayjobs.com",
+      "site": "Salesforce_Careers"
+    },
+    "note": "mass-employer / alt-site candidate - verified by fire"
   }
 ]
