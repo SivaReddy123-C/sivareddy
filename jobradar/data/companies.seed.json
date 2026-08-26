@@ -892,5 +892,54 @@
     "token": "skyflow",
     "verified": true,
     "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Navi",
+    "source": "recruitee",
+    "token": "navi",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Careem",
+    "source": "greenhouse",
+    "token": "careem",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Tamara",
+    "source": "greenhouse",
+    "token": "tamara",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Unifonic",
+    "source": "recruitee",
+    "token": "unifonic",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Bitpanda",
+    "source": "greenhouse",
+    "token": "bitpanda",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Deliveroo",
+    "source": "ashby",
+    "token": "deliveroo",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Lean Technologies",
+    "source": "ashby",
+    "token": "leantech",
+    "verified": true,
+    "note": "discovered 2026-08-26"
   }
 ]
