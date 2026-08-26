@@ -47,10 +47,29 @@ async function probeOne(source: SourceName, url: string, hasJobs: (d: unknown) =
   }
 }
 
+/** How many candidate names one run probes. The sponsor firehose put 1,500+
+ *  names in the queue; probing all of them every day is ~25k requests re-asking
+ *  questions already answered. A budget per run drains the backlog in a few
+ *  days, and the attempted-file keeps a name quiet for RETRY_DAYS after its
+ *  probe -- companies do adopt an ATS later, so misses retry, just slowly. */
+const NAMES_PER_RUN = 400;
+const RETRY_DAYS = 45;
+
 export async function discover(namesPath: string, seedPath: string): Promise<void> {
-  const candidates: Candidate[] = JSON.parse(readFileSync(namesPath, "utf8"));
+  const allCandidates: Candidate[] = JSON.parse(readFileSync(namesPath, "utf8"));
   const seeds: SeedCompany[] = JSON.parse(readFileSync(seedPath, "utf8"));
   const have = new Set(seeds.map((s) => `${s.source}|${s.token}`));
+
+  const attemptedPath = namesPath.replace(/[^\/]+$/, "discovery.attempted.json");
+  let attempted: Record<string, string> = {};
+  try { attempted = JSON.parse(readFileSync(attemptedPath, "utf8")); } catch { /* first run */ }
+  const cutoff = Date.now() - RETRY_DAYS * 24 * 60 * 60 * 1000;
+  const due = (c: Candidate) => {
+    const last = attempted[c.name.toLowerCase()];
+    return !last || new Date(last).getTime() < cutoff;
+  };
+  const candidates = allCandidates.filter(due).slice(0, NAMES_PER_RUN);
+  console.log(`discover: ${candidates.length} of ${allCandidates.length} names due this run`);
 
   const tasks: { name: string; source: SourceName; token: string; url: string; hasJobs: (d: unknown) => boolean }[] = [];
   const claimed = new Set<string>(); // one board per (name, source): first variant wins
@@ -92,5 +111,9 @@ export async function discover(namesPath: string, seedPath: string): Promise<voi
     // across ATSs are rare and harmless (slot keys differ by source).
     writeFileSync(seedPath, JSON.stringify([...seeds, ...found], null, 2));
   }
+
+  const probedIso = new Date().toISOString();
+  for (const c of candidates) attempted[c.name.toLowerCase()] = probedIso;
+  writeFileSync(attemptedPath, JSON.stringify(attempted, null, 1));
   console.log(`\ndiscover: ${done} probes, ${found.length} new boards -> ${seedPath}`);
 }

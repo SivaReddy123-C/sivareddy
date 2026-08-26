@@ -24,7 +24,7 @@ jobs:
         run: |
           git config user.name "jobradar-discover"
           git config user.email "actions@users.noreply.github.com"
-          git add jobradar/data/companies.seed.json
+          git add jobradar/data/companies.seed.json jobradar/data/discovery.attempted.json
           if git diff --cached --quiet; then
             echo "No new boards discovered"
           else
