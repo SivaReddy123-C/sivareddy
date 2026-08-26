@@ -154,6 +154,14 @@ async function discoverCmd(): Promise<void> {
   await discover(join(DATA, "discovery.names.json"), join(DATA, "companies.seed.json"));
 }
 
+/** `digest`: email each opted-in user their ranked list for today. */
+async function digestCmd(): Promise<void> {
+  const { makeClient } = await import("./sync.js");
+  const { sendDigests } = await import("./digest.js");
+  const result = await sendDigests(makeClient());
+  console.log(`digest: ${result.sent} sent, ${result.skipped} skipped`);
+}
+
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
 function stats(): void {
   const store = new Store(DATA);
@@ -243,7 +251,8 @@ switch (cmd) {
   case "sync": await sync(); break;
   case "rank": await rank(); break;
   case "discover": await discoverCmd(); break;
+  case "digest": await digestCmd(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest> [--india | --usa]");
     process.exit(1);
 }

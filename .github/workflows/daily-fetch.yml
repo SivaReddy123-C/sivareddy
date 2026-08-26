@@ -41,10 +41,6 @@ jobs:
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run rank
-      - name: Email daily digests
-        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' && env.RESEND_API_KEY != '' }}
-        working-directory: jobradar
-        run: npm run digest
       - name: Commit history and stats
         run: |
           git config user.name "jobradar-fetch"
@@ -61,3 +57,11 @@ jobs:
             git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
+      # Notifications come last and never gate the data: publishing the feed
+      # is the job, emailing about it is a courtesy. continue-on-error means a
+      # mail outage cannot leave every user staring at yesterday's postings.
+      - name: Email daily digests
+        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' && env.RESEND_API_KEY != '' }}
+        continue-on-error: true
+        working-directory: jobradar
+        run: npm run digest
