@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "JobRadar Assist",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Autofills job application forms from your JobRadar data - automatic on Greenhouse/Lever/Ashby, on-demand on any other site via the popup. You review every field and click Submit yourself - it never submits anything.",
   "permissions": [
     "storage",
@@ -26,13 +26,23 @@
       "matches": [
         "https://boards.greenhouse.io/*",
         "https://job-boards.greenhouse.io/*",
+        "https://*.greenhouse.io/*",
         "https://jobs.lever.co/*",
-        "https://jobs.ashbyhq.com/*"
+        "https://*.lever.co/*",
+        "https://jobs.ashbyhq.com/*",
+        "https://*.ashbyhq.com/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://jobs.smartrecruiters.com/*",
+        "https://*.smartrecruiters.com/*",
+        "https://apply.workable.com/*",
+        "https://*.workable.com/*",
+        "https://*.recruitee.com/*"
       ],
       "js": [
         "fill.js"
       ],
-      "run_at": "document_idle"
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ]
 }
