@@ -7,7 +7,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { SeedCompany, SourceName } from "./types.js";
 
-interface Candidate { name: string; tokens?: string[] }
+interface Candidate { name: string; tokens?: string[]; workdayTenant?: string }
 
 export function tokenVariants(name: string): string[] {
   const base = name.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9\s-]/g, "").trim();
@@ -32,6 +32,43 @@ const PROBES: { source: SourceName; url: (t: string) => string; hasJobs: (d: unk
   { source: "recruitee", url: (t) => `https://${t}.recruitee.com/api/offers/`,
     hasJobs: (d) => Array.isArray((d as { offers?: unknown[] }).offers) && (d as { offers: unknown[] }).offers.length > 0 },
 ];
+
+/**
+ * Workday needs two unknowns - the tenant host (wd1/wd3/wd5/wd12) and the
+ * site name - so it cannot be probed with a single URL like the others.
+ * These are the site names large employers actually use, in rough order of
+ * how often they appear.
+ */
+const WD_HOSTS = ["wd1", "wd3", "wd5", "wd12", "wd2"];
+const WD_SITES = [
+  "External", "Careers", "External_Career_Site", "ExternalCareerSite",
+  "careers", "External_Careers", "Search",
+];
+
+async function probeWorkday(tenant: string): Promise<{ host: string; site: string } | null> {
+  for (const h of WD_HOSTS) {
+    const host = `${tenant}.${h}.myworkdayjobs.com`;
+    for (const site of WD_SITES) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 8000);
+      try {
+        const res = await fetch(`https://${host}/wday/cxs/${tenant}/${site}/jobs`, {
+          method: "POST", signal: ctrl.signal,
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ appliedFacets: {}, limit: 1, offset: 0, searchText: "" }),
+        });
+        if (!res.ok) continue;
+        const data = (await res.json()) as { jobPostings?: unknown[]; total?: number };
+        if ((data.jobPostings?.length ?? 0) > 0) return { host, site };
+      } catch {
+        // wrong host or site - keep trying
+      } finally {
+        clearTimeout(t);
+      }
+    }
+  }
+  return null;
+}
 
 async function probeOne(source: SourceName, url: string, hasJobs: (d: unknown) => boolean): Promise<boolean> {
   const ctrl = new AbortController();
@@ -83,6 +120,23 @@ export async function discover(namesPath: string, seedPath: string): Promise<voi
   }
 
   const found: SeedCompany[] = [];
+
+  // Workday candidates carry an explicit tenant to probe.
+  const wdCandidates = candidates.filter((c) => (c as { workdayTenant?: string }).workdayTenant);
+  for (const c of wdCandidates) {
+    const tenant = (c as { workdayTenant?: string }).workdayTenant!;
+    if (have.has(`workday|${tenant}`)) continue;
+    const hit = await probeWorkday(tenant);
+    if (hit) {
+      have.add(`workday|${tenant}`);
+      found.push({
+        name: c.name, source: "workday", token: tenant, verified: true,
+        params: { host: hit.host, site: hit.site },
+        note: `discovered ${new Date().toISOString().slice(0, 10)}`,
+      });
+      console.log(`  FOUND workday      ${tenant.padEnd(28)} (${c.name}) site=${hit.site}`);
+    }
+  }
   let done = 0;
   const CONCURRENCY = 8;
   async function worker() {

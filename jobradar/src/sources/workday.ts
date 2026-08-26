@@ -17,7 +17,7 @@ interface WdPosting {
 }
 
 const PAGE = 20;
-const MAX_JOBS = 600; // per-board cap: respectful, and giants list thousands
+const MAX_JOBS = 2000; // per-board cap; giants list thousands and we want them
 
 function postedOnToIso(text: string | undefined, now: Date): string | null {
   if (!text) return null;
@@ -78,7 +78,7 @@ export const workday: SourceAdapter = {
         });
       }
       if (page.length < PAGE || jobs.length >= knownTotal) break;
-      await new Promise((r) => setTimeout(r, 250)); // be polite
+      await new Promise((r) => setTimeout(r, 120)); // be polite, but 100 pages must still finish
     }
     return jobs;
   },

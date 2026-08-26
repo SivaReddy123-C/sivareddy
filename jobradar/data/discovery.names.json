@@ -628,5 +628,748 @@
     "tokens": [
       "aramcodigital"
     ]
+  },
+  {
+    "name": "Home Depot",
+    "workdayTenant": "homedepot"
+  },
+  {
+    "name": "Best Buy",
+    "workdayTenant": "bestbuy"
+  },
+  {
+    "name": "Nordstrom",
+    "workdayTenant": "nordstrom"
+  },
+  {
+    "name": "Kohl's",
+    "workdayTenant": "kohls"
+  },
+  {
+    "name": "Starbucks",
+    "workdayTenant": "starbucks"
+  },
+  {
+    "name": "McDonald's",
+    "workdayTenant": "mcdonalds"
+  },
+  {
+    "name": "FedEx",
+    "workdayTenant": "fedex"
+  },
+  {
+    "name": "UPS",
+    "workdayTenant": "ups"
+  },
+  {
+    "name": "Delta Air Lines",
+    "workdayTenant": "delta"
+  },
+  {
+    "name": "United Airlines",
+    "workdayTenant": "united"
+  },
+  {
+    "name": "Kroger",
+    "workdayTenant": "kroger"
+  },
+  {
+    "name": "Walgreens",
+    "workdayTenant": "walgreens"
+  },
+  {
+    "name": "Cigna",
+    "workdayTenant": "cigna"
+  },
+  {
+    "name": "Elevance Health",
+    "workdayTenant": "elevancehealth"
+  },
+  {
+    "name": "HCA Healthcare",
+    "workdayTenant": "hcahealthcare"
+  },
+  {
+    "name": "Providence",
+    "workdayTenant": "providence"
+  },
+  {
+    "name": "Mayo Clinic",
+    "workdayTenant": "mayoclinic"
+  },
+  {
+    "name": "Cleveland Clinic",
+    "workdayTenant": "clevelandclinic"
+  },
+  {
+    "name": "Northwell Health",
+    "workdayTenant": "northwell"
+  },
+  {
+    "name": "Comcast",
+    "workdayTenant": "comcast"
+  },
+  {
+    "name": "T-Mobile",
+    "workdayTenant": "t-mobile"
+  },
+  {
+    "name": "Verizon",
+    "workdayTenant": "verizon"
+  },
+  {
+    "name": "Dell",
+    "workdayTenant": "dell"
+  },
+  {
+    "name": "HP",
+    "workdayTenant": "hp"
+  },
+  {
+    "name": "Cisco",
+    "workdayTenant": "cisco"
+  },
+  {
+    "name": "Broadcom",
+    "workdayTenant": "broadcom"
+  },
+  {
+    "name": "Qualcomm",
+    "workdayTenant": "qualcomm"
+  },
+  {
+    "name": "Micron",
+    "workdayTenant": "micron"
+  },
+  {
+    "name": "Texas Instruments",
+    "workdayTenant": "ti"
+  },
+  {
+    "name": "Applied Materials",
+    "workdayTenant": "amat"
+  },
+  {
+    "name": "GE",
+    "workdayTenant": "ge"
+  },
+  {
+    "name": "General Motors",
+    "workdayTenant": "gm"
+  },
+  {
+    "name": "Ford",
+    "workdayTenant": "ford"
+  },
+  {
+    "name": "Boeing",
+    "workdayTenant": "boeing"
+  },
+  {
+    "name": "Lockheed Martin",
+    "workdayTenant": "lockheedmartin"
+  },
+  {
+    "name": "Honeywell",
+    "workdayTenant": "honeywell"
+  },
+  {
+    "name": "Emerson",
+    "workdayTenant": "emerson"
+  },
+  {
+    "name": "Caterpillar",
+    "workdayTenant": "caterpillar"
+  },
+  {
+    "name": "Deere",
+    "workdayTenant": "deere"
+  },
+  {
+    "name": "PepsiCo",
+    "workdayTenant": "pepsico"
+  },
+  {
+    "name": "Coca-Cola",
+    "workdayTenant": "coca-cola"
+  },
+  {
+    "name": "General Mills",
+    "workdayTenant": "generalmills"
+  },
+  {
+    "name": "Tyson Foods",
+    "workdayTenant": "tyson"
+  },
+  {
+    "name": "Procter & Gamble",
+    "workdayTenant": "pg"
+  },
+  {
+    "name": "Johnson & Johnson",
+    "workdayTenant": "jnj"
+  },
+  {
+    "name": "Pfizer",
+    "workdayTenant": "pfizer"
+  },
+  {
+    "name": "Merck",
+    "workdayTenant": "merck"
+  },
+  {
+    "name": "AbbVie",
+    "workdayTenant": "abbvie"
+  },
+  {
+    "name": "Amgen",
+    "workdayTenant": "amgen"
+  },
+  {
+    "name": "Gilead",
+    "workdayTenant": "gilead"
+  },
+  {
+    "name": "Moderna",
+    "workdayTenant": "moderna"
+  },
+  {
+    "name": "Regeneron",
+    "workdayTenant": "regeneron"
+  },
+  {
+    "name": "Biogen",
+    "workdayTenant": "biogen"
+  },
+  {
+    "name": "Eli Lilly",
+    "workdayTenant": "lilly"
+  },
+  {
+    "name": "Bayer",
+    "workdayTenant": "bayer"
+  },
+  {
+    "name": "Novartis",
+    "workdayTenant": "novartis"
+  },
+  {
+    "name": "AstraZeneca",
+    "workdayTenant": "astrazeneca"
+  },
+  {
+    "name": "Sanofi",
+    "workdayTenant": "sanofi"
+  },
+  {
+    "name": "Takeda",
+    "workdayTenant": "takeda"
+  },
+  {
+    "name": "Accenture",
+    "workdayTenant": "accenture"
+  },
+  {
+    "name": "Infosys",
+    "workdayTenant": "infosys"
+  },
+  {
+    "name": "Wipro",
+    "workdayTenant": "wipro"
+  },
+  {
+    "name": "HCLTech",
+    "workdayTenant": "hcltech"
+  },
+  {
+    "name": "Tech Mahindra",
+    "workdayTenant": "techmahindra"
+  },
+  {
+    "name": "Siemens",
+    "workdayTenant": "siemens"
+  },
+  {
+    "name": "Schneider Electric",
+    "workdayTenant": "schneiderelectric"
+  },
+  {
+    "name": "ABB",
+    "workdayTenant": "abb"
+  },
+  {
+    "name": "Philips",
+    "workdayTenant": "philips"
+  },
+  {
+    "name": "Ericsson",
+    "workdayTenant": "ericsson"
+  },
+  {
+    "name": "Nokia",
+    "workdayTenant": "nokia"
+  },
+  {
+    "name": "SAP",
+    "workdayTenant": "sap"
+  },
+  {
+    "name": "Ramp Network"
+  },
+  {
+    "name": "Mercury Technologies"
+  },
+  {
+    "name": "Gusto"
+  },
+  {
+    "name": "Front"
+  },
+  {
+    "name": "Loom"
+  },
+  {
+    "name": "Miro"
+  },
+  {
+    "name": "Figma Health"
+  },
+  {
+    "name": "Webflow"
+  },
+  {
+    "name": "Contentful"
+  },
+  {
+    "name": "Sanity"
+  },
+  {
+    "name": "Strapi"
+  },
+  {
+    "name": "Hygraph"
+  },
+  {
+    "name": "Bubble"
+  },
+  {
+    "name": "Zapier"
+  },
+  {
+    "name": "Make"
+  },
+  {
+    "name": "n8n"
+  },
+  {
+    "name": "Airplane"
+  },
+  {
+    "name": "Census"
+  },
+  {
+    "name": "Hightouch"
+  },
+  {
+    "name": "Segment"
+  },
+  {
+    "name": "Amplitude Analytics"
+  },
+  {
+    "name": "Heap"
+  },
+  {
+    "name": "FullStory"
+  },
+  {
+    "name": "Sentry"
+  },
+  {
+    "name": "Datafold"
+  },
+  {
+    "name": "Monte Carlo"
+  },
+  {
+    "name": "Great Expectations"
+  },
+  {
+    "name": "Astronomer"
+  },
+  {
+    "name": "Starburst"
+  },
+  {
+    "name": "ClickHouse"
+  },
+  {
+    "name": "Timescale"
+  },
+  {
+    "name": "Cockroach Labs"
+  },
+  {
+    "name": "SingleStore"
+  },
+  {
+    "name": "Couchbase"
+  },
+  {
+    "name": "Redis Labs"
+  },
+  {
+    "name": "Confluent"
+  },
+  {
+    "name": "Materialize"
+  },
+  {
+    "name": "Estuary"
+  },
+  {
+    "name": "Grafana"
+  },
+  {
+    "name": "Chronosphere"
+  },
+  {
+    "name": "Honeycomb"
+  },
+  {
+    "name": "Lightstep"
+  },
+  {
+    "name": "Cribl"
+  },
+  {
+    "name": "Panther Labs"
+  },
+  {
+    "name": "Abnormal Security"
+  },
+  {
+    "name": "Socket"
+  },
+  {
+    "name": "Semgrep"
+  },
+  {
+    "name": "Doppler"
+  },
+  {
+    "name": "1Password"
+  },
+  {
+    "name": "Okta"
+  },
+  {
+    "name": "Auth0"
+  },
+  {
+    "name": "WorkOS"
+  },
+  {
+    "name": "Stytch"
+  },
+  {
+    "name": "Descope"
+  },
+  {
+    "name": "Persona"
+  },
+  {
+    "name": "Alloy"
+  },
+  {
+    "name": "Middesk"
+  },
+  {
+    "name": "Ironclad"
+  },
+  {
+    "name": "Everlaw"
+  },
+  {
+    "name": "Klarity"
+  },
+  {
+    "name": "Pilot"
+  },
+  {
+    "name": "Puzzle"
+  },
+  {
+    "name": "Numeral"
+  },
+  {
+    "name": "Anrok"
+  },
+  {
+    "name": "Metronome"
+  },
+  {
+    "name": "Orb"
+  },
+  {
+    "name": "Lago"
+  },
+  {
+    "name": "Paddle"
+  },
+  {
+    "name": "Chargebee Billing"
+  },
+  {
+    "name": "Recurly"
+  },
+  {
+    "name": "Maxio"
+  },
+  {
+    "name": "Zepto Now"
+  },
+  {
+    "name": "Blinkit"
+  },
+  {
+    "name": "Licious"
+  },
+  {
+    "name": "Country Delight"
+  },
+  {
+    "name": "Bombay Shaving"
+  },
+  {
+    "name": "Mamaearth"
+  },
+  {
+    "name": "Sugar Cosmetics"
+  },
+  {
+    "name": "Lenskart Solutions"
+  },
+  {
+    "name": "Purplle"
+  },
+  {
+    "name": "Wakefit"
+  },
+  {
+    "name": "Pepperfry"
+  },
+  {
+    "name": "Urban Ladder"
+  },
+  {
+    "name": "BluSmart"
+  },
+  {
+    "name": "Ather Energy"
+  },
+  {
+    "name": "Ola Electric"
+  },
+  {
+    "name": "Ultraviolette"
+  },
+  {
+    "name": "Zetwerk Manufacturing"
+  },
+  {
+    "name": "Infra.Market"
+  },
+  {
+    "name": "OfBusiness"
+  },
+  {
+    "name": "Udaan"
+  },
+  {
+    "name": "ElasticRun"
+  },
+  {
+    "name": "Shiprocket"
+  },
+  {
+    "name": "Razorpay Capital"
+  },
+  {
+    "name": "Perfios"
+  },
+  {
+    "name": "Signzy"
+  },
+  {
+    "name": "IDfy"
+  },
+  {
+    "name": "Digio"
+  },
+  {
+    "name": "Setu Payments"
+  },
+  {
+    "name": "M2P Fintech"
+  },
+  {
+    "name": "Zolve"
+  },
+  {
+    "name": "Vested Finance"
+  },
+  {
+    "name": "INDmoney"
+  },
+  {
+    "name": "Dezerv"
+  },
+  {
+    "name": "Scripbox"
+  },
+  {
+    "name": "Kuvera"
+  },
+  {
+    "name": "Personio"
+  },
+  {
+    "name": "Factorial"
+  },
+  {
+    "name": "HiBob"
+  },
+  {
+    "name": "Remote"
+  },
+  {
+    "name": "Oyster"
+  },
+  {
+    "name": "Papaya Global"
+  },
+  {
+    "name": "Velocity Global"
+  },
+  {
+    "name": "Adyen"
+  },
+  {
+    "name": "Mollie"
+  },
+  {
+    "name": "SumUp"
+  },
+  {
+    "name": "Qonto"
+  },
+  {
+    "name": "Pennylane"
+  },
+  {
+    "name": "Alan"
+  },
+  {
+    "name": "Doctolib"
+  },
+  {
+    "name": "Swile"
+  },
+  {
+    "name": "PayFit"
+  },
+  {
+    "name": "Getir"
+  },
+  {
+    "name": "Gorillas"
+  },
+  {
+    "name": "Flink"
+  },
+  {
+    "name": "Picnic"
+  },
+  {
+    "name": "HelloFresh"
+  },
+  {
+    "name": "Zalando"
+  },
+  {
+    "name": "About You"
+  },
+  {
+    "name": "Trade Republic"
+  },
+  {
+    "name": "N26"
+  },
+  {
+    "name": "Solaris"
+  },
+  {
+    "name": "Raisin"
+  },
+  {
+    "name": "Scalable Capital"
+  },
+  {
+    "name": "Wefox"
+  },
+  {
+    "name": "Taxfix"
+  },
+  {
+    "name": "Sennder"
+  },
+  {
+    "name": "Forto"
+  },
+  {
+    "name": "Flix"
+  },
+  {
+    "name": "Wayve"
+  },
+  {
+    "name": "Tractable"
+  },
+  {
+    "name": "Synthesia"
+  },
+  {
+    "name": "ElevenLabs Labs"
+  },
+  {
+    "name": "Stability AI"
+  },
+  {
+    "name": "Faculty"
+  },
+  {
+    "name": "Quantexa"
+  },
+  {
+    "name": "Improbable"
+  },
+  {
+    "name": "Darktrace"
+  },
+  {
+    "name": "Snyk Security"
+  },
+  {
+    "name": "Checkout.com"
+  },
+  {
+    "name": "GoCardless"
+  },
+  {
+    "name": "Zilch"
+  },
+  {
+    "name": "Marshmallow"
   }
 ]
