@@ -29,6 +29,6 @@ jobs:
             echo "No new boards discovered"
           else
             git commit -m "Discovery run: add newly found boards to seed"
-            git pull --rebase origin main
+            git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
