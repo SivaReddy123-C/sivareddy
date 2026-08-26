@@ -39,6 +39,10 @@ export const workday: SourceAdapter = {
     const endpoint = `https://${host}/wday/cxs/${tenant}/${site}/jobs`;
     const now = new Date();
     const jobs: Job[] = [];
+    // Workday only reports `total` reliably on the FIRST page - later pages
+    // often return 0/absent. Capture it once; absent means "unknown, keep
+    // paging until a short page or the cap".
+    let knownTotal = Number.POSITIVE_INFINITY;
 
     for (let offset = 0; offset < MAX_JOBS; offset += PAGE) {
       const res = await fetch(endpoint, {
@@ -48,6 +52,7 @@ export const workday: SourceAdapter = {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status} from ${endpoint}`);
       const data = (await res.json()) as { jobPostings?: WdPosting[]; total?: number };
+      if (offset === 0 && typeof data.total === "number" && data.total > 0) knownTotal = data.total;
       const page = data.jobPostings ?? [];
       for (const p of page) {
         const id = p.bulletFields?.[0] ?? p.externalPath;
@@ -70,12 +75,7 @@ export const workday: SourceAdapter = {
           updatedAt: null,
         });
       }
-      if (page.length < PAGE || jobs.length >= (data.total ?? 0)) {
-        if ((data.total ?? 0) <= 60 ) {
-          console.log(`  note: ${company.name} workday site '${site}' reports only ${data.total} total jobs - likely a filtered sub-view; main site name needed`);
-        }
-        break;
-      }
+      if (page.length < PAGE || jobs.length >= knownTotal) break;
       await new Promise((r) => setTimeout(r, 250)); // be polite
     }
     return jobs;
