@@ -152,3 +152,41 @@ test("applyParsed maps AI output into ResumeData, keeps template, drops empties"
   assert.equal(out.skills.length, 1);
   assert.ok(out.experience[0]!.id, "entries get ids");
 });
+
+test("live ranking: excludes ghosts, honors country and sponsorship, ranks by fit", async () => {
+  const { rankFeed, profileFromResume } = await import("../src/lib/fit.js");
+  const NOW2 = new Date("2026-08-26T00:00:00Z");
+  const mk = (over: Record<string, unknown>) => ({
+    key: "k", company: "Acme", title: "Software Engineer", location: "Bengaluru, India",
+    country: "in", url: "u", source: "greenhouse",
+    publishedAt: "2026-08-24T00:00:00Z", firstSeenAt: "2026-08-24T00:00:00Z",
+    ghost: { score: 10, band: "low", reasons: [] }, sponsorship: "unknown", hasSalaryInfo: false,
+    ...over,
+  }) as never;
+  const jobs = [
+    mk({ key: "ghost", ghost: { score: 60, band: "high", reasons: [] } }),
+    mk({ key: "nosponsor", sponsorship: "no" }),
+    mk({ key: "usa", country: "us", location: "Austin, TX" }),
+    mk({ key: "good", title: "Senior Backend Engineer", location: "Bengaluru, India" }),
+  ];
+  const profile = {
+    skills: ["backend"], countries: ["in"], locations: ["bengaluru"],
+    seniorityTarget: "senior", needsSponsorship: true,
+  };
+  const out = rankFeed(jobs, profile, 30, NOW2);
+  const keys = out.map((m) => m.job.key);
+  assert.ok(!keys.includes("ghost"), "ghosts are excluded, never ranked down");
+  assert.ok(!keys.includes("nosponsor"), "won't-sponsor filtered when sponsorship is needed");
+  assert.ok(!keys.includes("usa"), "other countries filtered out");
+  assert.equal(keys[0], "good");
+  assert.ok(out[0]!.reasons.some((r) => r.includes("backend")));
+  assert.ok(out[0]!.reasons.some((r) => r.includes("Seniority level matches")));
+
+  // Resume prefill pulls skills and location out of the resume the user already wrote.
+  const fromResume = profileFromResume({
+    skills: [{ items: "TypeScript, SQL" }, { items: "React" }],
+    basics: { location: "Bengaluru, IN" },
+  });
+  assert.deepEqual(fromResume.skills, ["typescript", "sql", "react"]);
+  assert.ok(fromResume.locations.includes("bengaluru"));
+});

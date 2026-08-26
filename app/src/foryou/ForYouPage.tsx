@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { daysSince } from "../lib/stats.js";
 import { uid } from "../lib/storage.js";
 import { buildApplicationPack } from "../lib/pack.js";
+import { profileFromResume, rankFeed, type ScoredMatch } from "../lib/fit.js";
+import { loadFeed, type Feed } from "../jobs/feed.js";
 import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
+import { uid as newId } from "../lib/storage.js";
 import { COUNTRY_LABELS } from "../jobs/feed.js";
 import {
   fetchMatches, logApplicationEvent, setMatchStatus, supabase,
@@ -87,31 +90,37 @@ function AuthForm() {
 
 function SignedIn({ session, applications, onChange, resume, answers }: Props & { session: Session }) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [profile, setProfile] = useState<ProfileRecord | null>(null);
+  const [feed, setFeed] = useState<Feed | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [dismissed, setDismissed] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("jobradar.dismissed") ?? "[]"); } catch { return []; }
+  });
+
   async function copyPack(id: string) {
     await navigator.clipboard.writeText(buildApplicationPack(resume, answers));
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 1500);
   }
-  const [profile, setProfile] = useState<ProfileRecord | null>(null);
-  const [matches, setMatches] = useState<MatchRecord[] | null>(null);
-  const [editing, setEditing] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     void (async () => {
       try {
         const db = supabase();
-        const { data, error: pErr } = await db
-          .from("jr_user_profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+        const [{ data, error: pErr }, loadedFeed] = await Promise.all([
+          db.from("jr_user_profiles").select("*").eq("user_id", session.user.id).maybeSingle(),
+          loadFeed(false).catch(() => null),
+        ]);
         if (pErr) throw pErr;
-        if (data) {
-          setProfile(data as ProfileRecord);
-          setMatches(await fetchMatches());
-        } else {
-          setEditing(true);
-        }
+        setFeed(loadedFeed);
+        if (data) setProfile(data as ProfileRecord);
+        else setEditing(true);
       } catch (err) {
         setError((err as Error).message);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [session.user.id]);
@@ -123,41 +132,56 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
       const { error: uErr } = await supabase().from("jr_user_profiles").upsert(record);
       if (uErr) throw uErr;
       setProfile({ ...p, user_id: session.user.id });
-      setEditing(false);
-      setMatches(await fetchMatches());
+      setEditing(false); // list below re-ranks immediately - no waiting for the nightly job
     } catch (err) {
       setError((err as Error).message);
     }
   }
 
-  async function markApplied(m: MatchRecord) {
-    const posting = m.jr_job_postings;
-    if (!posting) return;
+  // The list is computed here, in the browser, from the public feed and the
+  // current profile - so editing the profile changes the list instantly. The
+  // nightly job still writes matches for the email digest.
+  const matches: ScoredMatch[] = useMemo(() => {
+    if (!feed || !profile) return [];
+    return rankFeed(feed.jobs, {
+      skills: (profile.skills ?? []).map((s) => s.toLowerCase().trim()).filter(Boolean),
+      countries: profile.countries ?? [],
+      locations: (profile.locations ?? []).map((l) => l.toLowerCase().trim()).filter(Boolean),
+      seniorityTarget: profile.seniority_target,
+      needsSponsorship: Boolean((profile as { needs_sponsorship?: boolean }).needs_sponsorship),
+    }, profile.daily_list_size ?? 30).filter((m) => !dismissed.includes(m.job.key));
+  }, [feed, profile, dismissed]);
+
+  const appliedUrls = useMemo(
+    () => new Set(applications.map((a) => a.url).filter(Boolean)),
+    [applications],
+  );
+
+  async function markApplied(m: ScoredMatch) {
     const now = new Date().toISOString();
     onChange([
       {
-        id: uid(), company: posting.jr_companies?.name ?? "", title: posting.title,
-        url: posting.url, location: posting.location, source: "jobradar",
+        id: newId(), company: m.job.company, title: m.job.title,
+        url: m.job.url, location: m.job.location, source: "jobradar",
         appliedAt: now, status: "applied", statusChangedAt: now, notes: "",
       },
       ...applications,
     ]);
     try {
-      await setMatchStatus(m.id, "applied");
-      await logApplicationEvent(session.user.id, posting);
-      setMatches((ms) => ms?.map((x) => (x.id === m.id ? { ...x, status: "applied" } : x)) ?? null);
+      await supabase().from("jr_application_events").insert({
+        user_id: session.user.id, posting_id: null,
+        company_name: m.job.company, title: m.job.title, url: m.job.url,
+        event: "applied", source: "jobradar",
+      });
     } catch {
-      // Local tracker entry stands even if the cloud write hiccups.
+      // The local tracker entry stands even if the cloud write hiccups.
     }
   }
 
-  async function dismiss(m: MatchRecord) {
-    try {
-      await setMatchStatus(m.id, "dismissed");
-      setMatches((ms) => ms?.filter((x) => x.id !== m.id) ?? null);
-    } catch (err) {
-      setError((err as Error).message);
-    }
+  function dismiss(m: ScoredMatch) {
+    const next = [...dismissed, m.job.key];
+    setDismissed(next);
+    try { localStorage.setItem("jobradar.dismissed", JSON.stringify(next)); } catch { /* ignore */ }
   }
 
   return (
@@ -169,48 +193,52 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
       </div>
       {error && <p className="jobs-error">{error}</p>}
 
-      {editing && <ProfileEditor initial={profile} onSave={saveProfile} />}
+      {editing && <ProfileEditor initial={profile} resume={resume} onSave={saveProfile} />}
 
-      {!editing && matches !== null && matches.length === 0 && (
+      {!editing && loading && <p className="jobs-meta">Loading your matches…</p>}
+
+      {!editing && !loading && profile && matches.length === 0 && (
         <p className="empty-hint">
-          Your list appears after the next daily ranking run (03:17 UTC) — it ranks the scored
-          feed against your profile and picks your top matches, ghosts excluded.
+          No matches yet for this profile. Widen it — add countries, add skills as they appear in job
+          titles (e.g. "backend", "data", "react"), or raise your list size — and the list updates the
+          moment you save.
         </p>
       )}
 
-      {!editing && matches !== null && matches.filter((m) => m.status !== "dismissed").length > 0 && (
+      {!editing && !loading && matches.length > 0 && (
         <>
           <p className="jobs-meta">
-            Your top matches for {matches[0]!.match_date} · ghosts (score ≥50) excluded before ranking ·
-            every match explains itself
+            Your top {matches.length} matches, ranked live against your profile from
+            {" "}{feed?.total.toLocaleString()} scored postings · ghosts (score ≥50) excluded before
+            ranking · edit your profile and this list changes immediately
           </p>
           <div className="job-list">
-            {matches.filter((m) => m.status !== "dismissed").map((m) => {
-              const p = m.jr_job_postings;
-              if (!p) return null;
-              const posted = p.posted_at ?? p.first_seen_at;
+            {matches.map((m, i) => {
+              const applied = appliedUrls.has(m.job.url);
+              const posted = m.job.publishedAt ?? m.job.firstSeenAt;
               return (
-                <div className="card job-card" key={m.id}>
+                <div className="card job-card" key={m.job.key}>
                   <div className="job-main">
                     <div className="job-title">
-                      <span className="rank-chip">#{m.rank}</span>{" "}
-                      <strong>{p.jr_companies?.name}</strong> · {p.title}
+                      <span className="rank-chip">#{i + 1}</span>{" "}
+                      <strong>{m.job.company}</strong> · {m.job.title}
                     </div>
                     <div className="job-meta">
-                      {p.location} · posted {daysSince(posted)}d ago
-                      {p.has_salary && <span className="tag tag-salary">salary stated</span>}
-                      {p.sponsorship === "no" && <span className="tag tag-nosponsor">won't sponsor</span>}
-                      <span className="tag">fit {m.fit_score}</span>
-                      {m.ghost_score_at_match !== null && <span className="tag">ghost {m.ghost_score_at_match}</span>}
+                      {m.job.location} · posted {daysSince(posted)}d ago
+                      {m.job.hasSalaryInfo && <span className="tag tag-salary">salary stated</span>}
+                      {m.job.sponsorship === "yes" && <span className="tag tag-sponsor">sponsors visa</span>}
+                      {m.job.sponsorship === "no" && <span className="tag tag-nosponsor">won't sponsor</span>}
+                      <span className="tag">fit {m.score}</span>
+                      <span className="tag">ghost {m.job.ghost.score}</span>
                     </div>
                     <ul className="fit-reasons">
-                      {(m.fit_reasons ?? []).map((r, i) => <li key={i}>{r}</li>)}
+                      {m.reasons.map((r, k) => <li key={k}>{r}</li>)}
                     </ul>
                   </div>
                   <div className="job-actions">
-                    <a className="btn-link" href={p.url} target="_blank" rel="noreferrer">Open posting ↗</a>
-                    <button onClick={() => copyPack(m.id)}>{copiedId === m.id ? "Copied ✓" : "Copy pack"}</button>
-                    {m.status === "applied" ? (
+                    <a className="btn-link" href={m.job.url} target="_blank" rel="noreferrer">Open posting ↗</a>
+                    <button onClick={() => copyPack(m.job.key)}>{copiedId === m.job.key ? "Copied ✓" : "Copy pack"}</button>
+                    {applied ? (
                       <span className="applied-mark">Applied ✓</span>
                     ) : (
                       <button className="primary" onClick={() => markApplied(m)}>I applied — log it</button>
@@ -227,8 +255,9 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
   );
 }
 
-function ProfileEditor({ initial, onSave }: {
+function ProfileEditor({ initial, resume, onSave }: {
   initial: ProfileRecord | null;
+  resume: ResumeData;
   onSave: (p: Omit<ProfileRecord, "user_id">) => void;
 }) {
   const [skills, setSkills] = useState((initial?.skills ?? []).join(", "));
@@ -246,6 +275,11 @@ function ProfileEditor({ initial, onSave }: {
     <div className="card auth-card">
       <h3>Your match profile</h3>
       <p className="hint">Used only to rank the public jobs feed for you, by deterministic rules — no AI decides your list.</p>
+      <button onClick={() => {
+        const fromResume = profileFromResume(resume);
+        if (fromResume.skills.length) setSkills(fromResume.skills.join(", "));
+        if (fromResume.locations.length) setLocations(fromResume.locations.join(", "));
+      }}>Fill skills &amp; locations from my resume</button>
       <label className="field">Skills (comma-separated)
         <input placeholder="react, typescript, sql" value={skills} onChange={(e) => setSkills(e.target.value)} />
       </label>
