@@ -30,6 +30,10 @@ export interface ProfileRecord {
   skills: string[];
   seniority_target: string | null;
   daily_list_size: number;
+  /** When true, ranking excludes postings that state they cannot sponsor. */
+  needs_sponsorship: boolean;
+  /** Opt-in: email the ranked daily list. Off by default — never nagged. */
+  daily_email: boolean;
 }
 
 export interface MatchRecord {

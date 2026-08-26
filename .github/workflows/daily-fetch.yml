@@ -14,6 +14,8 @@ jobs:
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,6 +41,10 @@ jobs:
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run rank
+      - name: Email daily digests
+        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' && env.RESEND_API_KEY != '' }}
+        working-directory: jobradar
+        run: npm run digest
       - name: Commit history and stats
         run: |
           git config user.name "jobradar-fetch"
@@ -49,5 +55,9 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Daily fetch: update longitudinal state and stats"
+            # The run takes minutes and main moves under it (a merge, another
+            # workflow). A bare push then rejects and fails the whole run at
+            # the finish line. Rebase our one data commit onto whatever landed.
+            git pull --rebase origin main
             git push
           fi

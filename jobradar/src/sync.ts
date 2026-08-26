@@ -117,6 +117,8 @@ export async function syncRun(
         .from("jr_job_postings")
         .select("id, source_job_id, closed_at")
         .eq("company_id", comp.id)
+        // Ordered: unordered .range() pages have no stable boundaries.
+        .order("id")
         .range(from, from + 999);
       if (error) throw new Error(`id fetch failed for ${company.name}: ${error.message}`);
       idRows.push(...((data ?? []) as IdRow[]));
