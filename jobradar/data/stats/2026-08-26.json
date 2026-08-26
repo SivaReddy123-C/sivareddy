@@ -1,6 +1,6 @@
 {
  "date": "2026-08-26",
- "fetchedAt": "2026-08-26T03:56:24.171Z",
+ "fetchedAt": "2026-08-26T04:02:49.875Z",
  "overall": {
   "total": 18541,
   "bands": {
@@ -34,9 +34,9 @@
   "stale90": 248
  },
  "usa": {
-  "total": 8210,
+  "total": 8209,
   "bands": {
-   "low": 4127,
+   "low": 4126,
    "medium": 1903,
    "high": 2170,
    "critical": 10
@@ -44,9 +44,9 @@
   "sponsor": {
    "yes": 7,
    "no": 10,
-   "unknown": 8193
+   "unknown": 8192
   },
-  "noSalary": 6513,
+  "noSalary": 6512,
   "stale90": 2748
  },
  "byCompany": {
