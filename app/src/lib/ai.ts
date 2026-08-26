@@ -105,3 +105,38 @@ export function parseSuggestions(raw: string): string[] {
   }
   return arr.slice(0, 3);
 }
+
+const IMPORT_SYSTEM = `You convert raw resume text (extracted from a PDF) into structured JSON.
+Rules: copy facts exactly - never invent, embellish, or fill gaps; leave unknown fields as empty strings.
+Dates stay as written. Bullets stay as written (fix only obvious extraction artifacts like broken words).
+Return ONLY a JSON object with this exact shape, no other text:
+{"basics":{"name":"","headline":"","email":"","phone":"","location":"","links":[{"label":"","url":""}]},
+"summary":"","experience":[{"company":"","role":"","location":"","start":"","end":"","bullets":[""]}],
+"projects":[{"name":"","link":"","bullets":[""]}],
+"education":[{"school":"","degree":"","start":"","end":"","score":"","details":""}],
+"skills":[{"group":"","items":""}]}`;
+
+/** Parse raw resume text into the structured shape. BYO key, browser-direct. */
+export async function parseResumeText(text: string): Promise<unknown> {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error("No API key set - add one in AI settings (Resume tab) to use AI import.");
+  const { default: Anthropic } = await import("@anthropic-ai/sdk");
+  const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+  const response = await client.beta.messages.create({
+    model: MODEL,
+    max_tokens: 8192,
+    system: IMPORT_SYSTEM,
+    betas: ["server-side-fallback-2026-06-01"],
+    fallbacks: [{ model: "claude-opus-4-8" }],
+    messages: [{ role: "user", content: `Resume text:\n\n${text.slice(0, 30000)}` }],
+  });
+  if (response.stop_reason === "refusal") throw new Error("The model declined this request.");
+  const out = response.content
+    .filter((b): b is Extract<typeof b, { type: "text" }> => b.type === "text")
+    .map((b) => b.text).join("");
+  const cleaned = out.trim().replace(/^```(json)?\s*/i, "").replace(/```\s*$/, "");
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  if (start === -1 || end === -1) throw new Error("Unexpected response format");
+  return JSON.parse(cleaned.slice(start, end + 1));
+}
