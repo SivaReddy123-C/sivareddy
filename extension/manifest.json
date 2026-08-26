@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "JobRadar Assist",
+  "version": "0.1.0",
+  "description": "Autofills job application forms (Greenhouse, Lever, Ashby) from your JobRadar data. You review every field and click Submit yourself - it never submits anything.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JobRadar Assist"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://sivareddy123-c.github.io/*"],
+      "js": ["sync.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://boards.greenhouse.io/*",
+        "https://job-boards.greenhouse.io/*",
+        "https://jobs.lever.co/*",
+        "https://jobs.ashbyhq.com/*"
+      ],
+      "js": ["fill.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

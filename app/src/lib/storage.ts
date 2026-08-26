@@ -1,4 +1,4 @@
-import type { AppState, ResumeData, ResumeSettings, SectionKey } from "./types.js";
+import type { AnswerEntry, AppState, ResumeData, ResumeSettings, SectionKey } from "./types.js";
 
 const KEY = "jobradar.v1";
 
@@ -28,8 +28,19 @@ export function normalizeSectionOrder(order: unknown): SectionKey[] {
   return [...given, ...missing];
 }
 
+export function defaultAnswers(): AnswerEntry[] {
+  return [
+    { id: "work_auth", label: "Are you authorized to work in this country?", value: "" },
+    { id: "sponsorship", label: "Will you now or in the future require visa sponsorship?", value: "" },
+    { id: "notice", label: "Notice period / earliest start date", value: "" },
+    { id: "salary", label: "Salary expectation", value: "" },
+    { id: "experience", label: "Years of relevant experience", value: "" },
+    { id: "relocate", label: "Willing to relocate?", value: "" },
+  ];
+}
+
 export function emptyState(): AppState {
-  return { version: 1, resume: emptyResume(), applications: [] };
+  return { version: 1, resume: emptyResume(), applications: [], answers: defaultAnswers() };
 }
 
 /** Merge a parsed object over the empty state so missing fields never crash the UI. */
@@ -48,6 +59,7 @@ export function normalizeState(raw: unknown): AppState {
       settings,
     },
     applications: Array.isArray(r.applications) ? r.applications : [],
+    answers: Array.isArray(r.answers) && r.answers.length > 0 ? r.answers : defaultAnswers(),
   };
 }
 

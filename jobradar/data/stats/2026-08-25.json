@@ -1,56 +1,56 @@
 {
  "date": "2026-08-25",
- "fetchedAt": "2026-08-25T19:59:27.980Z",
+ "fetchedAt": "2026-08-25T20:09:03.147Z",
  "overall": {
-  "total": 8271,
+  "total": 14736,
   "bands": {
-   "low": 4007,
-   "medium": 1820,
-   "high": 2443,
-   "critical": 1
+   "low": 6839,
+   "medium": 3366,
+   "high": 4522,
+   "critical": 9
   },
   "sponsor": {
-   "yes": 1,
-   "no": 1,
-   "unknown": 8269
+   "yes": 7,
+   "no": 18,
+   "unknown": 14711
   },
-  "noSalary": 7423,
-  "stale90": 2719
+  "noSalary": 13561,
+  "stale90": 4930
  },
  "india": {
-  "total": 752,
+  "total": 1023,
   "bands": {
-   "low": 477,
-   "medium": 117,
-   "high": 158,
+   "low": 606,
+   "medium": 184,
+   "high": 233,
    "critical": 0
   },
   "sponsor": {
    "yes": 0,
    "no": 0,
-   "unknown": 752
+   "unknown": 1023
   },
-  "noSalary": 732,
-  "stale90": 158
+  "noSalary": 1002,
+  "stale90": 233
  },
  "usa": {
-  "total": 2309,
+  "total": 6038,
   "bands": {
-   "low": 1212,
-   "medium": 617,
-   "high": 479,
-   "critical": 1
+   "low": 2791,
+   "medium": 1502,
+   "high": 1738,
+   "critical": 7
   },
   "sponsor": {
-   "yes": 1,
-   "no": 1,
-   "unknown": 2307
+   "yes": 5,
+   "no": 10,
+   "unknown": 6023
   },
-  "noSalary": 1527,
-  "stale90": 758
+  "noSalary": 4997,
+  "stale90": 2123
  },
  "byCompany": {
-  "Stripe": 586,
+  "Stripe": 587,
   "Postman": 68,
   "GitLab": 211,
   "Databricks": 822,
@@ -65,6 +65,46 @@
   "CRED": 14,
   "Meesho": 50,
   "Airbnb": 188,
-  "Robinhood": 130
+  "Robinhood": 130,
+  "Lyft": 161,
+  "Pinterest": 214,
+  "Reddit": 151,
+  "DoorDash": 464,
+  "Instacart": 121,
+  "Brex": 288,
+  "Affirm": 204,
+  "Gusto": 87,
+  "MongoDB": 406,
+  "Elastic": 285,
+  "Datadog": 452,
+  "Twilio": 140,
+  "Asana": 126,
+  "Dropbox": 41,
+  "Duolingo": 81,
+  "Roblox": 235,
+  "Samsara": 263,
+  "Vercel": 87,
+  "Anthropic": 544,
+  "Discord": 51,
+  "Airtable": 16,
+  "Chime": 63,
+  "Carta": 59,
+  "Cloudflare": 310,
+  "Checkr": 46,
+  "Flexport": 161,
+  "Scale AI": 216,
+  "PhonePe": 66,
+  "InMobi": 64,
+  "Groww": 5,
+  "Palantir": 308,
+  "Spotify": 90,
+  "Porter": 27,
+  "Cursor": 115,
+  "Replit": 71,
+  "Supabase": 59,
+  "Vanta": 108,
+  "PostHog": 14,
+  "ElevenLabs": 247,
+  "Warp": 18
  }
 }

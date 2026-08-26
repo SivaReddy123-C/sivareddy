@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { daysSince } from "../lib/stats.js";
 import { uid } from "../lib/storage.js";
-import type { Application } from "../lib/types.js";
+import { buildApplicationPack } from "../lib/pack.js";
+import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
 import {
   fetchMatches, logApplicationEvent, setMatchStatus, supabase,
   type MatchRecord, type ProfileRecord, type Session,
@@ -10,10 +11,12 @@ import {
 interface Props {
   applications: Application[];
   onChange: (apps: Application[]) => void;
+  resume: ResumeData;
+  answers: AnswerEntry[];
 }
 
 /** Account-backed personalized daily list. Everything else stays local-first. */
-export function ForYouPage({ applications, onChange }: Props) {
+export function ForYouPage({ applications, onChange, resume, answers }: Props) {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -26,7 +29,7 @@ export function ForYouPage({ applications, onChange }: Props) {
 
   if (!ready) return <div className="foryou"><p className="jobs-meta">Loading…</p></div>;
   if (!session) return <AuthForm />;
-  return <SignedIn session={session} applications={applications} onChange={onChange} />;
+  return <SignedIn session={session} applications={applications} onChange={onChange} resume={resume} answers={answers} />;
 }
 
 function AuthForm() {
@@ -81,7 +84,13 @@ function AuthForm() {
   );
 }
 
-function SignedIn({ session, applications, onChange }: Props & { session: Session }) {
+function SignedIn({ session, applications, onChange, resume, answers }: Props & { session: Session }) {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  async function copyPack(id: string) {
+    await navigator.clipboard.writeText(buildApplicationPack(resume, answers));
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  }
   const [profile, setProfile] = useState<ProfileRecord | null>(null);
   const [matches, setMatches] = useState<MatchRecord[] | null>(null);
   const [editing, setEditing] = useState(false);
@@ -199,6 +208,7 @@ function SignedIn({ session, applications, onChange }: Props & { session: Sessio
                   </div>
                   <div className="job-actions">
                     <a className="btn-link" href={p.url} target="_blank" rel="noreferrer">Open posting ↗</a>
+                    <button onClick={() => copyPack(m.id)}>{copiedId === m.id ? "Copied ✓" : "Copy pack"}</button>
                     {m.status === "applied" ? (
                       <span className="applied-mark">Applied ✓</span>
                     ) : (

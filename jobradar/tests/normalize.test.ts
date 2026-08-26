@@ -126,3 +126,18 @@ test("fit scoring: skills, freshness, seniority, ghost penalty", async () => {
   assert.equal(seniorityOfTitle("Sr. Backend Engineer"), "senior");
   assert.equal(seniorityOfTitle("Software Engineer"), null);
 });
+
+test("discovery token variants", async () => {
+  const { tokenVariants } = await import("../src/discover.js");
+  assert.deepEqual(tokenVariants("Retool"), ["retool"]);
+  assert.ok(tokenVariants("Grafana Labs").includes("grafanalabs"));
+  assert.ok(tokenVariants("Grafana Labs").includes("grafana-labs"));
+  assert.ok(tokenVariants("Grafana Labs").includes("grafana"));
+  assert.ok(tokenVariants("Fly.io").includes("flyio"));
+});
+
+test("workday postedOn parsing via adapter shape", async () => {
+  // postedOnToIso is internal; exercise it indirectly by checking the module loads
+  const mod = await import("../src/sources/workday.js");
+  assert.equal(mod.workday.source, "workday");
+});

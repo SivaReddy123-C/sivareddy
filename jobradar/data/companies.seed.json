@@ -4,111 +4,479 @@
     "source": "greenhouse",
     "token": "stripe",
     "verified": true,
-    "note": "585 jobs at last probe; hires in India (Bengaluru)"
+    "note": "587 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Postman",
     "source": "greenhouse",
     "token": "postman",
     "verified": true,
-    "note": "69 jobs; India-founded, Bengaluru + SF"
+    "note": "68 open jobs at last run (2026-08-25)"
   },
   {
     "name": "GitLab",
     "source": "greenhouse",
     "token": "gitlab",
     "verified": true,
-    "note": "210 jobs; remote-first"
+    "note": "211 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Databricks",
     "source": "greenhouse",
     "token": "databricks",
     "verified": true,
-    "note": "823 jobs; Bengaluru office"
+    "note": "822 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Figma",
     "source": "greenhouse",
     "token": "figma",
     "verified": true,
-    "note": "159 jobs; strong US new-grad hiring"
+    "note": "158 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Coinbase",
     "source": "greenhouse",
     "token": "coinbase",
     "verified": true,
-    "note": "174 jobs; US remote-first"
+    "note": "175 open jobs at last run (2026-08-25)"
   },
   {
     "name": "OpenAI",
     "source": "ashby",
     "token": "openai",
     "verified": true,
-    "note": "758 jobs"
+    "note": "753 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Ramp",
     "source": "ashby",
     "token": "ramp",
     "verified": true,
-    "note": "139 jobs; US"
+    "note": "135 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Linear",
     "source": "ashby",
     "token": "linear",
     "verified": true,
-    "note": "32 jobs; remote"
+    "note": "32 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Notion",
     "source": "ashby",
     "token": "notion",
     "verified": true,
-    "note": "133 jobs; US"
+    "note": "132 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Bosch",
     "source": "smartrecruiters",
     "token": "BoschGroup",
     "verified": true,
-    "note": "4785 jobs at last probe (2026-08-25)"
+    "note": "4793 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Razorpay",
     "source": "greenhouse",
     "token": "razorpaysoftwareprivatelimited",
     "verified": true,
-    "note": "24 jobs at last probe (2026-08-25)"
+    "note": "24 open jobs at last run (2026-08-25)"
   },
   {
     "name": "CRED",
     "source": "lever",
     "token": "cred",
     "verified": true,
-    "note": "13 jobs at last probe (2026-08-25)"
+    "note": "14 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Meesho",
     "source": "lever",
     "token": "meesho",
     "verified": true,
-    "note": "50 jobs at last probe (2026-08-25)"
+    "note": "50 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Airbnb",
     "source": "greenhouse",
     "token": "airbnb",
     "verified": true,
-    "note": "193 jobs at last probe (2026-08-25)"
+    "note": "188 open jobs at last run (2026-08-25)"
   },
   {
     "name": "Robinhood",
     "source": "greenhouse",
     "token": "robinhood",
     "verified": true,
-    "note": "129 jobs at last probe (2026-08-25)"
+    "note": "130 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Lyft",
+    "source": "greenhouse",
+    "token": "lyft",
+    "verified": true,
+    "note": "161 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Pinterest",
+    "source": "greenhouse",
+    "token": "pinterest",
+    "verified": true,
+    "note": "214 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Reddit",
+    "source": "greenhouse",
+    "token": "reddit",
+    "verified": true,
+    "note": "151 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "DoorDash",
+    "source": "greenhouse",
+    "token": "doordashusa",
+    "verified": true,
+    "note": "464 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Instacart",
+    "source": "greenhouse",
+    "token": "instacart",
+    "verified": true,
+    "note": "121 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Brex",
+    "source": "greenhouse",
+    "token": "brex",
+    "verified": true,
+    "note": "288 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Affirm",
+    "source": "greenhouse",
+    "token": "affirm",
+    "verified": true,
+    "note": "204 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Gusto",
+    "source": "greenhouse",
+    "token": "gusto",
+    "verified": true,
+    "note": "87 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "MongoDB",
+    "source": "greenhouse",
+    "token": "mongodb",
+    "verified": true,
+    "note": "406 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Elastic",
+    "source": "greenhouse",
+    "token": "elastic",
+    "verified": true,
+    "note": "285 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Datadog",
+    "source": "greenhouse",
+    "token": "datadog",
+    "verified": true,
+    "note": "452 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Twilio",
+    "source": "greenhouse",
+    "token": "twilio",
+    "verified": true,
+    "note": "140 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Asana",
+    "source": "greenhouse",
+    "token": "asana",
+    "verified": true,
+    "note": "126 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Dropbox",
+    "source": "greenhouse",
+    "token": "dropbox",
+    "verified": true,
+    "note": "41 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Duolingo",
+    "source": "greenhouse",
+    "token": "duolingo",
+    "verified": true,
+    "note": "81 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Roblox",
+    "source": "greenhouse",
+    "token": "roblox",
+    "verified": true,
+    "note": "235 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Samsara",
+    "source": "greenhouse",
+    "token": "samsara",
+    "verified": true,
+    "note": "263 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Vercel",
+    "source": "greenhouse",
+    "token": "vercel",
+    "verified": true,
+    "note": "87 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Anthropic",
+    "source": "greenhouse",
+    "token": "anthropic",
+    "verified": true,
+    "note": "544 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Discord",
+    "source": "greenhouse",
+    "token": "discord",
+    "verified": true,
+    "note": "51 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Airtable",
+    "source": "greenhouse",
+    "token": "airtable",
+    "verified": true,
+    "note": "16 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Chime",
+    "source": "greenhouse",
+    "token": "chime",
+    "verified": true,
+    "note": "63 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Carta",
+    "source": "greenhouse",
+    "token": "carta",
+    "verified": true,
+    "note": "59 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Cloudflare",
+    "source": "greenhouse",
+    "token": "cloudflare",
+    "verified": true,
+    "note": "310 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Checkr",
+    "source": "greenhouse",
+    "token": "checkr",
+    "verified": true,
+    "note": "46 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Flexport",
+    "source": "greenhouse",
+    "token": "flexport",
+    "verified": true,
+    "note": "161 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Scale AI",
+    "source": "greenhouse",
+    "token": "scaleai",
+    "verified": true,
+    "note": "216 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "PhonePe",
+    "source": "greenhouse",
+    "token": "phonepe",
+    "verified": true,
+    "note": "66 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "InMobi",
+    "source": "greenhouse",
+    "token": "inmobi",
+    "verified": true,
+    "note": "64 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Groww",
+    "source": "greenhouse",
+    "token": "groww",
+    "verified": true,
+    "note": "5 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Palantir",
+    "source": "lever",
+    "token": "palantir",
+    "verified": true,
+    "note": "308 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Spotify",
+    "source": "lever",
+    "token": "spotify",
+    "verified": true,
+    "note": "90 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Porter",
+    "source": "lever",
+    "token": "porter",
+    "verified": true,
+    "note": "27 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Cursor",
+    "source": "ashby",
+    "token": "cursor",
+    "verified": true,
+    "note": "115 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Replit",
+    "source": "ashby",
+    "token": "replit",
+    "verified": true,
+    "note": "71 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Supabase",
+    "source": "ashby",
+    "token": "supabase",
+    "verified": true,
+    "note": "59 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Vanta",
+    "source": "ashby",
+    "token": "vanta",
+    "verified": true,
+    "note": "108 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "PostHog",
+    "source": "ashby",
+    "token": "posthog",
+    "verified": true,
+    "note": "14 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "ElevenLabs",
+    "source": "ashby",
+    "token": "elevenlabs",
+    "verified": true,
+    "note": "247 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "Warp",
+    "source": "ashby",
+    "token": "warp",
+    "verified": true,
+    "note": "18 open jobs at last run (2026-08-25)"
+  },
+  {
+    "name": "NVIDIA",
+    "source": "workday",
+    "token": "nvidia",
+    "verified": false,
+    "params": {
+      "host": "nvidia.wd5.myworkdayjobs.com",
+      "site": "NVIDIAExternalCareerSite"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Salesforce",
+    "source": "workday",
+    "token": "salesforce",
+    "verified": false,
+    "params": {
+      "host": "salesforce.wd12.myworkdayjobs.com",
+      "site": "External_Career_Site"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Adobe",
+    "source": "workday",
+    "token": "adobe",
+    "verified": false,
+    "params": {
+      "host": "adobe.wd5.myworkdayjobs.com",
+      "site": "external_experienced"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Workday",
+    "source": "workday",
+    "token": "workdayinc",
+    "verified": false,
+    "params": {
+      "host": "workday.wd5.myworkdayjobs.com",
+      "site": "Workday"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Target",
+    "source": "workday",
+    "token": "target",
+    "verified": false,
+    "params": {
+      "host": "target.wd5.myworkdayjobs.com",
+      "site": "targetcareers"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Capital One",
+    "source": "workday",
+    "token": "capitalone",
+    "verified": false,
+    "params": {
+      "host": "capitalone.wd12.myworkdayjobs.com",
+      "site": "Capital_One"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "Intuit",
+    "source": "workday",
+    "token": "intuit",
+    "verified": false,
+    "params": {
+      "host": "intuit.wd1.myworkdayjobs.com",
+      "site": "Intuit_Careers"
+    },
+    "note": "workday candidate - verified by fire on next run"
+  },
+  {
+    "name": "PayPal",
+    "source": "workday",
+    "token": "paypal",
+    "verified": false,
+    "params": {
+      "host": "paypal.wd1.myworkdayjobs.com",
+      "site": "jobs"
+    },
+    "note": "workday candidate - verified by fire on next run"
   }
 ]

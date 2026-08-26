@@ -8,12 +8,15 @@ import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
 import { smartrecruiters } from "./sources/smartrecruiters.js";
+import { workable } from "./sources/workable.js";
+import { recruitee } from "./sources/recruitee.js";
+import { workday } from "./sources/workday.js";
 import { Store } from "./store.js";
 import type { ScoredJob, SeedCompany, SourceAdapter } from "./types.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = join(ROOT, "data");
-const adapters: Record<string, SourceAdapter> = { greenhouse, lever, ashby, smartrecruiters };
+const adapters: Record<string, SourceAdapter> = { greenhouse, lever, ashby, smartrecruiters, workable, recruitee, workday };
 
 function loadSeeds(): SeedCompany[] {
   return JSON.parse(readFileSync(join(DATA, "companies.seed.json"), "utf8"));
@@ -144,6 +147,12 @@ async function rank(): Promise<void> {
   console.log(`ranked: ${result.users} users, ${result.matches} matches written`);
 }
 
+/** `discover`: probe ATSs for the company names in data/discovery.names.json. */
+async function discoverCmd(): Promise<void> {
+  const { discover } = await import("./discover.js");
+  await discover(join(DATA, "discovery.names.json"), join(DATA, "companies.seed.json"));
+}
+
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
 function stats(): void {
   const store = new Store(DATA);
@@ -231,7 +240,8 @@ switch (cmd) {
   case "feed": feed(); break;
   case "sync": await sync(); break;
   case "rank": await rank(); break;
+  case "discover": await discoverCmd(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover> [--india | --usa]");
     process.exit(1);
 }

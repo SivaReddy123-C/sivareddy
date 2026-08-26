@@ -62,8 +62,13 @@ npm run dev     # local dev server
 npm run build   # static production build in app/dist
 ```
 
-Next: assisted apply (client-side, human-confirmed) → employer response
-scorecard from opt-in anonymous outcomes.
+- **Assisted apply** — `extension/`: the JobRadar Assist browser extension
+  autofills Greenhouse/Lever/Ashby application forms from your app data
+  (contact, links, Apply-kit answers), outlines everything it touched, and
+  never submits — you review and click Submit. Install: load `extension/`
+  unpacked via chrome://extensions (see `extension/README.md`).
+
+Next: employer response scorecard from opt-in anonymous outcomes.
 
 ## Quick start
 
