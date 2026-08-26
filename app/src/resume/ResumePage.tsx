@@ -32,6 +32,10 @@ interface Props {
 export function ResumePage({ resume, onChange }: Props) {
   const [showEditor, setShowEditor] = useState(true);
   const [importing, setImporting] = useState(false);
+  const [summaryActive, setSummaryActive] = useState(false);
+  const [settled, setSettled] = useState<string[]>([]);
+  const isSettled = (t: string) => settled.includes(t.trim());
+  const settle = (t: string) => setSettled((s) => (s.includes(t.trim()) ? s : [...s, t.trim()]));
   const set = (patch: Partial<ResumeData>) => onChange({ ...resume, ...patch });
   const setSettings = (patch: Partial<ResumeSettings>) =>
     set({ settings: { ...resume.settings, ...patch } });
@@ -102,11 +106,16 @@ export function ResumePage({ resume, onChange }: Props) {
                 placeholder="Two or three lines. What you do, what you're strong at, what you're looking for."
                 value={resume.summary}
                 onChange={(e) => set({ summary: e.target.value })}
+                onFocus={() => setSummaryActive(true)}
               />
-              <Hints hints={checkSummary(resume.summary)} />
-              <AiSuggest kind="summary" text={resume.summary}
-                context={{ headline: resume.basics.headline, skills: skillsSummary }}
-                onApply={(summary) => set({ summary })} />
+              <Hints hints={checkSummary(resume.summary)}
+                show={summaryActive && !isSettled(resume.summary)}
+                onDismiss={() => settle(resume.summary)} />
+              {summaryActive && (
+                <AiSuggest kind="summary" text={resume.summary}
+                  context={{ headline: resume.basics.headline, skills: skillsSummary }}
+                  onApply={(summary) => { set({ summary }); settle(summary); }} />
+              )}
             </SectionCard>
             <EducationEditor entries={resume.education} onChange={(education) => set({ education })} />
             <ExperienceEditor entries={resume.experience} onChange={(experience) => set({ experience })} />
@@ -219,18 +228,30 @@ function BulletsEditor({ bullets, onChange, placeholder, aiContext }: {
   placeholder: string;
   aiContext?: { role?: string; company?: string };
 }) {
+  // Only the bullet you're working on shows feedback. `active` survives blur so
+  // the AI button stays clickable; it moves when another bullet is focused.
+  const [active, setActive] = useState<number | null>(null);
+  const [settled, setSettled] = useState<string[]>([]);
+  const isSettled = (t: string) => settled.includes(t.trim());
+  const settle = (t: string) => setSettled((s) => (s.includes(t.trim()) ? s : [...s, t.trim()]));
+
   return (
     <div className="bullets">
       {bullets.map((b, i) => (
         <div className="bullet-block" key={i}>
           <div className="row">
             <input placeholder={placeholder} value={b}
+              onFocus={() => setActive(i)}
               onChange={(e) => onChange(bullets.map((x, j) => (j === i ? e.target.value : x)))} />
             <button className="danger" onClick={() => onChange(bullets.filter((_, j) => j !== i))}>×</button>
           </div>
-          <Hints hints={checkBullet(b)} />
-          <AiSuggest kind="bullet" text={b} context={aiContext ?? {}}
-            onApply={(v) => onChange(bullets.map((x, j) => (j === i ? v : x)))} />
+          <Hints hints={checkBullet(b)}
+            show={active === i && !isSettled(b)}
+            onDismiss={() => settle(b)} />
+          {active === i && (
+            <AiSuggest kind="bullet" text={b} context={aiContext ?? {}}
+              onApply={(v) => { onChange(bullets.map((x, j) => (j === i ? v : x))); settle(v); }} />
+          )}
         </div>
       ))}
       <button onClick={() => onChange([...bullets, ""])}>+ Bullet</button>

@@ -26,8 +26,10 @@ export function checkBullet(text: string): string[] {
   if (hints.length === 0 && !ACTION_VERB_HINT.test(t)) {
     hints.push("Consider starting with a strong action verb (Built, Led, Reduced...)");
   }
-  if (!/\d/.test(t)) {
-    hints.push("No number — impact with a metric (%, time saved, users, ₹/$) is far more convincing");
+  // Only nag about metrics on bullets short enough to have room for one, and
+  // never on bullets that already carry a placeholder the writer will fill.
+  if (!/\d/.test(t) && t.length < 150 && !/\[/.test(t)) {
+    hints.push("Could use a number — a metric (%, time saved, users) is more convincing");
   }
   if (t.length > 220) {
     hints.push("Long for one bullet — split it or trim to the core achievement");

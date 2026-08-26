@@ -72,8 +72,8 @@ export function App() {
         </nav>
         <div className="data-actions">
           <button onClick={download}>Export data</button>
-          <label className="filebtn">
-            Import
+          <label className="filebtn" title="Load a JobRadar data file (.json) - restores everything: resume, tracker, answers">
+            Import data (.json)
             <input
               type="file"
               accept="application/json"

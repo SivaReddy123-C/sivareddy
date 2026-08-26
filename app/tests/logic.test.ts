@@ -68,8 +68,15 @@ test("writing check flags weak openers and missing numbers", async () => {
   const { checkBullet, checkSummary } = await import("../src/lib/writecheck.js");
   const weak = checkBullet("Responsible for testing the website");
   assert.ok(weak.some((h) => h.includes("Starts with")));
-  assert.ok(weak.some((h) => h.includes("No number")));
+  assert.ok(weak.some((h) => h.includes("number")));
+  // Weak-opener hint outranks the metric nag - only the first hint is shown.
+  assert.ok(weak[0]!.includes("Starts with"));
   assert.deepEqual(checkBullet("Reduced build time 40% by caching dependencies"), []);
+  // No metric nag on bullets carrying a placeholder the writer will fill...
+  assert.ok(!checkBullet("Shipped [X] releases across the enterprise system").some((h) => h.includes("number")));
+  // ...nor on long bullets, where there is no room for one anyway.
+  const long = "Built and operated a multi-tenant platform " + "x".repeat(120);
+  assert.ok(!checkBullet(long).some((h) => h.includes("number")));
   assert.ok(checkSummary("I am a passionate hardworking team player").length > 0);
 });
 
@@ -144,4 +151,42 @@ test("applyParsed maps AI output into ResumeData, keeps template, drops empties"
   assert.equal(out.experience[0]!.bullets.length, 1);
   assert.equal(out.skills.length, 1);
   assert.ok(out.experience[0]!.id, "entries get ids");
+});
+
+test("live ranking: excludes ghosts, honors country and sponsorship, ranks by fit", async () => {
+  const { rankFeed, profileFromResume } = await import("../src/lib/fit.js");
+  const NOW2 = new Date("2026-08-26T00:00:00Z");
+  const mk = (over: Record<string, unknown>) => ({
+    key: "k", company: "Acme", title: "Software Engineer", location: "Bengaluru, India",
+    country: "in", url: "u", source: "greenhouse",
+    publishedAt: "2026-08-24T00:00:00Z", firstSeenAt: "2026-08-24T00:00:00Z",
+    ghost: { score: 10, band: "low", reasons: [] }, sponsorship: "unknown", hasSalaryInfo: false,
+    ...over,
+  }) as never;
+  const jobs = [
+    mk({ key: "ghost", ghost: { score: 60, band: "high", reasons: [] } }),
+    mk({ key: "nosponsor", sponsorship: "no" }),
+    mk({ key: "usa", country: "us", location: "Austin, TX" }),
+    mk({ key: "good", title: "Senior Backend Engineer", location: "Bengaluru, India" }),
+  ];
+  const profile = {
+    skills: ["backend"], countries: ["in"], locations: ["bengaluru"],
+    seniorityTarget: "senior", needsSponsorship: true,
+  };
+  const out = rankFeed(jobs, profile, 30, NOW2);
+  const keys = out.map((m) => m.job.key);
+  assert.ok(!keys.includes("ghost"), "ghosts are excluded, never ranked down");
+  assert.ok(!keys.includes("nosponsor"), "won't-sponsor filtered when sponsorship is needed");
+  assert.ok(!keys.includes("usa"), "other countries filtered out");
+  assert.equal(keys[0], "good");
+  assert.ok(out[0]!.reasons.some((r) => r.includes("backend")));
+  assert.ok(out[0]!.reasons.some((r) => r.includes("Seniority level matches")));
+
+  // Resume prefill pulls skills and location out of the resume the user already wrote.
+  const fromResume = profileFromResume({
+    skills: [{ items: "TypeScript, SQL" }, { items: "React" }],
+    basics: { location: "Bengaluru, IN" },
+  });
+  assert.deepEqual(fromResume.skills, ["typescript", "sql", "react"]);
+  assert.ok(fromResume.locations.includes("bengaluru"));
 });
