@@ -41,7 +41,11 @@ jobs:
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run rank
+      # always(): fetch, stats and feed have already written their files by
+      # now. A failure in sync or rank must never withhold the published feed
+      # from every user - that mistake has already cost a day once.
       - name: Commit history and stats
+        if: always()
         run: |
           git config user.name "jobradar-fetch"
           git config user.email "actions@users.noreply.github.com"

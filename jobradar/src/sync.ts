@@ -25,9 +25,23 @@ export interface CompanyRow {
   last_polled_at: string;
 }
 
+/**
+ * Postgres rejects NUL bytes and lone surrogates inside json/jsonb, and a
+ * single posting carrying one kills the whole run. Job text comes from a
+ * hundred different systems, so scrub every string we send.
+ */
+export function cleanText<T extends string | null | undefined>(v: T): T {
+  if (typeof v !== "string") return v;
+  return v
+    .replace(/\u0000/g, "")
+    // Lone surrogates: a high surrogate with no low partner, or vice versa.
+    .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, "")
+    .replace(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "") as T;
+}
+
 export function companyToRow(c: SeedCompany, employerType: string, polledAt: string): CompanyRow {
   return {
-    name: c.name,
+    name: cleanText(c.name),
     ats: c.source,
     board_token: c.token,
     employer_type: employerType,
@@ -41,15 +55,15 @@ export function jobToRow(j: ScoredJob, companyId: string) {
     company_id: companyId,
     source_job_id: j.sourceJobId,
     slot_key: slotKey(j.source, j.companyToken, j.title, j.location),
-    title: j.title,
-    location: j.location,
+    title: cleanText(j.title),
+    location: cleanText(j.location),
     country: detectCountry(j.location),
     remote: j.remote,
     url: j.url,
     apply_url: j.applyUrl,
     department: j.department,
     employment_type: j.employmentType,
-    description_text: j.description,
+    description_text: cleanText(j.description),
     description_hash: j.description ? createHash("sha256").update(j.description).digest("hex").slice(0, 32) : null,
     has_salary: j.hasSalaryInfo,
     sponsorship: j.sponsorship ?? "unknown",
@@ -68,8 +82,8 @@ export function snapshotRow(j: ScoredJob, postingId: string, runDate: string) {
     posting_id: postingId,
     run_date: runDate,
     ghost_score: j.ghost.score,
-    ghost_reasons: j.ghost.signals.map((s) => s.reason),
-    signals: j.ghost.signals,
+    ghost_reasons: j.ghost.signals.map((s) => cleanText(s.reason)),
+    signals: j.ghost.signals.map((sig) => ({ ...sig, reason: cleanText(sig.reason) })),
     raw_hash: null as string | null,
   };
 }

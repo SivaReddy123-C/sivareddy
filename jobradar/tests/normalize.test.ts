@@ -192,3 +192,15 @@ test("sync deduplicates postings sharing a source id", async () => {
   }
   assert.equal(byKey.size, 2, "duplicate source ids collapse to one row per key");
 });
+
+test("sync strips characters Postgres rejects inside json", async () => {
+  const { cleanText } = await import("../src/sync.js");
+  assert.equal(cleanText("clean text"), "clean text");
+  assert.equal(cleanText(`with${String.fromCharCode(0)}nul`), "withnul");
+  // A lone high surrogate makes the serialized json invalid.
+  assert.equal(cleanText(`lone${String.fromCharCode(0xd800)}surrogate`), "lonesurrogate");
+  assert.equal(cleanText(`lone${String.fromCharCode(0xdc00)}low`), "lonelow");
+  // A valid surrogate pair (an emoji) must survive untouched.
+  assert.equal(cleanText("emoji \u{1F600} ok"), "emoji \u{1F600} ok");
+  assert.equal(cleanText(null), null);
+});
