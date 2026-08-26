@@ -251,15 +251,7 @@ function ProfileEditor({ initial, onSave }: {
       <label className="field">Preferred locations
         <input placeholder="bengaluru, remote" value={locations} onChange={(e) => setLocations(e.target.value)} />
       </label>
-      <div className="row">
-        <label className="check"><input type="checkbox" checked={countries.includes("in")} onChange={() => toggle("in")} /> India</label>
-        <label className="check"><input type="checkbox" checked={countries.includes("us")} onChange={() => toggle("us")} /> USA</label>
-        <label className="check" title="Postings that state they cannot sponsor are removed from your list entirely">
-          <input type="checkbox" checked={needsSponsorship} onChange={(e) => setNeedsSponsorship(e.target.checked)} /> I need visa sponsorship
-        </label>
-        <label className="check" title="One email a day with your ranked list — nothing when there are no matches. Off by default.">
-          <input type="checkbox" checked={dailyEmail} onChange={(e) => setDailyEmail(e.target.checked)} /> Email me my daily list
-        </label>
+      <div className="field-grid">
         <label className="field">Seniority target
           <select value={seniority} onChange={(e) => setSeniority(e.target.value)}>
             <option value="">Any</option>
@@ -271,9 +263,26 @@ function ProfileEditor({ initial, onSave }: {
             <option value="lead">Lead / Manager</option>
           </select>
         </label>
-        <label className="field">List size
+        <label className="field">Jobs per day (5–50)
           <input type="number" min={5} max={50} value={listSize}
             onChange={(e) => setListSize(Number(e.target.value) || 30)} />
+        </label>
+      </div>
+      <div className="pref-group">
+        <span className="pref-title">Countries</span>
+        <div className="row">
+          <label className="check"><input type="checkbox" checked={countries.includes("in")} onChange={() => toggle("in")} /> India</label>
+          <label className="check"><input type="checkbox" checked={countries.includes("us")} onChange={() => toggle("us")} /> USA</label>
+        </div>
+      </div>
+      <div className="pref-group">
+        <label className="check pref-line" title="Postings that state they cannot sponsor are removed from your list entirely">
+          <input type="checkbox" checked={needsSponsorship} onChange={(e) => setNeedsSponsorship(e.target.checked)} />
+          <span>I need visa sponsorship <em>— postings that say "won't sponsor" are removed from your list</em></span>
+        </label>
+        <label className="check pref-line" title="One email a day with your ranked list — nothing when there are no matches. Off by default.">
+          <input type="checkbox" checked={dailyEmail} onChange={(e) => setDailyEmail(e.target.checked)} />
+          <span>Email me my daily list <em>— one email a day, nothing on empty days, off by default</em></span>
         </label>
       </div>
       <button className="primary" onClick={() => onSave({

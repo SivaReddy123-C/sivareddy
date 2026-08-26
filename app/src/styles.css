@@ -394,3 +394,18 @@ input:focus, select:focus, textarea:focus {
   .sheet { box-shadow: none; border-radius: 0; }
 }
 .job-main > .ghost-badge-pill { align-self: flex-start; }
+
+/* For You: centered account column; matches stay full-width */
+.auth-card { max-width: 560px; width: 100%; margin: 0 auto; }
+.foryou-head { max-width: 560px; width: 100%; margin: 0 auto; }
+.foryou:has(.job-list) .foryou-head { max-width: none; }
+.foryou .empty-hint { margin: 0 auto; text-align: center; }
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field { color: var(--ink); font-weight: 600; font-size: 13px; }
+.field > input, .field > select { margin-top: 4px; font-weight: 400; }
+.pref-group { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.pref-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); }
+.pref-line { color: var(--ink); font-weight: 500; align-items: flex-start; white-space: normal; }
+.pref-line input { margin-top: 3px; }
+.pref-line em { color: var(--muted); font-style: normal; font-weight: 400; }
+.auth-card .primary { padding: 10px; font-size: 14px; }
