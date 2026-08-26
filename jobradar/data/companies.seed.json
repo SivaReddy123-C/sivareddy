@@ -1564,5 +1564,717 @@
     "token": "marshmallow",
     "verified": true,
     "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Mars",
+    "source": "workday",
+    "token": "mars",
+    "verified": true,
+    "params": {
+      "host": "mars.wd3.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Chewy",
+    "source": "workday",
+    "token": "chewy",
+    "verified": true,
+    "params": {
+      "host": "chewy.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Travelers",
+    "source": "workday",
+    "token": "travelers",
+    "verified": true,
+    "params": {
+      "host": "travelers.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "PNC",
+    "source": "workday",
+    "token": "pnc",
+    "verified": true,
+    "params": {
+      "host": "pnc.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Labcorp",
+    "source": "workday",
+    "token": "labcorp",
+    "verified": true,
+    "params": {
+      "host": "labcorp.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "McKesson",
+    "source": "workday",
+    "token": "mckesson",
+    "verified": true,
+    "params": {
+      "host": "mckesson.wd3.myworkdayjobs.com",
+      "site": "External_Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Albemarle",
+    "source": "workday",
+    "token": "albemarle",
+    "verified": true,
+    "params": {
+      "host": "albemarle.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Alcoa",
+    "source": "workday",
+    "token": "alcoa",
+    "verified": true,
+    "params": {
+      "host": "alcoa.wd5.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "ConocoPhillips",
+    "source": "workday",
+    "token": "conocophillips",
+    "verified": true,
+    "params": {
+      "host": "conocophillips.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Devon Energy",
+    "source": "workday",
+    "token": "devonenergy",
+    "verified": true,
+    "params": {
+      "host": "devonenergy.wd5.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Xcel Energy",
+    "source": "workday",
+    "token": "xcelenergy",
+    "verified": true,
+    "params": {
+      "host": "xcelenergy.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Leidos",
+    "source": "workday",
+    "token": "leidos",
+    "verified": true,
+    "params": {
+      "host": "leidos.wd5.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "CACI",
+    "source": "workday",
+    "token": "caci",
+    "verified": true,
+    "params": {
+      "host": "caci.wd1.myworkdayjobs.com",
+      "site": "External"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Parsons",
+    "source": "workday",
+    "token": "parsons",
+    "verified": true,
+    "params": {
+      "host": "parsons.wd5.myworkdayjobs.com",
+      "site": "Search"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "KLA",
+    "source": "workday",
+    "token": "kla",
+    "verified": true,
+    "params": {
+      "host": "kla.wd1.myworkdayjobs.com",
+      "site": "Search"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "NXP",
+    "source": "workday",
+    "token": "nxp",
+    "verified": true,
+    "params": {
+      "host": "nxp.wd3.myworkdayjobs.com",
+      "site": "Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cadence",
+    "source": "workday",
+    "token": "cadence",
+    "verified": true,
+    "params": {
+      "host": "cadence.wd1.myworkdayjobs.com",
+      "site": "External_Careers"
+    },
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "AB InBev",
+    "source": "greenhouse",
+    "token": "abinbev",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Union Pacific",
+    "source": "ashby",
+    "token": "union",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "MetLife",
+    "source": "lever",
+    "token": "metlife",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Charles Schwab",
+    "source": "greenhouse",
+    "token": "charles",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Advocate Health",
+    "source": "lever",
+    "token": "advocate",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Drata",
+    "source": "ashby",
+    "token": "drata",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Secureframe",
+    "source": "ashby",
+    "token": "secureframe",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Tines",
+    "source": "greenhouse",
+    "token": "tines",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Torq",
+    "source": "greenhouse",
+    "token": "torq",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Secureframe",
+    "source": "lever",
+    "token": "secureframe",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Orca Security",
+    "source": "greenhouse",
+    "token": "orcasecurity",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Orca Security",
+    "source": "greenhouse",
+    "token": "orca",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Orca Security",
+    "source": "ashby",
+    "token": "orca",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Sysdig",
+    "source": "lever",
+    "token": "sysdig",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "JFrog",
+    "source": "greenhouse",
+    "token": "jfrog",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Buildkite",
+    "source": "greenhouse",
+    "token": "buildkite",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Depot",
+    "source": "ashby",
+    "token": "depot",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Namespace",
+    "source": "ashby",
+    "token": "namespace",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Trigger.dev",
+    "source": "ashby",
+    "token": "triggerdev",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Temporal Technologies",
+    "source": "greenhouse",
+    "token": "temporaltechnologies",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Inngest",
+    "source": "ashby",
+    "token": "inngest",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Restate",
+    "source": "ashby",
+    "token": "restate",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Kestra",
+    "source": "ashby",
+    "token": "kestra",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Anyscale",
+    "source": "lever",
+    "token": "anyscale",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Anyscale",
+    "source": "ashby",
+    "token": "anyscale",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Comet ML",
+    "source": "greenhouse",
+    "token": "comet",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Galileo",
+    "source": "greenhouse",
+    "token": "galileo",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Neptune AI",
+    "source": "ashby",
+    "token": "neptune",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Braintrust",
+    "source": "ashby",
+    "token": "braintrust",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "LlamaIndex",
+    "source": "ashby",
+    "token": "llamaindex",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Vectara",
+    "source": "greenhouse",
+    "token": "vectara",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Character AI",
+    "source": "ashby",
+    "token": "character",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Reka",
+    "source": "ashby",
+    "token": "reka",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Luma AI",
+    "source": "ashby",
+    "token": "lumaai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Runway",
+    "source": "ashby",
+    "token": "runway",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Pika",
+    "source": "ashby",
+    "token": "pika",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Suno",
+    "source": "ashby",
+    "token": "suno",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Descript",
+    "source": "greenhouse",
+    "token": "descript",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Opus Clip",
+    "source": "ashby",
+    "token": "opusclip",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "HeyGen",
+    "source": "greenhouse",
+    "token": "heygen",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Opus Clip",
+    "source": "recruitee",
+    "token": "opus",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Hedra",
+    "source": "ashby",
+    "token": "hedra",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cresta",
+    "source": "greenhouse",
+    "token": "cresta",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Observe.AI",
+    "source": "greenhouse",
+    "token": "observeai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Intercom",
+    "source": "greenhouse",
+    "token": "intercom",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Udio",
+    "source": "greenhouse",
+    "token": "udio",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Gorgias",
+    "source": "ashby",
+    "token": "gorgias",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Klaviyo",
+    "source": "greenhouse",
+    "token": "klaviyo",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Braze",
+    "source": "greenhouse",
+    "token": "braze",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Attentive",
+    "source": "greenhouse",
+    "token": "attentive",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Iterable",
+    "source": "greenhouse",
+    "token": "iterable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Customer.io",
+    "source": "greenhouse",
+    "token": "customerio",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Iterable",
+    "source": "ashby",
+    "token": "iterable",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Postscript",
+    "source": "greenhouse",
+    "token": "postscript",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Bland AI",
+    "source": "ashby",
+    "token": "bland",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Vapi",
+    "source": "ashby",
+    "token": "vapi",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Retell AI",
+    "source": "ashby",
+    "token": "retell-ai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Deepgram",
+    "source": "ashby",
+    "token": "deepgram",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "AssemblyAI",
+    "source": "greenhouse",
+    "token": "assemblyai",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Speechmatics",
+    "source": "greenhouse",
+    "token": "speechmatics",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Rev",
+    "source": "ashby",
+    "token": "rev",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Otter",
+    "source": "greenhouse",
+    "token": "otter",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "TripActions",
+    "source": "greenhouse",
+    "token": "tripactions",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Expensify",
+    "source": "ashby",
+    "token": "expensify",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Pleo",
+    "source": "ashby",
+    "token": "pleo",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Moss",
+    "source": "ashby",
+    "token": "moss",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Wise",
+    "source": "greenhouse",
+    "token": "wise",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Monzo",
+    "source": "greenhouse",
+    "token": "monzo",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Vivid Money",
+    "source": "ashby",
+    "token": "vivid",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Lunar",
+    "source": "ashby",
+    "token": "lunar",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Truelayer",
+    "source": "greenhouse",
+    "token": "truelayer",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Plaid Europe",
+    "source": "ashby",
+    "token": "plaid",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Thought Machine",
+    "source": "ashby",
+    "token": "thought-machine",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Ghost",
+    "source": "greenhouse",
+    "token": "ghost",
+    "verified": true,
+    "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Ghost",
+    "source": "ashby",
+    "token": "ghost",
+    "verified": true,
+    "note": "discovered 2026-08-26"
   }
 ]
