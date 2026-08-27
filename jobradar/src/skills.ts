@@ -47,7 +47,9 @@ const DICTIONARY: Record<string, string[]> = {
   sales: ["account executive", "sales", "business development", "quota"],
   marketing: ["marketing", "seo", "demand generation", "brand"],
   recruiting: ["recruit", "talent acquisition", "sourcer"],
-  finance: ["accounting", "financial analyst", "controller", "audit", "tax"],
+  // "audit" must not fire on "night audit", which is a hotel front-office
+  // shift, not an accounting role.
+  finance: ["accounting", "financial analyst", "controller", "(?<!night )audit", "tax"],
   hr: ["human resources", "people operations", "\\bhr\\b"],
   support: ["customer support", "technical support", "help desk"],
   operations: ["operations manager", "supply chain", "logistics", "warehouse associate"],
@@ -56,6 +58,23 @@ const DICTIONARY: Record<string, string[]> = {
   consulting: ["consultant", "advisory"],
   healthcare: ["nurse", "clinical", "pharmacy", "patient care", "medical"],
   legal: ["attorney", "paralegal", "legal counsel"],
+  // Hospitality and travel. Absent until now, which meant a candidate whose
+  // whole background is hotel operations and hotel software matched nothing in
+  // the vertical they actually come from - the postings carried no tag to
+  // match against, so ranking could only see them as untagged noise.
+  hospitality: ["hospitality", "hotel", "lodging", "resort", "guest experience",
+    "front office", "front desk", "concierge", "housekeeping", "night audit",
+    "innkeep", "food and beverage", "\\bf&b\\b", "banquet", "catering"],
+  travel: ["travel tech", "\\bota\\b", "online travel", "tour operator",
+    "destination management", "airline", "cruise", "itinerary"],
+  "property-management": ["property management system", "\\bpms\\b",
+    "channel manager", "central reservation", "\\bcrs\\b", "booking engine",
+    "property manager", "short-?term rental", "vacation rental"],
+  "revenue-management": ["revenue management", "\\brms\\b", "yield management",
+    "\\brevpar\\b", "\\badr\\b", "occupancy forecast", "rate parity",
+    "distribution strategy", "pricing analyst"],
+  restaurant: ["restaurant", "point of sale", "\\bpos\\b", "kitchen display",
+    "quick service", "\\bqsr\\b", "menu management"],
 };
 
 const COMPILED: [string, RegExp][] = Object.entries(DICTIONARY).map(

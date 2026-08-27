@@ -2639,5 +2639,437 @@
   },
   {
     "name": "CapRover"
+  },
+  {
+    "name": "Cloudbeds"
+  },
+  {
+    "name": "Mews"
+  },
+  {
+    "name": "Apaleo"
+  },
+  {
+    "name": "Hostaway"
+  },
+  {
+    "name": "Guesty"
+  },
+  {
+    "name": "RoomRaccoon"
+  },
+  {
+    "name": "Stayntouch"
+  },
+  {
+    "name": "HotelKey"
+  },
+  {
+    "name": "Duetto"
+  },
+  {
+    "name": "Revinate"
+  },
+  {
+    "name": "Lighthouse"
+  },
+  {
+    "name": "SiteMinder"
+  },
+  {
+    "name": "Canary Technologies"
+  },
+  {
+    "name": "Actabl"
+  },
+  {
+    "name": "Sojern"
+  },
+  {
+    "name": "Cendyn"
+  },
+  {
+    "name": "Shiji Group"
+  },
+  {
+    "name": "Agilysys"
+  },
+  {
+    "name": "IDeaS Revenue Solutions"
+  },
+  {
+    "name": "Atomize"
+  },
+  {
+    "name": "Operto"
+  },
+  {
+    "name": "Akia"
+  },
+  {
+    "name": "Optii Solutions"
+  },
+  {
+    "name": "Beekeeper"
+  },
+  {
+    "name": "Triptease"
+  },
+  {
+    "name": "Hotelchamp"
+  },
+  {
+    "name": "Lodgify"
+  },
+  {
+    "name": "Hostfully"
+  },
+  {
+    "name": "Turno"
+  },
+  {
+    "name": "Inhabit IQ"
+  },
+  {
+    "name": "Profitroom"
+  },
+  {
+    "name": "InnQuest"
+  },
+  {
+    "name": "Little Hotelier"
+  },
+  {
+    "name": "Oaky"
+  },
+  {
+    "name": "Flexkeeping"
+  },
+  {
+    "name": "Hotel Effectiveness"
+  },
+  {
+    "name": "Knowcross"
+  },
+  {
+    "name": "ALICE"
+  },
+  {
+    "name": "Volara"
+  },
+  {
+    "name": "Zingle"
+  },
+  {
+    "name": "Whistle"
+  },
+  {
+    "name": "Runtriz"
+  },
+  {
+    "name": "Intelity"
+  },
+  {
+    "name": "Nonius"
+  },
+  {
+    "name": "Hotelbeds"
+  },
+  {
+    "name": "Sonder"
+  },
+  {
+    "name": "Vacasa"
+  },
+  {
+    "name": "Kasa Living"
+  },
+  {
+    "name": "Placemakr"
+  },
+  {
+    "name": "Landing"
+  },
+  {
+    "name": "Evolve Vacation Rental"
+  },
+  {
+    "name": "AvantStay"
+  },
+  {
+    "name": "Boom"
+  },
+  {
+    "name": "Wanderjaunt"
+  },
+  {
+    "name": "Blueground"
+  },
+  {
+    "name": "Habyt"
+  },
+  {
+    "name": "Common Living"
+  },
+  {
+    "name": "Sentral"
+  },
+  {
+    "name": "Booking.com"
+  },
+  {
+    "name": "Expedia Group"
+  },
+  {
+    "name": "TripAdvisor"
+  },
+  {
+    "name": "Hopper"
+  },
+  {
+    "name": "KAYAK"
+  },
+  {
+    "name": "GetYourGuide"
+  },
+  {
+    "name": "Klook"
+  },
+  {
+    "name": "Omio"
+  },
+  {
+    "name": "TravelPerk"
+  },
+  {
+    "name": "Hostelworld"
+  },
+  {
+    "name": "Skyscanner"
+  },
+  {
+    "name": "Trivago"
+  },
+  {
+    "name": "Despegar"
+  },
+  {
+    "name": "MakeMyTrip"
+  },
+  {
+    "name": "Yatra"
+  },
+  {
+    "name": "Cleartrip"
+  },
+  {
+    "name": "Ixigo"
+  },
+  {
+    "name": "Agoda"
+  },
+  {
+    "name": "Traveloka"
+  },
+  {
+    "name": "Mondee"
+  },
+  {
+    "name": "Kiwi.com"
+  },
+  {
+    "name": "Rome2Rio"
+  },
+  {
+    "name": "Civitatis"
+  },
+  {
+    "name": "Musement"
+  },
+  {
+    "name": "Headout"
+  },
+  {
+    "name": "Tiqets"
+  },
+  {
+    "name": "Holibob"
+  },
+  {
+    "name": "Travelport"
+  },
+  {
+    "name": "Amadeus"
+  },
+  {
+    "name": "Sabre"
+  },
+  {
+    "name": "Hotelplan"
+  },
+  {
+    "name": "TUI Group"
+  },
+  {
+    "name": "Lastminute"
+  },
+  {
+    "name": "Toast"
+  },
+  {
+    "name": "SevenRooms"
+  },
+  {
+    "name": "Tock"
+  },
+  {
+    "name": "Resy"
+  },
+  {
+    "name": "OpenTable"
+  },
+  {
+    "name": "TouchBistro"
+  },
+  {
+    "name": "Lightspeed Commerce"
+  },
+  {
+    "name": "Olo"
+  },
+  {
+    "name": "Popmenu"
+  },
+  {
+    "name": "Owner.com"
+  },
+  {
+    "name": "ChowNow"
+  },
+  {
+    "name": "Wisely"
+  },
+  {
+    "name": "Nory"
+  },
+  {
+    "name": "Tenzo"
+  },
+  {
+    "name": "MarketMan"
+  },
+  {
+    "name": "Restaurant365"
+  },
+  {
+    "name": "IHG Hotels & Resorts"
+  },
+  {
+    "name": "Accor"
+  },
+  {
+    "name": "Wyndham Hotels & Resorts"
+  },
+  {
+    "name": "Choice Hotels"
+  },
+  {
+    "name": "Four Seasons"
+  },
+  {
+    "name": "Radisson Hotel Group"
+  },
+  {
+    "name": "Omni Hotels"
+  },
+  {
+    "name": "Loews Hotels"
+  },
+  {
+    "name": "MGM Resorts"
+  },
+  {
+    "name": "Caesars Entertainment"
+  },
+  {
+    "name": "Wynn Resorts"
+  },
+  {
+    "name": "Hard Rock International"
+  },
+  {
+    "name": "citizenM"
+  },
+  {
+    "name": "Whitbread"
+  },
+  {
+    "name": "Melia Hotels"
+  },
+  {
+    "name": "NH Hotel Group"
+  },
+  {
+    "name": "Scandic Hotels"
+  },
+  {
+    "name": "Motel One"
+  },
+  {
+    "name": "Soho House"
+  },
+  {
+    "name": "Selina"
+  },
+  {
+    "name": "Kempinski"
+  },
+  {
+    "name": "Mandarin Oriental"
+  },
+  {
+    "name": "Rosewood Hotel Group"
+  },
+  {
+    "name": "Aman"
+  },
+  {
+    "name": "Belmond"
+  },
+  {
+    "name": "Leonardo Hotels"
+  },
+  {
+    "name": "Royal Caribbean Group"
+  },
+  {
+    "name": "Carnival Corporation"
+  },
+  {
+    "name": "Norwegian Cruise Line"
+  },
+  {
+    "name": "Viking Cruises"
+  },
+  {
+    "name": "Aramark"
+  },
+  {
+    "name": "Compass Group"
+  },
+  {
+    "name": "Sodexo"
+  },
+  {
+    "name": "Delaware North"
+  },
+  {
+    "name": "Levy Restaurants"
+  },
+  {
+    "name": "Eventbrite"
+  },
+  {
+    "name": "Cvent"
   }
 ]
