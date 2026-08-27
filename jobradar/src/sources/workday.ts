@@ -39,19 +39,36 @@ export const workday: SourceAdapter = {
     const endpoint = `https://${host}/wday/cxs/${tenant}/${site}/jobs`;
     const now = new Date();
     const jobs: Job[] = [];
+    // Hard wall-clock budget per board. Deep boards are welcome; a board that
+    // takes four minutes is starving the other three hundred.
+    const deadline = Date.now() + 180000;
     // Workday only reports `total` reliably on the FIRST page - later pages
     // often return 0/absent. Capture it once; absent means "unknown, keep
     // paging until a short page or the cap".
     let knownTotal = Number.POSITIVE_INFINITY;
 
     for (let offset = 0; offset < MAX_JOBS; offset += PAGE) {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "content-type": "application/json", accept: "application/json" },
-        body: JSON.stringify({ appliedFacets: {}, limit: PAGE, offset, searchText: "" }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status} from ${endpoint}`);
-      const data = (await res.json()) as { jobPostings?: WdPosting[]; total?: number };
+      if (Date.now() > deadline) {
+        console.log(`  note: ${company.name} hit the 3-minute board budget at ${jobs.length} jobs`);
+        break;
+      }
+      // A bare fetch has no timeout: one unresponsive tenant would hang the
+      // whole nightly run indefinitely, which is exactly what happened.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 20000);
+      let data: { jobPostings?: WdPosting[]; total?: number };
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          signal: ctrl.signal,
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ appliedFacets: {}, limit: PAGE, offset, searchText: "" }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status} from ${endpoint}`);
+        data = (await res.json()) as { jobPostings?: WdPosting[]; total?: number };
+      } finally {
+        clearTimeout(timer);
+      }
       if (offset === 0 && typeof data.total === "number" && data.total > 0) knownTotal = data.total;
       const page = data.jobPostings ?? [];
       for (const p of page) {
