@@ -154,14 +154,70 @@ export function rankFeed(
 }
 
 /** Skills and locations a resume already states - used to prefill the profile. */
+/**
+ * Domain vocabulary, mirroring the canonical tags the pipeline attaches to
+ * postings (jobradar/src/skills.ts). A profile and a posting have to speak the
+ * same language or ranking cannot match them, and parity is asserted in tests.
+ *
+ * This exists because a Skills section lists tools, not fields. Someone whose
+ * whole career is hotel operations writes "React, Postgres" under Skills and
+ * describes the hotels under Experience - so reading only the Skills line
+ * produced a profile of a generic web developer and buried the one vertical
+ * they were actually qualified for.
+ */
+const DOMAIN_TAGS: Record<string, RegExp> = {
+  hospitality: /hospitality|hotel|lodging|resort|guest experience|front office|front desk|concierge|housekeeping|night audit|food and beverage|banquet|catering/i,
+  travel: /travel tech|\bota\b|online travel|tour operator|airline|cruise|itinerary/i,
+  "property-management": /property management system|\bpms\b|channel manager|central reservation|\bcrs\b|booking engine|short-?term rental|vacation rental/i,
+  "revenue-management": /revenue management|yield management|\brevpar\b|\badr\b|occupancy|rate parity|distribution strategy/i,
+  restaurant: /restaurant|point of sale|\bpos\b|kitchen display|quick service|\bqsr\b|menu management/i,
+  healthcare: /nurse|clinical|patient care|pharmacy|\behr\b/i,
+  fintech: /payments|fintech|ledger|underwriting|\bkyc\b|fraud detection/i,
+  logistics: /logistics|supply chain|freight|warehouse|fulfilment|fulfillment/i,
+  ecommerce: /e-?commerce|marketplace|storefront|checkout/i,
+  education: /edtech|curriculum|\blms\b|student outcomes/i,
+};
+
+/**
+ * Everything the resume says about what this person has actually worked on -
+ * roles, employers, project names and bullets, and the summary. The Skills
+ * section is deliberately excluded here; it is read separately as literal
+ * tools.
+ */
+function narrativeText(resume: {
+  summary?: string;
+  experience?: { company?: string; role?: string; bullets?: string[] }[];
+  projects?: { name?: string; bullets?: string[] }[];
+}): string {
+  const parts: string[] = [resume.summary ?? ""];
+  for (const e of resume.experience ?? []) {
+    parts.push(e.company ?? "", e.role ?? "", ...(e.bullets ?? []));
+  }
+  for (const p of resume.projects ?? []) {
+    parts.push(p.name ?? "", ...(p.bullets ?? []));
+  }
+  return parts.join(" ");
+}
+
+/** Canonical domain tags the resume's narrative supports. */
+export function domainsFromResume(resume: Parameters<typeof narrativeText>[0]): string[] {
+  const text = narrativeText(resume);
+  return Object.entries(DOMAIN_TAGS).filter(([, re]) => re.test(text)).map(([tag]) => tag);
+}
+
 export function profileFromResume(resume: {
   skills: { items: string }[];
   basics: { location: string };
+  summary?: string;
+  experience?: { company?: string; role?: string; bullets?: string[] }[];
+  projects?: { name?: string; bullets?: string[] }[];
 }): { skills: string[]; locations: string[] } {
-  const skills = resume.skills
+  const listed = resume.skills
     .flatMap((g) => g.items.split(","))
     .map((s) => s.trim().toLowerCase())
     .filter((s) => s.length >= 2);
+  // Tools from the Skills section, plus the fields the experience demonstrates.
+  const skills = [...listed, ...domainsFromResume(resume)];
   const locations = resume.basics.location
     .split(/[·,;|]/)
     .map((s) => s.trim().toLowerCase())

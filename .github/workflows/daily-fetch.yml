@@ -43,6 +43,14 @@ jobs:
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run sync
+      # Advisory, never fatal: it reports which of each user's skills our
+      # inventory barely serves. A search product that cannot say "you are
+      # asking for something we hardly have" leaves the user to work it out.
+      - name: Report coverage gaps
+        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
+        continue-on-error: true
+        working-directory: jobradar
+        run: npm run coverage
       - name: Rank user matches
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar

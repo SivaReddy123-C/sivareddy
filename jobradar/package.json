@@ -20,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
     "sponsors": "tsx src/cli.ts sponsors",
-    "sponsorpage": "tsx src/cli.ts sponsorpage"
+    "sponsorpage": "tsx src/cli.ts sponsorpage",
+    "coverage": "tsx src/cli.ts coverage"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

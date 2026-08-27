@@ -185,6 +185,22 @@ async function discoverCmd(): Promise<void> {
   await discover(join(DATA, "discovery.names.json"), join(DATA, "companies.seed.json"));
 }
 
+/**
+ * `coverage`: report, per user, which of their skills our inventory barely
+ * serves. Advisory - it never fails the run, it just refuses to let a gap stay
+ * invisible until the user finds it themselves.
+ */
+async function coverageCmd(): Promise<void> {
+  const { makeClient } = await import("./sync.js");
+  const { coverage, format } = await import("./coverage.js");
+  const feedPath = join(ROOT, "data", "feed.json");
+  if (!existsSync(feedPath)) throw new Error("no feed.json yet - run `npm run feed` first");
+  const feed = JSON.parse(readFileSync(feedPath, "utf8")) as { jobs: [] };
+  const reports = await coverage(makeClient(), feed);
+  if (reports.length === 0) { console.log("coverage: no profiles yet"); return; }
+  for (const r of reports) console.log(format(r));
+}
+
 /** `digest`: email each opted-in user their ranked list for today. */
 async function digestCmd(): Promise<void> {
   const { makeClient } = await import("./sync.js");
@@ -350,7 +366,8 @@ switch (cmd) {
   case "digest": await digestCmd(); break;
   case "sponsors": await sponsorsCmd(); break;
   case "sponsorpage": await sponsorPageCmd(); break;
+  case "coverage": await coverageCmd(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest|sponsors|sponsorpage> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest|sponsors|sponsorpage|coverage> [--india | --usa]");
     process.exit(1);
 }

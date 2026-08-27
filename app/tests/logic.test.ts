@@ -281,3 +281,76 @@ test("sponsorsOnly filter keeps only employers with federal filings", async () =
   assert.equal(out.length, 1);
   assert.equal(out[0]!.key, "b");
 });
+
+const SIVA = {
+  basics: { location: "Open to relocation · India · UAE · Singapore" },
+  summary: "Founder building lodging software for independent hotels.",
+  experience: [
+    {
+      company: "Lodginos",
+      role: "Founder",
+      bullets: [
+        "Building a property management system for independent hotels.",
+        "Front office, housekeeping and night audit workflows in one product.",
+      ],
+    },
+    { company: "Infosys", role: "Systems Engineer", bullets: ["Java and SQL on client platforms."] },
+  ],
+  projects: [{ name: "arivo", bullets: ["Guest experience and booking engine for small resorts."] }],
+  skills: [{ items: "TypeScript, React, Postgres, Supabase" }],
+};
+
+test("profileFromResume keeps the tools listed under Skills", async () => {
+  const { profileFromResume } = await import("../src/lib/fit.js");
+  const p = profileFromResume(SIVA);
+  for (const tool of ["typescript", "react", "postgres", "supabase"]) {
+    assert.ok(p.skills.includes(tool), `missing ${tool}`);
+  }
+});
+
+test("profileFromResume adds the domain the experience demonstrates", async () => {
+  // The bug this covers: the Skills line said React and Postgres, so the
+  // profile described a generic web developer and the whole hospitality
+  // vertical ranked as irrelevant to someone who has only ever built for it.
+  const { profileFromResume } = await import("../src/lib/fit.js");
+  const p = profileFromResume(SIVA);
+  assert.ok(p.skills.includes("hospitality"), `got: ${p.skills.join(", ")}`);
+  assert.ok(p.skills.includes("property-management"), `got: ${p.skills.join(", ")}`);
+});
+
+test("profileFromResume does not invent domains the resume never mentions", async () => {
+  const { profileFromResume } = await import("../src/lib/fit.js");
+  const p = profileFromResume({
+    basics: { location: "Berlin" },
+    summary: "Backend engineer.",
+    experience: [{ company: "Acme", role: "Engineer", bullets: ["Go services on Kubernetes."] }],
+    projects: [],
+    skills: [{ items: "Go, Kubernetes" }],
+  });
+  for (const t of ["hospitality", "travel", "healthcare", "restaurant"]) {
+    assert.ok(!p.skills.includes(t), `${t} should not be present, got: ${p.skills.join(", ")}`);
+  }
+});
+
+test("profileFromResume works when experience and projects are absent", async () => {
+  const { profileFromResume } = await import("../src/lib/fit.js");
+  const p = profileFromResume({ basics: { location: "Delhi" }, skills: [{ items: "Python" }] });
+  assert.ok(p.skills.includes("python"));
+});
+
+test("app domain tags exist as canonical tags in the pipeline dictionary", async () => {
+  // Profile tags and posting tags must come from one vocabulary. If the
+  // pipeline renames a family and the app does not, ranking silently stops
+  // matching that domain for everyone who has it.
+  const { readFileSync } = await import("node:fs");
+  const dict = readFileSync(new URL("../../jobradar/src/skills.ts", import.meta.url), "utf8");
+  const { profileFromResume } = await import("../src/lib/fit.js");
+  const domains = profileFromResume(SIVA).skills.filter((s) => s.includes("-") || [
+    "hospitality", "travel", "restaurant", "healthcare",
+  ].includes(s));
+  assert.ok(domains.length > 0, "expected at least one domain tag to check");
+  for (const tag of domains) {
+    const key = tag.includes("-") ? `"${tag}"` : `${tag}:`;
+    assert.ok(dict.includes(key), `pipeline dictionary has no canonical tag ${tag}`);
+  }
+});
