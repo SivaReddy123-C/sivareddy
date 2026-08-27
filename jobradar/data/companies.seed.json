@@ -2276,5 +2276,250 @@
     "token": "ghost",
     "verified": true,
     "note": "discovered 2026-08-26"
+  },
+  {
+    "name": "Cloudbeds",
+    "source": "greenhouse",
+    "token": "cloudbeds",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Apaleo",
+    "source": "greenhouse",
+    "token": "apaleo",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Hostaway",
+    "source": "recruitee",
+    "token": "hostaway",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Lighthouse",
+    "source": "greenhouse",
+    "token": "lighthouse",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Revinate",
+    "source": "lever",
+    "token": "revinate",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "SiteMinder",
+    "source": "ashby",
+    "token": "siteminder",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Canary Technologies",
+    "source": "lever",
+    "token": "canarytechnologies",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Agilysys",
+    "source": "greenhouse",
+    "token": "agilysys",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Triptease",
+    "source": "workable",
+    "token": "triptease",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Hotelchamp",
+    "source": "recruitee",
+    "token": "hotelchamp",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Lodgify",
+    "source": "lever",
+    "token": "lodgify",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Vacasa",
+    "source": "greenhouse",
+    "token": "vacasa",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Placemakr",
+    "source": "lever",
+    "token": "placemakr",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Evolve Vacation Rental",
+    "source": "greenhouse",
+    "token": "evolvevacationrental",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Evolve Vacation Rental",
+    "source": "ashby",
+    "token": "evolve",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Boom",
+    "source": "ashby",
+    "token": "boom",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "KAYAK",
+    "source": "greenhouse",
+    "token": "kayak",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Hopper",
+    "source": "ashby",
+    "token": "hopper",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "TripAdvisor",
+    "source": "greenhouse",
+    "token": "tripadvisor",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "GetYourGuide",
+    "source": "greenhouse",
+    "token": "getyourguide",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "KAYAK",
+    "source": "ashby",
+    "token": "kayak",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Skyscanner",
+    "source": "greenhouse",
+    "token": "skyscanner",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Trivago",
+    "source": "greenhouse",
+    "token": "trivago",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Despegar",
+    "source": "lever",
+    "token": "despegar",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Agoda",
+    "source": "greenhouse",
+    "token": "agoda",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Toast",
+    "source": "greenhouse",
+    "token": "toast",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "OpenTable",
+    "source": "greenhouse",
+    "token": "opentable",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Lightspeed Commerce",
+    "source": "ashby",
+    "token": "lightspeed",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Olo",
+    "source": "lever",
+    "token": "olo",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "ChowNow",
+    "source": "lever",
+    "token": "chownow",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Nory",
+    "source": "ashby",
+    "token": "nory",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Restaurant365",
+    "source": "lever",
+    "token": "restaurant365",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Four Seasons",
+    "source": "greenhouse",
+    "token": "fourseasons",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Omni Hotels",
+    "source": "ashby",
+    "token": "omni",
+    "verified": true,
+    "note": "discovered 2026-08-27"
+  },
+  {
+    "name": "Kasa Living",
+    "source": "greenhouse",
+    "token": "kasa",
+    "verified": true,
+    "note": "discovered 2026-08-27"
   }
 ]
