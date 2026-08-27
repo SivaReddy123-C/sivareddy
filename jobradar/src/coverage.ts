@@ -76,11 +76,44 @@ export async function coverage(
   });
 }
 
+/**
+ * Where the work this user wants actually is.
+ *
+ * The skill report says "hospitality is thin for you". It does not say the
+ * thing that would help: there are 1,428 hospitality jobs in the feed and 71
+ * of them are in your four countries, because hospitality technology hires in
+ * the US, Thailand, the UK and Germany. Knowing a gap exists is useless
+ * without knowing where it closes.
+ */
+export function countriesFor(
+  skills: string[],
+  targetCountries: string[],
+  postings: { tags: string[]; title: string; country: string | null }[],
+): { country: string; postings: number; targeted: boolean }[] {
+  const needles = skills.map((s) => s.toLowerCase().trim()).filter(Boolean);
+  const counts = new Map<string, number>();
+  for (const p of postings) {
+    if (!p.country) continue;
+    const hit = needles.some((n) => p.tags.includes(n) || p.title.toLowerCase().includes(n));
+    if (!hit) continue;
+    counts.set(p.country, (counts.get(p.country) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([country, n]) => ({ country, postings: n, targeted: targetCountries.includes(country) }))
+    .sort((a, b) => b.postings - a.postings);
+}
+
 /** One user's report, as a line-per-gap block for the run log. */
-export function format(r: CoverageReport): string {
+export function format(r: CoverageReport, countries: ReturnType<typeof countriesFor> = []): string {
   const lines = [`coverage for ${r.userId.slice(0, 8)}: ${r.covered.length} skills served, ${r.gaps.length} thin`];
   for (const g of r.gaps.slice(0, 12)) {
     lines.push(`  THIN  ${g.skill.padEnd(24)} ${String(g.inTargetCountries).padStart(5)} in target countries (${g.postings} total)`);
+  }
+  const missed = countries.filter((c) => !c.targeted).slice(0, 6);
+  if (missed.length > 0) {
+    const reachable = countries.filter((c) => c.targeted).reduce((a, c) => a + c.postings, 0);
+    lines.push(`  reachable in the countries on this profile: ${reachable}`);
+    lines.push(`  most of this work is elsewhere: ${missed.map((c) => `${c.country} ${c.postings}`).join(", ")}`);
   }
   return lines.join("\n");
 }

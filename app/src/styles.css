@@ -423,3 +423,14 @@ input:focus, select:focus, textarea:focus {
 }
 .hint-dismiss:hover { color: #7a2e0e; }
 .tag-nofiling { color: #b54708; border-color: #fedf89; background: #fffcf5; }
+
+/* A failed save is lost work, not a notice - it gets the loudest treatment
+   in the app and sits above everything else. */
+.save-banner {
+  background: #7f1d1d;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  border-bottom: 2px solid #fca5a5;
+}

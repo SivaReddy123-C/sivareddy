@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
-import { exportJson, importJson, loadState, saveState } from "./lib/storage.js";
+import { exportJson, importJson, lastStorageError, loadState, saveState } from "./lib/storage.js";
 import type { AppState } from "./lib/types.js";
 import { JobsPage } from "./jobs/JobsPage.js";
 import { ApplyKitPage } from "./kit/ApplyKitPage.js";
@@ -17,9 +17,11 @@ const ForYouPage = lazy(() =>
 export function App() {
   const [state, setState] = useState<AppState>(() => loadState());
   const [tab, setTab] = useState<Tab>("resume");
+  const [saveError, setSaveError] = useState("");
 
-  // Persist on every change - the browser is the database.
-  useEffect(() => saveState(state), [state]);
+  // Persist on every change - the browser is the database, so a failed write
+  // is lost work, not a hiccup. It used to be swallowed silently.
+  useEffect(() => { setSaveError(saveState(state) ? "" : lastStorageError); }, [state]);
 
   const accepted = useMemo(
     () => state.applications.some((a) => a.status === "accepted"),
@@ -47,6 +49,11 @@ export function App() {
 
   return (
     <div className="app">
+      {saveError && (
+        <div className="save-banner no-print" role="alert">
+          <strong>Not saved.</strong> {saveError}
+        </div>
+      )}
       <header className="topbar no-print">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true" />

@@ -61,7 +61,8 @@ async function probeWorkday(tenant: string): Promise<{ host: string; site: strin
         const data = (await res.json()) as { jobPostings?: unknown[]; total?: number };
         if ((data.jobPostings?.length ?? 0) > 0) return { host, site };
       } catch {
-        // wrong host or site - keep trying
+        // silent-ok: probing candidates - a wrong host or site is the
+        // expected outcome for most guesses, not an error to report.
       } finally {
         clearTimeout(t);
       }

@@ -193,7 +193,7 @@ async function discoverCmd(): Promise<void> {
  */
 async function coverageCmd(): Promise<void> {
   const { makeClient } = await import("./sync.js");
-  const { coverage, format } = await import("./coverage.js");
+  const { coverage, countriesFor, format } = await import("./coverage.js");
   const shardDir = join(ROOT, "data", "feed");
   const indexPath = join(shardDir, "index.json");
   if (!existsSync(indexPath)) throw new Error("no feed shards yet - run `npm run feed` first");
@@ -206,7 +206,20 @@ async function coverageCmd(): Promise<void> {
   const feed = { jobs };
   const reports = await coverage(makeClient(), feed);
   if (reports.length === 0) { console.log("coverage: no profiles yet"); return; }
-  for (const r of reports) console.log(format(r));
+  const { data: profiles } = await makeClient().from("jr_user_profiles").select("user_id, skills, countries");
+  const byUser = new Map((profiles ?? []).map((p) => {
+    const r = p as { user_id: string; skills: string[] | null; countries: string[] | null };
+    return [r.user_id, r] as const;
+  }));
+  const postings = feed.jobs as unknown as { tags?: string[]; title: string; country: string | null }[];
+  for (const r of reports) {
+    const p = byUser.get(r.userId);
+    const where = p
+      ? countriesFor(p.skills ?? [], p.countries ?? [],
+          postings.map((j) => ({ tags: (j.tags ?? []).map((t) => t.toLowerCase()), title: j.title, country: j.country })))
+      : [];
+    console.log(format(r, where));
+  }
 }
 
 /** `digest`: email each opted-in user their ranked list for today. */

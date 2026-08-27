@@ -191,7 +191,8 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
         event: "applied", source: "jobradar",
       });
     } catch {
-      // The local tracker entry stands even if the cloud write hiccups.
+      // silent-ok: the local tracker entry is already written and is the
+      // record of truth; the cloud copy is a convenience.
     }
   }
 

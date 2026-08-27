@@ -256,7 +256,11 @@ export async function matchCompanies(db: SupabaseClient): Promise<{ matched: num
   for (let from = 0; ; from += 1000) {
     const { data, error: sErr } = await db
       .from("jr_sponsors")
-      .select("employer_norm, employer_name, fiscal_year, initial_approval, continuing_approval, initial_denial, continuing_denial")
+      // city/state are declared on SponsorRow, so they are selected. A column
+      // a row type promises and the query omits is undefined at runtime while
+      // TypeScript still believes the type - which is how the daily list
+      // collapsed to three jobs.
+      .select("employer_norm, employer_name, fiscal_year, initial_approval, continuing_approval, initial_denial, continuing_denial, city, state")
       .order("employer_norm")
       .range(from, from + 999);
     if (sErr) throw new Error(`sponsor fetch failed: ${sErr.message}`);

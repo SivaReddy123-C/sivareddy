@@ -156,7 +156,8 @@ export function loadFeedSWR(onFresh: (feed: Feed) => void, countries?: string[])
       const fresh = await loadFeed(true, countries);
       if (!cached || fresh.generatedAt !== cached.feed.generatedAt) onFresh(fresh);
     } catch {
-      // Offline or GitHub hiccup - the cached feed still works.
+      // silent-ok: background revalidation. The cached feed is already on
+      // screen, and a foreground load reports its own failures.
     }
   })();
   return cached?.feed ?? null;

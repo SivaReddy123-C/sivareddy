@@ -24,7 +24,8 @@ export function setApiKey(key: string): void {
     if (key) localStorage.setItem(KEY_STORAGE, key.trim());
     else localStorage.removeItem(KEY_STORAGE);
   } catch {
-    // Private mode - key just won't persist across reloads.
+    // silent-ok: private mode. The key still works for this session; only
+    // persistence is lost, and re-entering it is trivial.
   }
 }
 

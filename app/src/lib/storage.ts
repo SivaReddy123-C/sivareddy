@@ -72,11 +72,37 @@ export function loadState(): AppState {
   }
 }
 
-export function saveState(state: AppState): void {
+/**
+ * Why a save last failed, or "" when the last save succeeded.
+ *
+ * This used to be swallowed with a comment saying the session still works in
+ * memory. It does - until the tab closes, and then the resume someone spent an
+ * hour on is gone with no warning that it was never saved. Storage genuinely
+ * does fill up: a 24MB feed cache was competing for the same quota.
+ */
+export let lastStorageError = "";
+
+/** Listeners notified when a save fails, so the UI can say so. */
+const saveFailureListeners = new Set<(message: string) => void>();
+
+export function onSaveFailure(fn: (message: string) => void): () => void {
+  saveFailureListeners.add(fn);
+  return () => saveFailureListeners.delete(fn);
+}
+
+export function saveState(state: AppState): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
-  } catch {
-    // Storage full or blocked (private mode) - the session still works in memory.
+    lastStorageError = "";
+    return true;
+  } catch (err) {
+    const quota = (err as Error)?.name === "QuotaExceededError";
+    lastStorageError = quota
+      ? "Your browser's storage is full, so this change was NOT saved. Export your data "
+        + "(Download .json) before closing this tab."
+      : `This change was NOT saved: ${(err as Error).message}`;
+    for (const fn of saveFailureListeners) fn(lastStorageError);
+    return false;
   }
 }
 
