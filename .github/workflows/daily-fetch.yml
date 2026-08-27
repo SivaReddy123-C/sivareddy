@@ -1,8 +1,10 @@
 name: Daily fetch
 
 on:
-  schedule:
-    - cron: "17 3 * * *"   # 03:17 UTC daily; offset minute avoids the top-of-hour rush
+  # Paused 2026-08-27 at Siva's request - the project is stopped.
+  # Uncomment these two lines to resume the nightly run.
+  # schedule:
+    #   - cron:  "17 3 * * *"   # 03:17 UTC daily; offset minute avoids the top-of-hour rush
   workflow_dispatch: {}     # manual "Run workflow" button
 
 permissions:

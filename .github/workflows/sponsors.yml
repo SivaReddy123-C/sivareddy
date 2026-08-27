@@ -3,8 +3,10 @@ name: Sponsorship data
 # Federal filings change quarterly at most, so this runs monthly rather than
 # daily - and on demand when a new fiscal year file lands.
 on:
-  schedule:
-    - cron: "23 4 1 * *"
+  # Paused 2026-08-27 at Siva's request - the project is stopped.
+  # Uncomment these two lines to resume the nightly run.
+  # schedule:
+    #   - cron:  "23 4 1 * *"
   workflow_dispatch: {}
 
 permissions:
