@@ -1,0 +1,288 @@
+{
+  "generatedAt": "2026-08-27T02:19:10.279Z",
+  "total": 40716,
+  "shards": [
+    {
+      "country": "us",
+      "jobs": 21281,
+      "bytes": 10810332,
+      "file": "us.json"
+    },
+    {
+      "country": "in",
+      "jobs": 3826,
+      "bytes": 1851476,
+      "file": "in.json"
+    },
+    {
+      "country": "gb",
+      "jobs": 2098,
+      "bytes": 1058873,
+      "file": "gb.json"
+    },
+    {
+      "country": "de",
+      "jobs": 1814,
+      "bytes": 880525,
+      "file": "de.json"
+    },
+    {
+      "country": "sg",
+      "jobs": 1376,
+      "bytes": 676150,
+      "file": "sg.json"
+    },
+    {
+      "country": "cn",
+      "jobs": 1375,
+      "bytes": 630300,
+      "file": "cn.json"
+    },
+    {
+      "country": "ca",
+      "jobs": 1156,
+      "bytes": 586562,
+      "file": "ca.json"
+    },
+    {
+      "country": "jp",
+      "jobs": 751,
+      "bytes": 374379,
+      "file": "jp.json"
+    },
+    {
+      "country": "tw",
+      "jobs": 636,
+      "bytes": 306847,
+      "file": "tw.json"
+    },
+    {
+      "country": "fr",
+      "jobs": 626,
+      "bytes": 317402,
+      "file": "fr.json"
+    },
+    {
+      "country": "ie",
+      "jobs": 621,
+      "bytes": 318038,
+      "file": "ie.json"
+    },
+    {
+      "country": "mx",
+      "jobs": 443,
+      "bytes": 219671,
+      "file": "mx.json"
+    },
+    {
+      "country": "br",
+      "jobs": 373,
+      "bytes": 184083,
+      "file": "br.json"
+    },
+    {
+      "country": "es",
+      "jobs": 369,
+      "bytes": 185423,
+      "file": "es.json"
+    },
+    {
+      "country": "au",
+      "jobs": 364,
+      "bytes": 185390,
+      "file": "au.json"
+    },
+    {
+      "country": "il",
+      "jobs": 361,
+      "bytes": 176666,
+      "file": "il.json"
+    },
+    {
+      "country": "nl",
+      "jobs": 353,
+      "bytes": 181674,
+      "file": "nl.json"
+    },
+    {
+      "country": "th",
+      "jobs": 276,
+      "bytes": 139519,
+      "file": "th.json"
+    },
+    {
+      "country": "it",
+      "jobs": 259,
+      "bytes": 126046,
+      "file": "it.json"
+    },
+    {
+      "country": "my",
+      "jobs": 259,
+      "bytes": 121563,
+      "file": "my.json"
+    },
+    {
+      "country": "pl",
+      "jobs": 247,
+      "bytes": 127169,
+      "file": "pl.json"
+    },
+    {
+      "country": "kr",
+      "jobs": 243,
+      "bytes": 122788,
+      "file": "kr.json"
+    },
+    {
+      "country": "pt",
+      "jobs": 219,
+      "bytes": 107732,
+      "file": "pt.json"
+    },
+    {
+      "country": "vn",
+      "jobs": 178,
+      "bytes": 84451,
+      "file": "vn.json"
+    },
+    {
+      "country": "se",
+      "jobs": 143,
+      "bytes": 74833,
+      "file": "se.json"
+    },
+    {
+      "country": "ph",
+      "jobs": 127,
+      "bytes": 67513,
+      "file": "ph.json"
+    },
+    {
+      "country": "ae",
+      "jobs": 109,
+      "bytes": 54820,
+      "file": "ae.json"
+    },
+    {
+      "country": "co",
+      "jobs": 84,
+      "bytes": 41458,
+      "file": "co.json"
+    },
+    {
+      "country": "ro",
+      "jobs": 76,
+      "bytes": 35717,
+      "file": "ro.json"
+    },
+    {
+      "country": "ar",
+      "jobs": 74,
+      "bytes": 38987,
+      "file": "ar.json"
+    },
+    {
+      "country": "be",
+      "jobs": 74,
+      "bytes": 37910,
+      "file": "be.json"
+    },
+    {
+      "country": "ch",
+      "jobs": 68,
+      "bytes": 35135,
+      "file": "ch.json"
+    },
+    {
+      "country": "eg",
+      "jobs": 61,
+      "bytes": 28834,
+      "file": "eg.json"
+    },
+    {
+      "country": "sa",
+      "jobs": 61,
+      "bytes": 30783,
+      "file": "sa.json"
+    },
+    {
+      "country": "dk",
+      "jobs": 60,
+      "bytes": 32518,
+      "file": "dk.json"
+    },
+    {
+      "country": "at",
+      "jobs": 55,
+      "bytes": 28146,
+      "file": "at.json"
+    },
+    {
+      "country": "hk",
+      "jobs": 36,
+      "bytes": 18816,
+      "file": "hk.json"
+    },
+    {
+      "country": "id",
+      "jobs": 31,
+      "bytes": 16366,
+      "file": "id.json"
+    },
+    {
+      "country": "cz",
+      "jobs": 30,
+      "bytes": 14459,
+      "file": "cz.json"
+    },
+    {
+      "country": "cl",
+      "jobs": 23,
+      "bytes": 11391,
+      "file": "cl.json"
+    },
+    {
+      "country": "no",
+      "jobs": 22,
+      "bytes": 11515,
+      "file": "no.json"
+    },
+    {
+      "country": "tr",
+      "jobs": 20,
+      "bytes": 10325,
+      "file": "tr.json"
+    },
+    {
+      "country": "za",
+      "jobs": 17,
+      "bytes": 9411,
+      "file": "za.json"
+    },
+    {
+      "country": "fi",
+      "jobs": 15,
+      "bytes": 8409,
+      "file": "fi.json"
+    },
+    {
+      "country": "nz",
+      "jobs": 13,
+      "bytes": 6983,
+      "file": "nz.json"
+    },
+    {
+      "country": "qa",
+      "jobs": 11,
+      "bytes": 6097,
+      "file": "qa.json"
+    },
+    {
+      "country": "ke",
+      "jobs": 2,
+      "bytes": 1034,
+      "file": "ke.json"
+    }
+  ]
+}
