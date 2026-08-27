@@ -95,6 +95,7 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
   const [feed, setFeed] = useState<Feed | null>(null);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
+  const [feedError, setFeedError] = useState("");
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState<string[]>(() => {
     try { return JSON.parse(localStorage.getItem("jobradar.dismissed") ?? "[]"); } catch { return []; }
@@ -122,7 +123,17 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
         const countries = ((data as ProfileRecord | null)?.countries ?? []).filter(Boolean);
         // Paint from cache at once, then swap in a newer feed when it lands.
         const cachedFeed = loadFeedSWR(setFeed, countries);
-        setFeed(cachedFeed ?? await loadFeed(false, countries).catch(() => null));
+        if (cachedFeed) setFeed(cachedFeed);
+        else {
+          // A feed that failed to load is not an empty result. Telling someone
+          // "no matches for this profile" when the data never arrived sends
+          // them off to rewrite a profile that was never the problem.
+          try {
+            setFeed(await loadFeed(false, countries));
+          } catch (err) {
+            setFeedError((err as Error).message || "Could not load the jobs feed");
+          }
+        }
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -203,7 +214,15 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
 
       {!editing && loading && <p className="jobs-meta">Loading your matches…</p>}
 
-      {!editing && !loading && profile && matches.length === 0 && (
+      {!editing && !loading && feedError && (
+        <p className="empty-hint">
+          Couldn't load the jobs feed, so there is nothing to match against yet — this is not a
+          problem with your profile. <strong>{feedError}</strong> The feed is republished by the
+          daily run; try again shortly, or press Refresh.
+        </p>
+      )}
+
+      {!editing && !loading && !feedError && profile && matches.length === 0 && (
         <p className="empty-hint">
           No matches for this profile. Every match must genuinely involve one of your skills — we
           won't pad the list with nearby, recent, senior-sounding roles that have nothing to do with
