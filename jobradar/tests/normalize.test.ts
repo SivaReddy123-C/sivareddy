@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { htmlToText, looksIndian, slotKey, toIso } from "../src/normalize.js";
+import { detectCountry, htmlToText, looksIndian, slotKey, toIso } from "../src/normalize.js";
 import { hasSalaryText } from "../src/sources/greenhouse.js";
 
 test("htmlToText strips tags and entities", () => {
@@ -275,4 +275,38 @@ test("slotKey survives a malformed posting instead of killing the run", async ()
   assert.doesNotThrow(() => slotKey("workday", "acme", "SWE", null as unknown as string));
   assert.equal(slotKey("workday", "acme", undefined as unknown as string, "Austin, TX"),
                "workday|acme||austin, tx");
+});
+
+test("detects the countries that were falling through as null", () => {
+  // Every one of these appeared in the feed with country null, which hid it
+  // from anyone filtering by where they can work. Hospitality and travel hire
+  // heavily in exactly these places.
+  const cases: [string, string][] = [
+    ["Bangkok", "th"], ["Bangkok, Thailand", "th"], ["Kuala Lumpur", "my"],
+    ["Makati, Philippines", "ph"], ["Manila", "ph"], ["Jakarta", "id"],
+    ["Tokyo, Japan", "jp"], ["Seoul", "kr"], ["Taipei, Taiwan", "tw"],
+    ["Hong Kong", "hk"], ["Foshan, China", "cn"], ["Riyadh", "sa"],
+    ["Doha", "qa"], ["Cairo, Egypt", "eg"], ["Tel Aviv", "il"],
+    ["Istanbul", "tr"], ["Cape Town", "za"], ["Nairobi", "ke"],
+    ["Auckland", "nz"], ["Barcelona", "es"], ["Milan", "it"],
+    ["Kraków", "pl"], ["Lisbon", "pt"], ["Zurich", "ch"], ["Copenhagen", "dk"],
+    ["Oslo", "no"], ["Helsinki", "fi"], ["Brussels", "be"], ["Vienna", "at"],
+    ["Prague", "cz"], ["Bucharest", "ro"], ["São Paulo, SP", "br"],
+    ["Mexico City", "mx"], ["Buenos Aires", "ar"], ["Bogotá", "co"],
+  ];
+  for (const [loc, want] of cases) {
+    assert.equal(detectCountry(loc), want, `${loc} should be ${want}`);
+  }
+});
+
+test("expanding the country list did not break the original twelve", () => {
+  const cases: [string, string][] = [
+    ["Bengaluru, India", "in"], ["San Francisco, CA", "us"], ["London", "gb"],
+    ["Berlin", "de"], ["Amsterdam", "nl"], ["Dubai", "ae"], ["Toronto", "ca"],
+    ["Singapore", "sg"], ["Sydney", "au"], ["Stockholm", "se"],
+    ["Paris", "fr"], ["Dublin", "ie"],
+  ];
+  for (const [loc, want] of cases) {
+    assert.equal(detectCountry(loc), want, `${loc} should be ${want}`);
+  }
 });

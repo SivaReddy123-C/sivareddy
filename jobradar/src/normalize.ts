@@ -61,7 +61,16 @@ const US_HINTS = [
   "los angeles", "denver", "atlanta", "dallas", "miami", "washington",
 ];
 
-export type Country = "in" | "us" | "gb" | "de" | "nl" | "ae" | "ca" | "sg" | "au" | "se" | "fr" | "ie";
+export type Country =
+  | "in" | "us" | "gb" | "de" | "nl" | "ae" | "ca" | "sg" | "au" | "se" | "fr" | "ie"
+  // Added because 26,000 postings were landing with no country at all, which
+  // made them invisible to anyone filtering by where they can actually work.
+  // Hospitality and travel hire heavily across Asia and the Gulf in
+  // particular, and none of it was reachable.
+  | "th" | "my" | "ph" | "id" | "vn" | "jp" | "kr" | "tw" | "hk" | "cn"
+  | "sa" | "qa" | "eg" | "il" | "tr" | "za" | "ke" | "nz"
+  | "es" | "it" | "pl" | "pt" | "ch" | "dk" | "no" | "fi" | "be" | "at" | "cz" | "ro"
+  | "br" | "mx" | "ar" | "cl" | "co";
 
 const COUNTRY_HINTS: Record<Exclude<Country, "in" | "us">, string[]> = {
   gb: ["united kingdom", "uk", "london", "manchester", "cambridge, uk", "edinburgh"],
@@ -74,6 +83,41 @@ const COUNTRY_HINTS: Record<Exclude<Country, "in" | "us">, string[]> = {
   se: ["sweden", "stockholm", "gothenburg"],
   fr: ["france", "paris", "lyon", "grenoble"],
   ie: ["ireland", "dublin", "cork"],
+  th: ["thailand", "bangkok", "phuket", "chiang mai"],
+  my: ["malaysia", "kuala lumpur", "penang", "cyberjaya"],
+  ph: ["philippines", "manila", "makati", "cebu", "taguig"],
+  id: ["indonesia", "jakarta", "bali", "denpasar"],
+  vn: ["vietnam", "viet nam", "hanoi", "ho chi minh"],
+  jp: ["japan", "tokyo", "osaka", "kyoto", "yokohama"],
+  kr: ["south korea", "korea", "seoul", "busan"],
+  tw: ["taiwan", "taipei", "hsinchu"],
+  hk: ["hong kong", "kowloon"],
+  cn: ["china", "shanghai", "beijing", "shenzhen", "guangzhou", "foshan", "hangzhou"],
+  sa: ["saudi arabia", "riyadh", "jeddah", "dammam", "neom"],
+  qa: ["qatar", "doha"],
+  eg: ["egypt", "cairo", "giza", "alexandria, eg"],
+  il: ["israel", "tel aviv", "herzliya", "jerusalem"],
+  tr: ["turkey", "türkiye", "istanbul", "ankara"],
+  za: ["south africa", "johannesburg", "cape town", "durban"],
+  ke: ["kenya", "nairobi"],
+  nz: ["new zealand", "auckland", "wellington"],
+  es: ["spain", "españa", "madrid", "barcelona", "valencia", "malaga"],
+  it: ["italy", "italia", "milan", "milano", "rome", "roma", "turin"],
+  pl: ["poland", "polska", "warsaw", "warszawa", "krakow", "kraków", "wroclaw", "gdansk"],
+  pt: ["portugal", "lisbon", "lisboa", "porto"],
+  ch: ["switzerland", "zurich", "zürich", "geneva", "lausanne", "basel"],
+  dk: ["denmark", "copenhagen", "københavn", "aarhus"],
+  no: ["norway", "oslo", "bergen"],
+  fi: ["finland", "helsinki", "espoo", "tampere"],
+  be: ["belgium", "brussels", "bruxelles", "antwerp", "ghent"],
+  at: ["austria", "vienna", "wien", "graz", "linz"],
+  cz: ["czech", "czechia", "prague", "praha", "brno"],
+  ro: ["romania", "bucharest", "bucuresti", "cluj", "timisoara"],
+  br: ["brazil", "brasil", "sao paulo", "são paulo", "rio de janeiro", "campinas", "belo horizonte"],
+  mx: ["mexico", "méxico", "mexico city", "guadalajara", "monterrey"],
+  ar: ["argentina", "buenos aires", "cordoba, ar"],
+  cl: ["chile", "santiago, chile"],
+  co: ["colombia", "bogota", "bogotá", "medellin", "medellín"],
 };
 
 export function matchesCountry(location: string, country: Country): boolean {
@@ -83,7 +127,13 @@ export function matchesCountry(location: string, country: Country): boolean {
   return COUNTRY_HINTS[country].some((h) => h.startsWith(",") ? l.endsWith(h) || l.includes(h + ";") : l.includes(h));
 }
 
-export const ALL_COUNTRIES: Country[] = ["in", "us", "gb", "de", "nl", "ae", "ca", "sg", "au", "se", "fr", "ie"];
+export const ALL_COUNTRIES: Country[] = [
+  "in", "us", "gb", "de", "nl", "ae", "ca", "sg", "au", "se", "fr", "ie",
+  "th", "my", "ph", "id", "vn", "jp", "kr", "tw", "hk", "cn",
+  "sa", "qa", "eg", "il", "tr", "za", "ke", "nz",
+  "es", "it", "pl", "pt", "ch", "dk", "no", "fi", "be", "at", "cz", "ro",
+  "br", "mx", "ar", "cl", "co",
+];
 
 /** Best-effort country for a location string; null when nothing matches. */
 export function detectCountry(location: string): Country | null {

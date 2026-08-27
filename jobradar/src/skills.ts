@@ -65,16 +65,16 @@ const DICTIONARY: Record<string, string[]> = {
   hospitality: ["hospitality", "hotel", "lodging", "resort", "guest experience",
     "front office", "front desk", "concierge", "housekeeping", "night audit",
     "innkeep", "food and beverage", "\\bf&b\\b", "banquet", "catering"],
-  travel: ["travel tech", "\\bota\\b", "online travel", "tour operator",
-    "destination management", "airline", "cruise", "itinerary"],
-  "property-management": ["property management system", "\\bpms\\b",
-    "channel manager", "central reservation", "\\bcrs\\b", "booking engine",
-    "property manager", "short-?term rental", "vacation rental"],
-  "revenue-management": ["revenue management", "\\brms\\b", "yield management",
-    "\\brevpar\\b", "\\badr\\b", "occupancy forecast", "rate parity",
-    "distribution strategy", "pricing analyst"],
-  restaurant: ["restaurant", "point of sale", "\\bpos\\b", "kitchen display",
-    "quick service", "\\bqsr\\b", "menu management"],
+  travel: ["travel tech", "online travel", "tour operator",
+    "destination management", "airline", "cruise line", "itinerary"],
+  "property-management": ["property management system", "hotel pms",
+    "channel manager", "central reservation", "booking engine",
+    "short-?term rental", "vacation rental"],
+  "revenue-management": ["revenue management", "yield management",
+    "\\brevpar\\b", "average daily rate", "occupancy forecast", "rate parity",
+    "hotel pricing"],
+  restaurant: ["restaurant", "point of sale", "kitchen display",
+    "quick service restaurant", "menu management"],
 };
 
 const COMPILED: [string, RegExp][] = Object.entries(DICTIONARY).map(
@@ -82,11 +82,47 @@ const COMPILED: [string, RegExp][] = Object.entries(DICTIONARY).map(
 );
 
 /** Canonical tags present in a posting. Title is weighted by being searched too. */
+/**
+ * Domain terms common enough to appear in an "about us" blurb.
+ *
+ * Almost every posting says who the company sells to, so a single mention of
+ * the market tags every role there - which made a warehouse associate at a
+ * pizza-ordering company read as a restaurant job. These words need
+ * corroboration; the specific terms alongside them in each family ("channel
+ * manager", "night audit", "revpar") do not, because nobody writes those
+ * unless the job is actually about them.
+ */
+const WEAK_TERMS: Record<string, RegExp> = {
+  hospitality: /hospitality|hotel|lodging|resort/i,
+  travel: /travel tech|cruise line/i,
+  restaurant: /restaurant/i,
+  healthcare: /medical|clinical/i,
+  legal: /legal counsel/i,
+  consulting: /consultant|advisory/i,
+};
+
+/** How many times a weak term must appear in the body to count on its own. */
+const BOILERPLATE_FLOOR = 2;
+
 export function extractTags(title: string, description: string | null): string[] {
-  const haystack = `${title}\n${(description ?? "").slice(0, 4000)}`;
+  const body = (description ?? "").slice(0, 4000);
+  const haystack = `${title}\n${body}`;
   const tags: string[] = [];
+
   for (const [tag, re] of COMPILED) {
-    if (re.test(haystack)) tags.push(tag);
+    if (!re.test(haystack)) continue;
+    const weak = WEAK_TERMS[tag];
+    if (weak) {
+      // A specific term in the family carries the tag on its own. Strip the
+      // weak words and see whether anything precise still matches.
+      const stripped = `${title}\n${body}`.replace(new RegExp(weak.source, "gi"), " ");
+      if (!re.test(stripped)) {
+        const inTitle = weak.test(title);
+        const mentions = body.match(new RegExp(weak.source, "gi"))?.length ?? 0;
+        if (!inTitle && mentions < BOILERPLATE_FLOOR) continue;
+      }
+    }
+    tags.push(tag);
   }
   return tags;
 }

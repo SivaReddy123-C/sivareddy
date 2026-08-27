@@ -42,3 +42,38 @@ test("travel platforms are tagged travel", () => {
   assert.ok(has("Engineer", "Work on our online travel marketplace and itinerary tools.", "travel"));
   assert.ok(has("Manager", "Partner with airline and cruise suppliers.", "travel"));
 });
+
+test("acronyms that collide with tech vocabulary do not tag a domain", () => {
+  // Every one of these appeared in the feed after the first pass. OTA is
+  // over-the-air at a chip company, RMS is root mean square, ADR is an
+  // architecture decision record, PMS is often project management.
+  const cases: [string, string][] = [
+    ["OTA/Cloud Validation Engineer", "Over-the-air update validation for embedded devices."],
+    ["Signal Processing Engineer", "Compute RMS noise across the wafer."],
+    ["Staff Engineer", "Write an ADR for each significant decision."],
+    ["Program Manager", "Own the PMS rollout for the engineering org."],
+  ];
+  for (const [title, desc] of cases) {
+    const tags = extractTags(title, desc);
+    for (const d of ["travel", "revenue-management", "property-management", "hospitality"]) {
+      assert.ok(!tags.includes(d), `"${title}" wrongly tagged ${d}: ${tags.join(", ")}`);
+    }
+  }
+});
+
+test("one mention of a market in an about-us blurb does not tag the job", () => {
+  // A warehouse job at a pizza-ordering company was reading as a restaurant
+  // job, because the company describes itself as serving restaurants.
+  const boilerplate = "About us: we build software for restaurants across the country.";
+  const tags = extractTags("Delivery & Warehouse Associate", `${boilerplate} You will load vans and manage inventory.`);
+  assert.ok(!tags.includes("restaurant"), `got: ${tags.join(", ")}`);
+});
+
+test("a job genuinely about the domain is still tagged", () => {
+  // Title match alone is enough.
+  assert.ok(extractTags("Restaurant Onboarding Manager", "Help merchants go live.").includes("restaurant"));
+  // So is a body that keeps returning to it.
+  const real = extractTags("Implementation Manager",
+    "Onboard restaurant groups. You will configure each restaurant's menu and train restaurant staff.");
+  assert.ok(real.includes("restaurant"), `got: ${real.join(", ")}`);
+});
