@@ -35,12 +35,44 @@ interface PostingRow {
   url: string;
 }
 
+/**
+ * Cap how many postings one employer can contribute, then take the top N.
+ *
+ * Extracted because it silently destroyed the product. The query that feeds
+ * this did not select company_id, so every posting keyed on `undefined`, they
+ * all collided in one bucket, and a cap meant to allow three per company
+ * allowed three in total - a daily list of three jobs drawn from over a
+ * thousand eligible ones. A caller that cannot identify the employer must get
+ * an uncapped list, never a collapsed one.
+ */
+export function capPerCompany<T extends { post: { company_id?: string } }>(
+  scored: T[],
+  listSize: number,
+): T[] {
+  const perCompany = new Map<string, number>();
+  const capped: T[] = [];
+  for (const s of scored) {
+    if (capped.length >= listSize) break;
+    const key = s.post.company_id;
+    if (key === undefined || key === null || key === "") {
+      // Unknown employer: cannot be capped, must not be lumped with the rest.
+      capped.push(s);
+      continue;
+    }
+    const seen = perCompany.get(key) ?? 0;
+    if (seen >= MAX_PER_COMPANY) continue;
+    perCompany.set(key, seen + 1);
+    capped.push(s);
+  }
+  return capped;
+}
+
 async function fetchOpenPostings(db: SupabaseClient): Promise<PostingRow[]> {
   const rows: PostingRow[] = [];
   for (let from = 0; ; from += 1000) {
     const { data, error } = await db
       .from("jr_job_postings")
-      .select("id, title, location, country, description_text, has_salary, posted_at, first_seen_at, ghost_score, sponsorship, url")
+      .select("id, company_id, title, location, country, description_text, has_salary, posted_at, first_seen_at, ghost_score, sponsorship, url")
       .is("closed_at", null)
       .lt("ghost_score", 50)
       // Unordered .range() pagination has no stable page boundaries -- rows
@@ -90,17 +122,7 @@ export async function rankAllUsers(db: SupabaseClient, now = new Date()): Promis
       }))
       .sort((a, b) => b.fit.score - a.fit.score);
 
-    // Cap per employer for the same reason the live ranker does: one huge
-    // board would otherwise be the entire list.
-    const perCompany = new Map<string, number>();
-    const capped: typeof scored = [];
-    for (const s of scored) {
-      if (capped.length >= listSize) break;
-      const seen = perCompany.get(s.post.company_id) ?? 0;
-      if (seen >= MAX_PER_COMPANY) continue;
-      perCompany.set(s.post.company_id, seen + 1);
-      capped.push(s);
-    }
+    const capped = capPerCompany(scored, listSize);
 
     const rows = capped.map((s, i) => ({
       user_id: p.user_id,
