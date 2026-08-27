@@ -188,3 +188,71 @@ export async function buildSponsorPage(db: SupabaseClient, outPath: string): Pro
   writeFileSync(outPath, html);
   return rows.length;
 }
+
+/**
+ * A job as it appears in the public feed. The feed already carries the
+ * sponsorship facts we joined at generation time, which is why this page can be
+ * built from it without touching the database.
+ */
+interface FeedJob {
+  company: string;
+  country: string | null;
+  sponsor?: { approvals: number; denials: number; fy: number; name: string } | null;
+}
+
+/** What the sponsorship ingest recorded about its own last run. */
+export interface SponsorMeta {
+  federalRecords: number;
+  ingestedAt: string;
+}
+
+/**
+ * Build the index from the committed feed rather than the database.
+ *
+ * The page used to query Supabase directly, which chained it to the nightly
+ * sync: one sync failure and the page silently did not regenerate, even though
+ * every fact it needed was already sitting in the feed we had just written.
+ * Reading the feed makes the page a pure function of a file in the repo.
+ */
+export function buildSponsorPageFromFeed(
+  feed: { generatedAt: string; jobs: FeedJob[] },
+  meta: SponsorMeta | null,
+  outPath: string,
+): number {
+  const byCompany = new Map<string, IndexRow>();
+  let usJobsAtSponsors = 0;
+
+  for (const job of feed.jobs) {
+    if (!job.sponsor || job.sponsor.approvals <= 0) continue;
+    let row = byCompany.get(job.company);
+    if (!row) {
+      row = {
+        company: job.company,
+        matchedName: job.sponsor.name,
+        approvals: job.sponsor.approvals,
+        denials: job.sponsor.denials,
+        fiscalYear: job.sponsor.fy,
+        openJobs: 0,
+        usJobs: 0,
+      };
+      byCompany.set(job.company, row);
+    }
+    row.openJobs++;
+    if (job.country === "us") {
+      row.usJobs++;
+      usJobsAtSponsors++;
+    }
+  }
+
+  const rows = [...byCompany.values()].sort((a, b) =>
+    b.approvals - a.approvals || b.usJobs - a.usJobs || a.company.localeCompare(b.company));
+
+  const html = renderPage(rows, feed.generatedAt, {
+    employers: rows.length,
+    federalRecords: meta?.federalRecords ?? 0,
+    openJobs: feed.jobs.length,
+    usJobsAtSponsors,
+  });
+  writeFileSync(outPath, html);
+  return rows.length;
+}

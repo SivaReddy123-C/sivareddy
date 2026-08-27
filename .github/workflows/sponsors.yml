@@ -28,3 +28,18 @@ jobs:
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run sponsors
+      # The record count this run stored is what the public index quotes. It
+      # has to be committed, or the page reports whatever the last commit said.
+      - name: Commit the ingest record count
+        if: always()
+        run: |
+          git config user.name "jobradar-sponsors"
+          git config user.email "actions@users.noreply.github.com"
+          git add jobradar/data/sponsor-meta.json || true
+          if git diff --cached --quiet; then
+            echo "No change to the record count"
+          else
+            git commit -m "Sponsors: record how many federal filings were ingested"
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push
+          fi

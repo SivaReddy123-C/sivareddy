@@ -1,3 +1,6 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 /**
  * Visa sponsorship facts from US federal records.
  *
@@ -221,7 +224,21 @@ export async function ingestSponsors(db: SupabaseClient, years: number[]): Promi
       "Check the logged URLs and header line above; refusing to report success.",
     );
   }
+  writeSponsorMeta(stored);
   return stored;
+}
+
+/**
+ * Record what this ingest actually stored, next to the feed.
+ *
+ * The public index quotes how many federal records back it. That number has to
+ * come from the run that read them, not from a live query the page might not be
+ * able to make - otherwise the page either lies or drops the stat.
+ */
+export function writeSponsorMeta(federalRecords: number, dir?: string): void {
+  const out = join(dir ?? join(dirname(fileURLToPath(import.meta.url)), "..", "data"), "sponsor-meta.json");
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, `${JSON.stringify({ federalRecords, ingestedAt: new Date().toISOString() }, null, 2)}\n`);
 }
 
 /**

@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { StubClassifier } from "./classify.js";
@@ -201,12 +201,25 @@ async function sponsorsCmd(): Promise<void> {
   console.log(`sponsors: ${stored} employer-years stored; ${matched}/${total} of our companies matched to federal filings`);
 }
 
-/** `sponsorpage`: regenerate the public sponsorship index served with the app. */
+/**
+ * `sponsorpage`: regenerate the public sponsorship index served with the app.
+ *
+ * Built from the committed feed, not the database. The feed already carries the
+ * sponsorship facts, so the page cannot be held hostage by a failed sync.
+ */
 async function sponsorPageCmd(): Promise<void> {
-  const { makeClient } = await import("./sync.js");
-  const { buildSponsorPage } = await import("./sponsorpage.js");
+  const { buildSponsorPageFromFeed } = await import("./sponsorpage.js");
+  const feedPath = join(ROOT, "data", "feed.json");
+  if (!existsSync(feedPath)) throw new Error("no feed.json yet - run `npm run feed` first");
+  const feed = JSON.parse(readFileSync(feedPath, "utf8")) as { generatedAt: string; jobs: [] };
+
+  const metaPath = join(ROOT, "data", "sponsor-meta.json");
+  const meta = existsSync(metaPath)
+    ? (JSON.parse(readFileSync(metaPath, "utf8")) as { federalRecords: number; ingestedAt: string })
+    : null;
+
   const out = join(ROOT, "..", "app", "public", "sponsors.html");
-  const n = await buildSponsorPage(makeClient(), out);
+  const n = buildSponsorPageFromFeed(feed, meta, out);
   console.log(`sponsor page: ${n} employers -> app/public/sponsors.html`);
 }
 

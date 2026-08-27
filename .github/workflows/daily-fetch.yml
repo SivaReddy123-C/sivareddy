@@ -33,15 +33,16 @@ jobs:
       - name: Write public jobs feed
         working-directory: jobradar
         run: npm run feed
+      # Built from the feed we just wrote, so it needs no database and runs
+      # before sync. It used to run after, and a sync failure silently left the
+      # public index stale for a day while every fact it needed sat in feed.json.
+      - name: Rebuild the public sponsorship index
+        working-directory: jobradar
+        run: npm run sponsorpage
       - name: Sync to Supabase
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
         run: npm run sync
-      - name: Rebuild the public sponsorship index
-        if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
-        continue-on-error: true
-        working-directory: jobradar
-        run: npm run sponsorpage
       - name: Rank user matches
         if: ${{ env.SUPABASE_SERVICE_ROLE_KEY != '' }}
         working-directory: jobradar
@@ -56,6 +57,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add -f jobradar/data/state.json
           git add jobradar/data/stats jobradar/data/feed.json
+          git add jobradar/data/sponsor-meta.json || true
           git add app/public/sponsors.html || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
