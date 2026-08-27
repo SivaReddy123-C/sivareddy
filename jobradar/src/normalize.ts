@@ -35,7 +35,9 @@ export function toIso(value: string | number | null | undefined): string | null 
 
 /** Key for tracking the same "job slot" across reposts (id changes, role doesn't). */
 export function slotKey(source: string, companyToken: string, title: string, location: string): string {
-  const norm = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
+  // Upstream boards are not obliged to send well-formed records: a single
+  // Workday posting with no title once crashed a whole 300-board run here.
+  const norm = (s: string | null | undefined) => (s ?? "").toLowerCase().replace(/\s+/g, " ").trim();
   return `${source}|${companyToken}|${norm(title)}|${norm(location)}`;
 }
 

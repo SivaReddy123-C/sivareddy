@@ -266,3 +266,13 @@ test("sponsor index page states facts and refuses to overclaim", async () => {
   assert.ok(!nasty.includes("<script>x</script>"));
   assert.ok(nasty.includes("&lt;script&gt;"));
 });
+
+test("slotKey survives a malformed posting instead of killing the run", async () => {
+  const { slotKey } = await import("../src/normalize.js");
+  // A real Workday tenant returned a record with no title; this used to throw
+  // and take the entire 300-board run down with it.
+  assert.doesNotThrow(() => slotKey("workday", "acme", undefined as unknown as string, "Austin"));
+  assert.doesNotThrow(() => slotKey("workday", "acme", "SWE", null as unknown as string));
+  assert.equal(slotKey("workday", "acme", undefined as unknown as string, "Austin, TX"),
+               "workday|acme||austin, tx");
+});

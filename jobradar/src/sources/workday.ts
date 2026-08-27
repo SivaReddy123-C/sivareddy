@@ -42,6 +42,7 @@ export const workday: SourceAdapter = {
     // Hard wall-clock budget per board. Deep boards are welcome; a board that
     // takes four minutes is starving the other three hundred.
     const deadline = Date.now() + 180000;
+    let skipped = 0;
     // Workday only reports `total` reliably on the FIRST page - later pages
     // often return 0/absent. Capture it once; absent means "unknown, keep
     // paging until a short page or the cap".
@@ -96,6 +97,9 @@ export const workday: SourceAdapter = {
       }
       if (page.length < PAGE || jobs.length >= knownTotal) break;
       await new Promise((r) => setTimeout(r, 120)); // be polite, but 100 pages must still finish
+    }
+    if (skipped > 0) {
+      console.log(`  note: ${company.name} returned ${skipped} record(s) without a title or id; skipped`);
     }
     return jobs;
   },
