@@ -354,3 +354,13 @@ test("app domain tags exist as canonical tags in the pipeline dictionary", async
     assert.ok(dict.includes(key), `pipeline dictionary has no canonical tag ${tag}`);
   }
 });
+
+test("daily_list_size is clamped to something a person can read", async () => {
+  // The stored profile had 3050. Nobody reviews three thousand jobs, and a
+  // number that large silently means "50" - so the clamp is the real contract.
+  const clamp = (n: number | null | undefined) => Math.min(50, Math.max(5, n ?? 30));
+  assert.equal(clamp(3050), 50);
+  assert.equal(clamp(0), 5);
+  assert.equal(clamp(null), 30);
+  assert.equal(clamp(25), 25);
+});

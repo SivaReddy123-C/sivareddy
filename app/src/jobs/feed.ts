@@ -57,45 +57,84 @@ interface Shard {
   jobs: Omit<FeedJob, "country" | "sponsor" | "industry">[];
 }
 
-const CACHE_KEY = "jobradar.feed.v2";
-// Short: users iterate on their profile in minutes, so a long cache makes the
-// product look broken. Callers also revalidate in the background.
+// One cache entry per country, not one for the whole selection.
+//
+// A single blob meant adding a seventh country pushed the total past what
+// localStorage would take and the ENTIRE cache was refused - so widening a
+// search made the app slower, which is precisely backwards. Per shard, adding
+// a country costs only that country, and one oversized shard (the US is 10MB)
+// simply does not cache while every other one still does.
+const SHARD_KEY = (c: string) => `jobradar.shard.v3.${c}`;
 const CACHE_TTL_MS = 30 * 60 * 1000;
-/** Above this a shard will not fit in localStorage alongside everything else. */
-const MAX_CACHEABLE_BYTES = 3_500_000;
+/** No single shard above this is worth trying to store. */
+const MAX_SHARD_BYTES = 2_500_000;
 
-interface CacheEnvelope {
-  cachedAt: number;
-  countries: string[];
-  feed: Feed;
-}
+interface ShardEnvelope { cachedAt: number; shard: Shard }
 
-export function readCache(): CacheEnvelope | null {
+/** Set when a shard could not be stored, so the UI can say why. */
+export let lastCacheNote = "";
+
+function readShardCache(country: string): Shard | null {
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    return raw ? (JSON.parse(raw) as CacheEnvelope) : null;
+    const raw = localStorage.getItem(SHARD_KEY(country));
+    if (!raw) return null;
+    const env = JSON.parse(raw) as ShardEnvelope;
+    return Date.now() - env.cachedAt < CACHE_TTL_MS ? env.shard : null;
   } catch {
+    // silent-ok: an unreadable cache entry is the same as a miss, and the
+    // shard is about to be refetched anyway.
     return null;
   }
 }
 
-/** Set by writeCache so the UI can say why a refresh did not stick. */
-export let lastCacheNote = "";
+/** Drop other cached shards, oldest first, to make room. */
+function evictOldestShard(except: string): boolean {
+  let oldestKey: string | null = null;
+  let oldestAt = Infinity;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k?.startsWith("jobradar.shard.v3.") || k === SHARD_KEY(except)) continue;
+    try {
+      const env = JSON.parse(localStorage.getItem(k) ?? "{}") as ShardEnvelope;
+      if (env.cachedAt < oldestAt) { oldestAt = env.cachedAt; oldestKey = k; }
+    } catch {
+      // silent-ok: unparseable entry - evicting it is exactly what we want.
+      oldestKey = k; oldestAt = 0;
+    }
+  }
+  if (!oldestKey) return false;
+  localStorage.removeItem(oldestKey);
+  return true;
+}
 
-function writeCache(feed: Feed, countries: string[]): void {
-  const body = JSON.stringify({ cachedAt: Date.now(), countries, feed });
-  if (body.length > MAX_CACHEABLE_BYTES) {
-    // Say so rather than swallowing it. Silently failing to cache is how this
-    // went unnoticed: every load looked like a first load, forever.
-    lastCacheNote = `Too large to cache (${(body.length / 1048576).toFixed(1)}MB); `
-      + "narrow your countries to keep it offline-ready.";
+function writeShardCache(country: string, shard: Shard): void {
+  const body = JSON.stringify({ cachedAt: Date.now(), shard });
+  if (body.length > MAX_SHARD_BYTES) {
+    lastCacheNote = `${country.toUpperCase()} is too large to keep offline `
+      + `(${(body.length / 1048576).toFixed(1)}MB); it reloads each time.`;
     return;
   }
-  try {
-    localStorage.setItem(CACHE_KEY, body);
-    lastCacheNote = "";
-  } catch {
-    lastCacheNote = "Browser storage is full; the list still works but will reload each time.";
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      localStorage.setItem(SHARD_KEY(country), body);
+      return;
+    } catch {
+      // silent-ok: quota is expected here; we handle it by evicting and
+      // retrying, and report below if that does not work.
+      if (!evictOldestShard(country)) break;
+    }
+  }
+  lastCacheNote = "Browser storage is full; some countries reload each time.";
+}
+
+/** Remove cache entries written by older versions of this code. */
+function dropLegacyCaches(): void {
+  for (const k of ["jobradar.feed.v1", "jobradar.feed.v2"]) {
+    try {
+      localStorage.removeItem(k);
+    } catch {
+      // silent-ok: nothing depends on the old key going away.
+    }
   }
 }
 
@@ -119,29 +158,60 @@ function expand(shard: Shard): FeedJob[] {
   }) as FeedJob);
 }
 
-export async function loadFeed(force = false, countries?: string[]): Promise<Feed> {
+/** Whatever is already cached for these countries, without touching the network. */
+export function readCache(countries?: string[]): { feed: Feed } | null {
   const want = (countries?.length ? countries : DEFAULT_COUNTRIES).map((c) => c.toLowerCase());
-  const cached = readCache();
-  const sameCountries = cached && cached.countries.join() === want.join();
-  if (!force && cached && sameCountries && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
-    return cached.feed;
+  const jobs: FeedJob[] = [];
+  let generatedAt = "";
+  for (const c of want) {
+    const shard = readShardCache(c);
+    if (!shard) continue;
+    jobs.push(...expand(shard));
+    if (shard.generatedAt > generatedAt) generatedAt = shard.generatedAt;
   }
+  return jobs.length > 0 ? { feed: { generatedAt, total: jobs.length, jobs } } : null;
+}
+
+export async function loadFeed(force = false, countries?: string[]): Promise<Feed> {
+  dropLegacyCaches();
+  const want = (countries?.length ? countries : DEFAULT_COUNTRIES).map((c) => c.toLowerCase());
 
   const index = await loadIndex();
   const available = new Set(index.shards.map((s) => s.country));
   const targets = want.filter((c) => available.has(c));
+  if (targets.length === 0) {
+    throw new Error(`No feed for ${want.join(", ").toUpperCase()} yet - the countries on your profile have no postings in this run.`);
+  }
 
-  const results = await Promise.all(targets.map((c) =>
-    getJson<Shard>(`${BASE}/${c}.json`).then(expand).catch(() => [] as FeedJob[])));
+  const failed: string[] = [];
+  const results = await Promise.all(targets.map(async (c) => {
+    if (!force) {
+      const hit = readShardCache(c);
+      if (hit) return expand(hit);
+    }
+    try {
+      const shard = await getJson<Shard>(`${BASE}/${c}.json`);
+      writeShardCache(c, shard);
+      return expand(shard);
+    } catch {
+      // silent-ok per shard, reported in aggregate below: one country failing
+      // must not deny the user the other six.
+      failed.push(c);
+      const stale = readShardCache(c);
+      return stale ? expand(stale) : [];
+    }
+  }));
   const jobs = results.flat();
 
   if (jobs.length === 0) {
-    if (cached) return cached.feed; // stale beats nothing
-    throw new Error("Feed not available yet");
+    throw new Error(failed.length > 0
+      ? `Could not load ${failed.join(", ").toUpperCase()}`
+      : "Feed not available yet");
   }
-  const feed: Feed = { generatedAt: index.generatedAt, total: jobs.length, jobs };
-  writeCache(feed, want);
-  return feed;
+  if (failed.length > 0) {
+    lastCacheNote = `Could not refresh ${failed.join(", ").toUpperCase()}; showing what loaded.`;
+  }
+  return { generatedAt: index.generatedAt, total: jobs.length, jobs };
 }
 
 /**
@@ -150,7 +220,7 @@ export async function loadFeed(force = false, countries?: string[]): Promise<Fee
  * changed. Nobody waits for a megabyte to download to see their list.
  */
 export function loadFeedSWR(onFresh: (feed: Feed) => void, countries?: string[]): Feed | null {
-  const cached = readCache();
+  const cached = readCache(countries);
   void (async () => {
     try {
       const fresh = await loadFeed(true, countries);

@@ -41,11 +41,15 @@ test("no catch block discards an error without saying why", () => {
     const lines = src.split("\n");
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]!;
-      if (!/\bcatch\s*(\([^)]*\))?\s*\{/.test(line)) continue;
-      // Collect the block body up to its closing brace (these are all short).
+      const m = /\bcatch\s*(?:\([^)]*\))?\s*\{/.exec(line);
+      if (!m) continue;
+      // Start counting at the brace that opens the catch, not at the start of
+      // the line: "} catch {" closes an earlier block on the same line, and
+      // counting that cancelled the opening brace and read an empty body.
       let depth = 0, body = "", j = i;
+      let from = m.index + m[0].length - 1;
       for (; j < lines.length && j < i + 40; j++) {
-        for (const ch of lines[j]!) {
+        for (const ch of (lines[j]!).slice(j === i ? from : 0)) {
           if (ch === "{") depth++;
           else if (ch === "}") depth--;
         }
@@ -98,4 +102,34 @@ test("every column a row interface declares is actually selected", () => {
     }
   }
   assert.deepEqual(failures, [], `\n  ${failures.join("\n  ")}`);
+});
+
+test("the scanner reads the body of a catch that closes a block on the same line", () => {
+  // "} catch {" both closes the try and opens the catch. Counting braces from
+  // the start of the line cancelled them out and made every such block look
+  // empty - which would have flagged handled errors and, worse, taught us to
+  // ignore the guard.
+  const sample = [
+    "try {",
+    "  risky();",
+    "} catch {",
+    "  recorded.push(err);",
+    "  return fallback;",
+    "}",
+  ].join("\n");
+  const lines = sample.split("\n");
+  const i = 2;
+  const m = /\bcatch\s*(?:\([^)]*\))?\s*\{/.exec(lines[i]!)!;
+  let depth = 0, body = "", j = i;
+  const from = m.index + m[0].length - 1;
+  for (; j < lines.length; j++) {
+    for (const ch of (lines[j]!).slice(j === i ? from : 0)) {
+      if (ch === "{") depth++;
+      else if (ch === "}") depth--;
+    }
+    if (j > i) body += `${lines[j]}\n`;
+    if (depth === 0 && j > i) break;
+  }
+  assert.match(body, /recorded\.push/);
+  assert.match(body, /return fallback/);
 });
