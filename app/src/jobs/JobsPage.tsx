@@ -7,6 +7,7 @@ import {
   COUNTRY_LABELS, applyFilters, defaultFilters, loadFeed, readCache,
   type Feed, type FeedJob, type JobFilters,
 } from "./feed.js";
+import { SponsorBadge } from "./SponsorBadge.js";
 
 const PAGE = 50;
 
@@ -106,6 +107,11 @@ export function JobsPage({ applications, onChange, resume, answers }: Props) {
             onChange={(e) => setFilters({ ...filters, sponsorshipOnly: e.target.checked })} />
           Hide "won't sponsor visa"
         </label>
+        <label className="check" title="Only employers with H-1B petitions on USCIS federal record">
+          <input type="checkbox" checked={filters.sponsorsOnly}
+            onChange={(e) => setFilters({ ...filters, sponsorsOnly: e.target.checked })} />
+          Proven H-1B sponsors only
+        </label>
         <button onClick={() => refresh(true)} disabled={loading}>
           {loading ? "Loading..." : "Refresh"}
         </button>
@@ -135,6 +141,7 @@ export function JobsPage({ applications, onChange, resume, answers }: Props) {
                   {j.hasSalaryInfo && <span className="tag tag-salary">salary stated</span>}
                   {j.sponsorship === "yes" && <span className="tag tag-sponsor">sponsors visa</span>}
                   {j.sponsorship === "no" && <span className="tag tag-nosponsor">won't sponsor</span>}
+                  <SponsorBadge job={j} />
                 </div>
                 {j.ghost.reasons.length > 0 && (
                   <details className="ghost-details">

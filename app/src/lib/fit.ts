@@ -92,6 +92,20 @@ export function scoreFit(profile: FitProfile, job: FeedJob, now = new Date()): S
     reasons.push("States it sponsors visas");
   }
 
+  // Federal filing history, for someone who needs sponsorship. This is a
+  // ranking signal, never a hard filter: no recent filings is real evidence
+  // but not proof - a company can sponsor without having filed lately, and
+  // hiding those roles would quietly narrow someone's search on a guess.
+  if (profile.needsSponsorship && job.country === "us") {
+    if (job.sponsor && job.sponsor.approvals > 0) {
+      score += Math.min(25, 10 + Math.round(job.sponsor.approvals / 20));
+      reasons.push(`Sponsored ${job.sponsor.approvals.toLocaleString()} H-1Bs in FY${job.sponsor.fy} (USCIS records)`);
+    } else {
+      score -= 10;
+      reasons.push("No H-1B filings on federal record for this employer");
+    }
+  }
+
   if (job.ghost.score >= 25) {
     score -= Math.round((job.ghost.score - 25) / 5);
     reasons.push(`Some ghost risk (score ${job.ghost.score})`);

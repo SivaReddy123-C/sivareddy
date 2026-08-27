@@ -237,3 +237,47 @@ test("irrelevant roles are excluded, not merely outranked", async () => {
   assert.equal(out.length, 1);
   assert.equal(out[0]!.job.key, "eng", "the relevant role is the only one that survives");
 });
+
+test("sponsorship facts rank US roles for someone who needs sponsorship", async () => {
+  const { rankFeed } = await import("../src/lib/fit.js");
+  const NOW2 = new Date("2026-08-27T00:00:00Z");
+  const mk = (key: string, sponsor: unknown) => ({
+    key, company: key, title: "Backend Engineer", location: "Austin, TX", country: "us",
+    url: "u" + key, source: "greenhouse",
+    publishedAt: "2026-08-26T00:00:00Z", firstSeenAt: "2026-08-26T00:00:00Z",
+    ghost: { score: 5, band: "low", reasons: [] }, sponsorship: "unknown",
+    hasSalaryInfo: false, tags: ["backend"], sponsor,
+  }) as never;
+  const jobs = [
+    mk("nofiling", null),
+    mk("sponsor", { approvals: 394, denials: 1, fy: 2023, name: "NVIDIA CORPORATION" }),
+  ];
+  const profile = {
+    skills: ["backend"], countries: ["us"], locations: [],
+    seniorityTarget: null, needsSponsorship: true,
+  };
+  const out = rankFeed(jobs, profile, 10, NOW2);
+  assert.equal(out[0]!.job.key, "sponsor", "a proven sponsor outranks an employer with no filings");
+  assert.ok(out[0]!.reasons.some((r) => r.includes("394") && r.includes("FY2023")));
+  // Never hidden: absence of filings is evidence, not proof.
+  assert.equal(out.length, 2);
+  assert.ok(out[1]!.reasons.some((r) => r.includes("No H-1B filings")));
+
+  // Someone not needing sponsorship is unaffected by filing history.
+  const neutral = rankFeed(jobs, { ...profile, needsSponsorship: false }, 10, NOW2);
+  assert.ok(!neutral.some((m) => m.reasons.some((r) => r.includes("H-1B"))));
+});
+
+test("sponsorsOnly filter keeps only employers with federal filings", async () => {
+  const { applyFilters, defaultFilters } = await import("../src/jobs/feed.js");
+  const mk = (key: string, sponsor: unknown) => ({
+    key, company: key, title: "Engineer", location: "Austin, TX", country: "us",
+    url: "u", source: "greenhouse", publishedAt: null, firstSeenAt: "2026-08-26T00:00:00Z",
+    ghost: { score: 5, band: "low", reasons: [] }, sponsorship: "unknown",
+    hasSalaryInfo: false, sponsor,
+  }) as never;
+  const jobs = [mk("a", null), mk("b", { approvals: 12, denials: 0, fy: 2023, name: "B INC" })];
+  const out = applyFilters(jobs, { ...defaultFilters(), sponsorsOnly: true });
+  assert.equal(out.length, 1);
+  assert.equal(out[0]!.key, "b");
+});

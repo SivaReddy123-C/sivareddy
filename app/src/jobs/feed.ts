@@ -15,6 +15,12 @@ export interface FeedJob {
   hasSalaryInfo: boolean;
   /** Canonical skill/role tags extracted from the posting by the pipeline. */
   tags?: string[];
+  /**
+   * H-1B petitions this employer actually filed, from USCIS federal records.
+   * Absent means no filings were found for that fiscal year - which is
+   * evidence, not proof, that they do not sponsor.
+   */
+  sponsor?: { approvals: number; denials: number; fy: number; name: string } | null;
 }
 
 export interface Feed {
@@ -111,11 +117,13 @@ export interface JobFilters {
   country: string; // "all" or a COUNTRY_LABELS key
   hideHighGhost: boolean;
   sponsorshipOnly: boolean;
+  /** Only employers with H-1B petitions on federal record. */
+  sponsorsOnly: boolean;
   sort: SortKey;
 }
 
 export function defaultFilters(): JobFilters {
-  return { q: "", country: "all", hideHighGhost: false, sponsorshipOnly: false, sort: "ghost" };
+  return { q: "", country: "all", hideHighGhost: false, sponsorshipOnly: false, sponsorsOnly: false, sort: "ghost" };
 }
 
 export function applyFilters(jobs: FeedJob[], f: JobFilters): FeedJob[] {
@@ -124,6 +132,7 @@ export function applyFilters(jobs: FeedJob[], f: JobFilters): FeedJob[] {
     if (f.country !== "all" && j.country !== f.country) return false;
     if (f.hideHighGhost && (j.ghost.band === "high" || j.ghost.band === "critical")) return false;
     if (f.sponsorshipOnly && j.sponsorship === "no") return false;
+    if (f.sponsorsOnly && !(j.sponsor && j.sponsor.approvals > 0)) return false;
     if (q && !`${j.title} ${j.company} ${j.location}`.toLowerCase().includes(q)) return false;
     return true;
   });

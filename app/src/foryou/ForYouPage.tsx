@@ -4,6 +4,7 @@ import { uid } from "../lib/storage.js";
 import { buildApplicationPack } from "../lib/pack.js";
 import { profileFromResume, rankFeed, type ScoredMatch } from "../lib/fit.js";
 import { loadFeed, loadFeedSWR, type Feed } from "../jobs/feed.js";
+import { SponsorBadge } from "../jobs/SponsorBadge.js";
 import type { AnswerEntry, Application, ResumeData } from "../lib/types.js";
 import { uid as newId } from "../lib/storage.js";
 import { COUNTRY_LABELS } from "../jobs/feed.js";
@@ -233,6 +234,7 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
                       {m.job.hasSalaryInfo && <span className="tag tag-salary">salary stated</span>}
                       {m.job.sponsorship === "yes" && <span className="tag tag-sponsor">sponsors visa</span>}
                       {m.job.sponsorship === "no" && <span className="tag tag-nosponsor">won't sponsor</span>}
+                      <SponsorBadge job={m.job} />
                       <span className="tag">fit {m.score}</span>
                       <span className="tag">ghost {m.job.ghost.score}</span>
                     </div>

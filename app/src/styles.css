@@ -422,3 +422,4 @@ input:focus, select:focus, textarea:focus {
   font-size: 14px; line-height: 1; cursor: pointer; font-weight: 700;
 }
 .hint-dismiss:hover { color: #7a2e0e; }
+.tag-nofiling { color: #b54708; border-color: #fedf89; background: #fffcf5; }

@@ -218,13 +218,42 @@ function stats(): void {
  * and serve from GitHub raw. Every entry carries its ghost assessment with
  * human-readable reasons, because a score without reasons is just an opinion.
  */
-function feed(): void {
+async function feed(): Promise<void> {
   const store = new Store(DATA);
   const latest = store.readLatest<{ fetchedAt: string; jobs: ScoredJob[] }>();
   if (!latest) {
     console.error("No data yet - run `npm run fetch` first.");
     process.exit(1);
   }
+  // Sponsorship facts live in the database (ingested monthly from USCIS) and
+  // are keyed by company. Optional: without credentials the feed simply omits
+  // them rather than failing - the rest of the feed is still worth publishing.
+  const sponsorByCompany = new Map<string, { approvals: number; denials: number; fy: number; name: string }>();
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const { makeClient } = await import("./sync.js");
+      const { data } = await makeClient()
+        .from("jr_companies")
+        .select("name, sponsor_matched_name, h1b_approvals_recent, h1b_denials_recent, h1b_last_fiscal_year");
+      for (const row of data ?? []) {
+        const r = row as { name: string; sponsor_matched_name: string | null;
+          h1b_approvals_recent: number | null; h1b_denials_recent: number | null;
+          h1b_last_fiscal_year: number | null };
+        if (r.h1b_approvals_recent && r.h1b_last_fiscal_year) {
+          sponsorByCompany.set(r.name, {
+            approvals: r.h1b_approvals_recent,
+            denials: r.h1b_denials_recent ?? 0,
+            fy: r.h1b_last_fiscal_year,
+            name: r.sponsor_matched_name ?? r.name,
+          });
+        }
+      }
+      console.log(`  sponsorship facts for ${sponsorByCompany.size} companies`);
+    } catch (err) {
+      console.log(`  sponsorship facts unavailable: ${(err as Error).message}`);
+    }
+  }
+
   const entries = latest.jobs
     .map((j) => {
       const country = detectCountry(j.location);
@@ -242,6 +271,7 @@ function feed(): void {
         sponsorship: j.sponsorship ?? "unknown",
         hasSalaryInfo: j.hasSalaryInfo,
         tags: extractTags(j.title, j.description),
+        sponsor: sponsorByCompany.get(j.company) ?? null,
       };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
@@ -260,7 +290,7 @@ switch (cmd) {
   case "fetch": await fetchAll(); break;
   case "report": report(country); break;
   case "stats": stats(); break;
-  case "feed": feed(); break;
+  case "feed": await feed(); break;
   case "sync": await sync(); break;
   case "rank": await rank(); break;
   case "discover": await discoverCmd(); break;
