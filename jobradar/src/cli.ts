@@ -13,7 +13,7 @@ import { workable } from "./sources/workable.js";
 import { recruitee } from "./sources/recruitee.js";
 import { workday } from "./sources/workday.js";
 import { Store } from "./store.js";
-import type { ScoredJob, SeedCompany, SourceAdapter } from "./types.js";
+import type { Job, ScoredJob, SeedCompany, SourceAdapter } from "./types.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = join(ROOT, "data");
@@ -44,36 +44,62 @@ async function fetchAll(): Promise<void> {
   const seeds = loadSeeds();
   const store = new Store(DATA);
   const classifier = new StubClassifier();
-  const all: ScoredJob[] = [];
-  for (const c of seeds) {
-    const employerType = c.employerType ?? classifier.classifyEmployer(c.name).type;
-    const adapter = adapters[c.source]!;
-    try {
-      const jobs = await adapter.fetchJobs(c);
-      store.record(jobs);
-      const concurrent = new Map<string, number>();
-      for (const job of jobs) {
-        const k = slotKey(job.source, job.companyToken, job.title, job.location);
-        concurrent.set(k, (concurrent.get(k) ?? 0) + 1);
+
+  // Boards were fetched one at a time, which became the whole runtime once
+  // deep Workday boards joined the seed (300+ boards, some paginating to
+  // 2,000 postings). They are independent hosts, so fetch a few at once -
+  // wall time drops to roughly the slowest board rather than their sum.
+  const CONCURRENCY = 6;
+  const queue = [...seeds];
+  const results: { company: SeedCompany; employerType: string; jobs: Job[] }[] = [];
+
+  async function worker(): Promise<void> {
+    for (;;) {
+      const c = queue.shift();
+      if (!c) return;
+      const employerType = c.employerType ?? classifier.classifyEmployer(c.name).type;
+      const adapter = adapters[c.source];
+      if (!adapter) {
+        console.error(`ERROR ${c.name}: no adapter for source ${c.source}`);
+        continue;
       }
-      for (const job of jobs) {
-        const history = store.historyFor(job);
-        const open = concurrent.get(slotKey(job.source, job.companyToken, job.title, job.location)) ?? 1;
-        all.push({
-          ...job,
-          firstSeenAt: history?.firstSeenAt ?? new Date().toISOString(),
-          lastSeenAt: history?.lastSeenAt ?? new Date().toISOString(),
-          ghost: assessGhost(job, history, new Date(), open, employerType),
-          sponsorship: sponsorshipSignal(job.description),
-        });
+      try {
+        const jobs = await adapter.fetchJobs(c);
+        results.push({ company: c, employerType, jobs });
+        console.log(`fetched ${String(jobs.length).padStart(5)} jobs  ${c.name} (${c.source})`);
+      } catch (err) {
+        console.error(`ERROR ${c.name} (${c.source}/${c.token}): ${(err as Error).message}`);
       }
-      console.log(`fetched ${String(jobs.length).padStart(4)} jobs  ${c.name} (${c.source})`);
-    } catch (err) {
-      console.error(`ERROR ${c.name} (${c.source}/${c.token}): ${(err as Error).message}`);
     }
   }
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+
+  // Scoring stays sequential and after the fetch: it touches the shared
+  // longitudinal store, and keeping it single-threaded keeps that honest.
+  const all: ScoredJob[] = [];
+  for (const { company, employerType, jobs } of results) {
+    store.record(jobs);
+    const concurrent = new Map<string, number>();
+    for (const job of jobs) {
+      const k = slotKey(job.source, job.companyToken, job.title, job.location);
+      concurrent.set(k, (concurrent.get(k) ?? 0) + 1);
+    }
+    for (const job of jobs) {
+      const history = store.historyFor(job);
+      const open = concurrent.get(slotKey(job.source, job.companyToken, job.title, job.location)) ?? 1;
+      all.push({
+        ...job,
+        firstSeenAt: history?.firstSeenAt ?? new Date().toISOString(),
+        lastSeenAt: history?.lastSeenAt ?? new Date().toISOString(),
+        ghost: assessGhost(job, history, new Date(), open, employerType),
+        sponsorship: sponsorshipSignal(job.description),
+      });
+    }
+    void company;
+  }
+
   store.writeLatest({ fetchedAt: new Date().toISOString(), jobs: all });
-  console.log(`\nTotal: ${all.length} jobs -> data/latest.json`);
+  console.log(`\nTotal: ${all.length} jobs from ${results.length}/${seeds.length} boards -> data/latest.json`);
 }
 
 function report(country: Country | null): void {
