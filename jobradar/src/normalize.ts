@@ -73,7 +73,9 @@ export type Country =
   | "br" | "mx" | "ar" | "cl" | "co";
 
 const COUNTRY_HINTS: Record<Exclude<Country, "in" | "us">, string[]> = {
-  gb: ["united kingdom", "uk", "london", "manchester", "cambridge, uk", "edinburgh"],
+  // "uk" must be a word: it also sits inside Fukuoka, which put a Japanese
+  // posting in the United Kingdom.
+  gb: ["united kingdom", "\\buk\\b", "london", "manchester", "edinburgh", "glasgow", "bristol"],
   de: ["germany", "deutschland", "berlin", "munich", "münchen", "stuttgart", "hamburg", "frankfurt", "cologne", "karlsruhe", "leonberg", "renningen", "abstatt", "hildesheim", ", de"],
   nl: ["netherlands", "amsterdam", "eindhoven", "rotterdam", ", nl"],
   ae: ["united arab emirates", "uae", "dubai", "abu dhabi", "sharjah"],
@@ -88,7 +90,7 @@ const COUNTRY_HINTS: Record<Exclude<Country, "in" | "us">, string[]> = {
   ph: ["philippines", "manila", "makati", "cebu", "taguig"],
   id: ["indonesia", "jakarta", "bali", "denpasar"],
   vn: ["vietnam", "viet nam", "hanoi", "ho chi minh"],
-  jp: ["japan", "tokyo", "osaka", "kyoto", "yokohama"],
+  jp: ["japan", "tokyo", "osaka", "kyoto", "yokohama", "fukuoka", "nagoya", "sapporo", "kobe"],
   kr: ["south korea", "korea", "seoul", "busan"],
   tw: ["taiwan", "taipei", "hsinchu"],
   hk: ["hong kong", "kowloon"],
@@ -124,7 +126,10 @@ export function matchesCountry(location: string, country: Country): boolean {
   const l = location.toLowerCase();
   if (country === "in") return looksIndian(location);
   if (country === "us") return US_HINTS.some((h) => l.includes(h)) || US_STATE_RE.test(location);
-  return COUNTRY_HINTS[country].some((h) => h.startsWith(",") ? l.endsWith(h) || l.includes(h + ";") : l.includes(h));
+  return COUNTRY_HINTS[country].some((h) => {
+    if (h.startsWith("\\b")) return new RegExp(h, "i").test(l);
+    return h.startsWith(",") ? l.endsWith(h) || l.includes(h + ";") : l.includes(h);
+  });
 }
 
 export const ALL_COUNTRIES: Country[] = [

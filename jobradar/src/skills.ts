@@ -101,9 +101,6 @@ const WEAK_TERMS: Record<string, RegExp> = {
   consulting: /consultant|advisory/i,
 };
 
-/** How many times a weak term must appear in the body to count on its own. */
-const BOILERPLATE_FLOOR = 2;
-
 export function extractTags(title: string, description: string | null): string[] {
   const body = (description ?? "").slice(0, 4000);
   const haystack = `${title}\n${body}`;
@@ -116,11 +113,10 @@ export function extractTags(title: string, description: string | null): string[]
       // A specific term in the family carries the tag on its own. Strip the
       // weak words and see whether anything precise still matches.
       const stripped = `${title}\n${body}`.replace(new RegExp(weak.source, "gi"), " ");
-      if (!re.test(stripped)) {
-        const inTitle = weak.test(title);
-        const mentions = body.match(new RegExp(weak.source, "gi"))?.length ?? 0;
-        if (!inTitle && mentions < BOILERPLATE_FLOOR) continue;
-      }
+      // Repetition is not evidence: a company that sells into six industries
+      // names all six in every posting, often more than once. Only the title
+      // says what THIS job is.
+      if (!re.test(stripped) && !weak.test(title)) continue;
     }
     tags.push(tag);
   }

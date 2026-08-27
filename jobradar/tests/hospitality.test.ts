@@ -70,10 +70,18 @@ test("one mention of a market in an about-us blurb does not tag the job", () => 
 });
 
 test("a job genuinely about the domain is still tagged", () => {
-  // Title match alone is enough.
+  // The title stating it is enough.
   assert.ok(extractTags("Restaurant Onboarding Manager", "Help merchants go live.").includes("restaurant"));
-  // So is a body that keeps returning to it.
-  const real = extractTags("Implementation Manager",
+  // So is a specific term of the trade, wherever it appears.
+  assert.ok(extractTags("Implementation Manager", "You will own menu management for each account.")
+    .includes("restaurant"));
+});
+
+test("repetition in the body is not evidence the job is in that field", () => {
+  // It was, and it was wrong: a company selling into six industries names all
+  // six in every posting, often several times. Whether the EMPLOYER is in the
+  // field is answered by the curated vertical list, not by word frequency.
+  const tags = extractTags("Implementation Manager",
     "Onboard restaurant groups. You will configure each restaurant's menu and train restaurant staff.");
-  assert.ok(real.includes("restaurant"), `got: ${real.join(", ")}`);
+  assert.ok(!tags.includes("restaurant"), `got: ${tags.join(", ")}`);
 });

@@ -5,6 +5,7 @@ import { StubClassifier } from "./classify.js";
 import { assessGhost } from "./ghost.js";
 import { detectCountry, matchesCountry, slotKey, sponsorshipSignal, type Country } from "./normalize.js";
 import { extractTags } from "./skills.js";
+import { industryOf } from "./verticals.js";
 import { greenhouse } from "./sources/greenhouse.js";
 import { lever } from "./sources/lever.js";
 import { ashby } from "./sources/ashby.js";
@@ -340,6 +341,10 @@ async function feed(): Promise<void> {
         sponsorship: j.sponsorship ?? "unknown",
         hasSalaryInfo: j.hasSalaryInfo,
         tags: extractTags(j.title, j.description),
+        // What the employer does, from the curated list - not inferred from
+        // posting text, which cannot tell "is a hotel company" from "sells to
+        // hotel companies".
+        industry: industryOf(j.company),
         sponsor: sponsorByCompany.get(j.company) ?? null,
       };
     })
