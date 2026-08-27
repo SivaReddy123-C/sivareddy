@@ -201,6 +201,15 @@ async function sponsorsCmd(): Promise<void> {
   console.log(`sponsors: ${stored} employer-years stored; ${matched}/${total} of our companies matched to federal filings`);
 }
 
+/** `sponsorpage`: regenerate the public sponsorship index served with the app. */
+async function sponsorPageCmd(): Promise<void> {
+  const { makeClient } = await import("./sync.js");
+  const { buildSponsorPage } = await import("./sponsorpage.js");
+  const out = join(ROOT, "..", "app", "public", "sponsors.html");
+  const n = await buildSponsorPage(makeClient(), out);
+  console.log(`sponsor page: ${n} employers -> app/public/sponsors.html`);
+}
+
 /** `stats`: write a small, publishable daily summary - the seed of the open ledger. */
 function stats(): void {
   const store = new Store(DATA);
@@ -322,7 +331,8 @@ switch (cmd) {
   case "discover": await discoverCmd(); break;
   case "digest": await digestCmd(); break;
   case "sponsors": await sponsorsCmd(); break;
+  case "sponsorpage": await sponsorPageCmd(); break;
   default:
-    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest|sponsors> [--india | --usa]");
+    console.log("Usage: tsx src/cli.ts <probe|fetch|report|stats|feed|sync|rank|discover|digest|sponsors|sponsorpage> [--india | --usa]");
     process.exit(1);
 }

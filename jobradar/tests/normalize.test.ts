@@ -243,3 +243,26 @@ test("csv parser tolerates a renamed header column", async () => {
   assert.equal(rows[0]!.employer_norm, "gamma");
   assert.equal(rows[0]!.initial_approval, 4);
 });
+
+test("sponsor index page states facts and refuses to overclaim", async () => {
+  const { renderPage } = await import("../src/sponsorpage.js");
+  const html = renderPage(
+    [{ company: "NVIDIA", matchedName: "NVIDIA CORPORATION", approvals: 394, denials: 1,
+       fiscalYear: 2023, openJobs: 2000, usJobs: 1200 }],
+    "2026-08-27T01:00:00.000Z",
+    { employers: 113, federalRecords: 122857, openJobs: 39483, usJobsAtSponsors: 10638 },
+  );
+  assert.ok(html.includes("NVIDIA CORPORATION"), "shows the matched federal name");
+  assert.ok(html.includes("394"), "shows the real count");
+  assert.ok(html.includes("FY2023"), "names the fiscal year");
+  // The honesty caveat must be on the page, not just in our commit messages.
+  assert.ok(html.includes("evidence, not proof"));
+  assert.ok(html.includes("uscis.gov"), "links the primary source so anyone can check");
+  // Company names must be escaped, not injected.
+  const nasty = renderPage(
+    [{ company: '<script>x</script>', matchedName: "X", approvals: 1, denials: 0,
+       fiscalYear: 2023, openJobs: 1, usJobs: 1 }],
+    "2026-08-27T01:00:00.000Z", { employers: 1, federalRecords: 1, openJobs: 1, usJobsAtSponsors: 1 });
+  assert.ok(!nasty.includes("<script>x</script>"));
+  assert.ok(nasty.includes("&lt;script&gt;"));
+});

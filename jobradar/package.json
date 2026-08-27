@@ -19,7 +19,8 @@
     "digest": "tsx src/cli.ts digest",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
-    "sponsors": "tsx src/cli.ts sponsors"
+    "sponsors": "tsx src/cli.ts sponsors",
+    "sponsorpage": "tsx src/cli.ts sponsorpage"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
