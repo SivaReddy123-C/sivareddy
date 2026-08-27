@@ -13,12 +13,46 @@
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-/** USCIS publishes one CSV per fiscal year; we take the most recent few. */
+/** Guessed URL pattern - a fallback only; the real links are discovered. */
 export function hubUrls(years: number[]): { year: number; url: string }[] {
   return years.map((year) => ({
     year,
     url: `https://www.uscis.gov/sites/default/files/document/data/h1b_datahubexport-${year}.csv`,
   }));
+}
+
+const HUB_PAGES = [
+  "https://www.uscis.gov/tools/reports-and-studies/h-1b-employer-data-hub",
+  "https://www.uscis.gov/archive/h-1b-employer-data-hub-files",
+];
+
+/**
+ * Read the actual download links off the USCIS pages instead of guessing a URL
+ * pattern. Federal sites reorganize; a scraped-then-verified link survives that,
+ * and the fiscal year comes from the filename itself.
+ */
+export async function discoverHubUrls(): Promise<{ year: number; url: string }[]> {
+  const found = new Map<number, string>();
+  for (const page of HUB_PAGES) {
+    try {
+      const res = await fetch(page, { headers: { accept: "text/html" } });
+      if (!res.ok) { console.log(`  hub page ${page} -> HTTP ${res.status}`); continue; }
+      const html = await res.text();
+      for (const m of html.matchAll(/href="([^"]+\.csv)"/gi)) {
+        const href = m[1]!;
+        if (!/h.?1b|datahub/i.test(href)) continue;
+        const url = href.startsWith("http") ? href : `https://www.uscis.gov${href}`;
+        const year = Number(/(20\d\d)/.exec(href)?.[1] ?? 0);
+        if (year >= 2015 && !found.has(year)) found.set(year, url);
+      }
+    } catch (err) {
+      console.log(`  hub page ${page} -> ${(err as Error).message}`);
+    }
+  }
+  const list = [...found.entries()].map(([year, url]) => ({ year, url }))
+    .sort((a, b) => b.year - a.year);
+  console.log(`discovered ${list.length} fiscal-year files: ${list.map((l) => l.year).join(", ")}`);
+  return list;
 }
 
 /** Minimal RFC4180-ish CSV reader: handles quoted fields and embedded commas. */
@@ -158,7 +192,15 @@ async function fetchCsv(url: string): Promise<string | null> {
 /** Download the recent fiscal years and store per-employer petition counts. */
 export async function ingestSponsors(db: SupabaseClient, years: number[]): Promise<number> {
   let stored = 0;
-  for (const { year, url } of hubUrls(years)) {
+  // Prefer the links the site actually publishes; fall back to the pattern.
+  const discovered = await discoverHubUrls();
+  const wanted = discovered.length > 0
+    ? discovered.filter((d) => years.includes(d.year)).slice(0, 3)
+    : [];
+  const targets = wanted.length > 0 ? wanted
+    : discovered.length > 0 ? discovered.slice(0, 3)
+    : hubUrls(years);
+  for (const { year, url } of targets) {
     console.log(`fetching FY${year}: ${url}`);
     const csv = await fetchCsv(url);
     if (!csv) continue;
@@ -172,6 +214,12 @@ export async function ingestSponsors(db: SupabaseClient, years: number[]): Promi
       if (error) throw new Error(`sponsor upsert failed: ${error.message}`);
       stored += chunk.length;
     }
+  }
+  if (stored === 0) {
+    throw new Error(
+      "no sponsorship rows ingested - every download failed or parsed empty. " +
+      "Check the logged URLs and header line above; refusing to report success.",
+    );
   }
   return stored;
 }
@@ -204,6 +252,11 @@ export async function matchCompanies(db: SupabaseClient): Promise<{ matched: num
   for (const s of sponsors) {
     const cur = latest.get(s.employer_norm);
     if (!cur || s.fiscal_year > cur.fiscal_year) latest.set(s.employer_norm, s);
+  }
+
+  if (latest.size === 0) {
+    console.log("no sponsor data present; leaving existing company facts untouched");
+    return { matched: 0, total: (companies ?? []).length };
   }
 
   let matched = 0;
