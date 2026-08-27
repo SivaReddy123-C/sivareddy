@@ -13,6 +13,7 @@ import { workable } from "./sources/workable.js";
 import { recruitee } from "./sources/recruitee.js";
 import { workday } from "./sources/workday.js";
 import { Store } from "./store.js";
+import { isUsable } from "./types.js";
 import type { Job, ScoredJob, SeedCompany, SourceAdapter } from "./types.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -64,9 +65,13 @@ async function fetchAll(): Promise<void> {
         continue;
       }
       try {
-        const jobs = await adapter.fetchJobs(c);
+        const fetched = await adapter.fetchJobs(c);
+        // The one place every adapter's output converges - see isUsable.
+        const jobs = fetched.filter(isUsable);
+        const dropped = fetched.length - jobs.length;
         results.push({ company: c, employerType, jobs });
-        console.log(`fetched ${String(jobs.length).padStart(5)} jobs  ${c.name} (${c.source})`);
+        console.log(`fetched ${String(jobs.length).padStart(5)} jobs  ${c.name} (${c.source})`
+          + (dropped > 0 ? `  [dropped ${dropped} unusable]` : ""));
       } catch (err) {
         console.error(`ERROR ${c.name} (${c.source}/${c.token}): ${(err as Error).message}`);
       }

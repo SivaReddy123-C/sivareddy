@@ -75,3 +75,22 @@ export interface ScoredJob extends Job {
   lastSeenAt: string;
   ghost: GhostAssessment;
 }
+
+/**
+ * Reject postings that cannot be stored or shown.
+ *
+ * Every adapter reads a third-party system that owes us nothing, and one
+ * malformed record has now broken this pipeline three separate times: it
+ * crashed scoring in slotKey, it violated the NOT NULL constraint on title in
+ * sync, and it would have rendered a blank row in the feed. Patching each site
+ * as it fails is how you get a fourth. One gate where every adapter's output
+ * converges lets everything downstream rely on the invariant rather than
+ * defend against its absence.
+ *
+ * Dropping is deliberate, not throwing: a board with one bad record among two
+ * thousand should lose the record, not the board.
+ */
+export function isUsable(job: Job): boolean {
+  const filled = (v: unknown): boolean => typeof v === "string" && v.trim().length > 0;
+  return filled(job.title) && filled(job.sourceJobId) && filled(job.url);
+}

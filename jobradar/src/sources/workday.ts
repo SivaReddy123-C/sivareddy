@@ -76,6 +76,10 @@ export const workday: SourceAdapter = {
         // bulletFields[0] is the requisition id, which Workday repeats across
         // locations; the path is what actually identifies one posting.
         const id = p.externalPath || p.bulletFields?.[0] || p.title;
+        // Tenants do return postings with no title and no path. They cannot be
+        // stored or linked to, and the counter below reports the loss so it
+        // never becomes silent.
+        if (!p.title || !id) { skipped++; continue; }
         jobs.push({
           key: `workday:${company.token}:${id}`,
           source: "workday",
