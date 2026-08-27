@@ -194,9 +194,16 @@ async function discoverCmd(): Promise<void> {
 async function coverageCmd(): Promise<void> {
   const { makeClient } = await import("./sync.js");
   const { coverage, format } = await import("./coverage.js");
-  const feedPath = join(ROOT, "data", "feed.json");
-  if (!existsSync(feedPath)) throw new Error("no feed.json yet - run `npm run feed` first");
-  const feed = JSON.parse(readFileSync(feedPath, "utf8")) as { jobs: [] };
+  const shardDir = join(ROOT, "data", "feed");
+  const indexPath = join(shardDir, "index.json");
+  if (!existsSync(indexPath)) throw new Error("no feed shards yet - run `npm run feed` first");
+  const index = JSON.parse(readFileSync(indexPath, "utf8")) as { shards: { country: string; file: string }[] };
+  const jobs = index.shards.flatMap((sh) => {
+    const shard = JSON.parse(readFileSync(join(shardDir, sh.file), "utf8")) as
+      { jobs: { tags?: string[]; title: string }[] };
+    return shard.jobs.map((j) => ({ tags: j.tags, title: j.title, country: sh.country }));
+  });
+  const feed = { jobs };
   const reports = await coverage(makeClient(), feed);
   if (reports.length === 0) { console.log("coverage: no profiles yet"); return; }
   for (const r of reports) console.log(format(r));
@@ -231,9 +238,21 @@ async function sponsorsCmd(): Promise<void> {
  */
 async function sponsorPageCmd(): Promise<void> {
   const { buildSponsorPageFromFeed } = await import("./sponsorpage.js");
-  const feedPath = join(ROOT, "data", "feed.json");
-  if (!existsSync(feedPath)) throw new Error("no feed.json yet - run `npm run feed` first");
-  const feed = JSON.parse(readFileSync(feedPath, "utf8")) as { generatedAt: string; jobs: [] };
+  const shardDir = join(ROOT, "data", "feed");
+  const indexPath = join(shardDir, "index.json");
+  if (!existsSync(indexPath)) throw new Error("no feed shards yet - run `npm run feed` first");
+  const index = JSON.parse(readFileSync(indexPath, "utf8")) as
+    { generatedAt: string; shards: { country: string; file: string }[] };
+  // The index knows every shard; the page is a view over all of them.
+  const jobs = index.shards.flatMap((sh) => {
+    const shard = JSON.parse(readFileSync(join(shardDir, sh.file), "utf8")) as
+      { sponsors: Record<string, { approvals: number; denials: number; fy: number; name: string }>;
+        jobs: { company: string }[] };
+    return shard.jobs.map((j) => ({
+      company: j.company, country: sh.country, sponsor: shard.sponsors[j.company] ?? null,
+    }));
+  });
+  const feed = { generatedAt: index.generatedAt, jobs };
 
   const metaPath = join(ROOT, "data", "sponsor-meta.json");
   const meta = existsSync(metaPath)
@@ -349,9 +368,70 @@ async function feed(): Promise<void> {
       };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
-  const out = { generatedAt: latest.fetchedAt, total: entries.length, jobs: entries };
-  writeFileSync(join(DATA, "feed.json"), JSON.stringify(out));
-  console.log(`feed -> data/feed.json (${entries.length} India+US jobs of ${latest.jobs.length} total)`);
+  // Shard by country.
+  //
+  // The single feed reached 24.6 MB. A browser cannot cache that - localStorage
+  // caps near 5 MB - so every refresh re-downloaded and re-parsed the whole
+  // thing and the cache write failed silently every time. It also committed
+  // 24.6 MB into git nightly. Nobody needs 20,000 US postings to look at jobs
+  // in Singapore; they need their own countries.
+  const shardDir = join(DATA, "feed");
+  mkdirSync(shardDir, { recursive: true });
+  const byCountry = new Map<string, typeof entries>();
+  for (const e of entries) {
+    const key = e.country ?? "other";
+    const bucket = byCountry.get(key);
+    if (bucket) bucket.push(e);
+    else byCountry.set(key, [e]);
+  }
+
+  const shards: { country: string; jobs: number; bytes: number; file: string }[] = [];
+  for (const [country, jobs] of [...byCountry.entries()].sort()) {
+    const file = `${country}.json`;
+
+    // Hoist what repeats. Sponsorship facts are identical for every posting at
+    // an employer, and the country is constant inside its own shard - together
+    // they were about a tenth of the payload for nothing.
+    const sponsors: Record<string, NonNullable<typeof jobs[number]["sponsor"]>> = {};
+    const industries: Record<string, string> = {};
+    const slim = jobs.map((j) => {
+      if (j.sponsor) sponsors[j.company] = j.sponsor;
+      if (j.industry) industries[j.company] = j.industry;
+      const { country: _c, sponsor: _s, industry: _i, ...rest } = j;
+      return {
+        ...rest,
+        // Whole dates: nothing in the UI shows the time, and an ISO timestamp
+        // is more than twice as long.
+        publishedAt: j.publishedAt ? j.publishedAt.slice(0, 10) : null,
+        firstSeenAt: j.firstSeenAt.slice(0, 10),
+        // Reasons explain a risk score. A posting with no risk has nothing to
+        // explain, and those are the majority.
+        ghost: j.ghost.band === "low"
+          ? { score: j.ghost.score, band: j.ghost.band, reasons: [] }
+          : j.ghost,
+      };
+    });
+
+    const body = JSON.stringify({
+      generatedAt: latest.fetchedAt, country, total: slim.length, sponsors, industries, jobs: slim,
+    });
+    writeFileSync(join(shardDir, file), body);
+    shards.push({ country, jobs: slim.length, bytes: body.length, file });
+  }
+  shards.sort((a, b) => b.jobs - a.jobs);
+
+  const index = { generatedAt: latest.fetchedAt, total: entries.length, shards };
+  writeFileSync(join(shardDir, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
+
+  const mb = (n: number) => `${(n / 1048576).toFixed(1)}MB`;
+  console.log(`feed -> data/feed/ (${entries.length} jobs in ${shards.length} country shards)`);
+  for (const sh of shards.slice(0, 8)) {
+    console.log(`  ${sh.country.padEnd(6)} ${String(sh.jobs).padStart(6)} jobs  ${mb(sh.bytes)}`);
+  }
+  const largest = shards[0];
+  if (largest && largest.bytes > 8 * 1048576) {
+    console.log(`  warning: ${largest.country} is ${mb(largest.bytes)}; browsers cannot cache a shard this size`);
+  }
 }
 
 const cmd = process.argv[2];

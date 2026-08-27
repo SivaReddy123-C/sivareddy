@@ -5,3 +5,7 @@ dist/
 jobradar/data/snapshots/
 jobradar/data/state.json
 jobradar/data/latest.json
+
+# The monolithic feed is replaced by data/feed/<country>.json shards.
+# It was 24.6MB and was committed nightly.
+jobradar/data/feed.json

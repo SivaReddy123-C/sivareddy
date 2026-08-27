@@ -110,16 +110,19 @@ function SignedIn({ session, applications, onChange, resume, answers }: Props & 
     void (async () => {
       try {
         const db = supabase();
-        // Paint from cache at once, then swap in a newer feed when it lands.
-        const cachedFeed = loadFeedSWR(setFeed);
-        const [{ data, error: pErr }, loadedFeed] = await Promise.all([
-          db.from("jr_user_profiles").select("*").eq("user_id", session.user.id).maybeSingle(),
-          cachedFeed ? Promise.resolve(cachedFeed) : loadFeed(false).catch(() => null),
-        ]);
+        // The profile decides which country shards to fetch, so it has to come
+        // first. Fetching every country was the old behaviour and it meant
+        // downloading 24 MB to look at jobs in one place.
+        const { data, error: pErr } = await db
+          .from("jr_user_profiles").select("*").eq("user_id", session.user.id).maybeSingle();
         if (pErr) throw pErr;
-        setFeed(loadedFeed);
         if (data) setProfile(data as ProfileRecord);
         else setEditing(true);
+
+        const countries = ((data as ProfileRecord | null)?.countries ?? []).filter(Boolean);
+        // Paint from cache at once, then swap in a newer feed when it lands.
+        const cachedFeed = loadFeedSWR(setFeed, countries);
+        setFeed(cachedFeed ?? await loadFeed(false, countries).catch(() => null));
       } catch (err) {
         setError((err as Error).message);
       } finally {
